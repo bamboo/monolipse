@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/monolipse.feature_1.0.3.jar" id="monolipse.feature" version="1.0.3"/>
+</site>
