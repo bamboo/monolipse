@@ -1,3 +1,0 @@
-import TestAssembly
-
-TestClass().Run()
