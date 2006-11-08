@@ -4,9 +4,7 @@ import java.io.IOException;
 
 import monolipse.core.compiler.CompilerServices;
 import monolipse.core.compiler.OutlineNode;
-
-import org.apache.commons.io.IOUtils;
-
+import monolipse.core.foundation.IOUtilities;
 
 public class CompilerServicesTestCase extends AbstractBooTestCase {
 	
@@ -40,7 +38,7 @@ public class CompilerServicesTestCase extends AbstractBooTestCase {
 	}
 
 	private String loadResourceAsString(String resource) throws IOException {
-		return IOUtils.toString(getResourceStream(resource));
+		return IOUtilities.toString(getResourceStream(resource));
 	}
 
 }

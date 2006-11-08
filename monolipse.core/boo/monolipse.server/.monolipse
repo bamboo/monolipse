@@ -1,0 +1,11 @@
+<settings>
+  <language>boo</language>
+  <outputType>exe</outputType>
+  <references>
+    <monolipse.core.internal.AssemblySourceReference-Remembrance>
+      <path>/monolipse.core/boo/monolipse.core</path>
+    </monolipse.core.internal.AssemblySourceReference-Remembrance>
+  </references>
+  <outputFolder>/monolipse.core/bin</outputFolder>
+  <additionalOptions></additionalOptions>
+</settings>
