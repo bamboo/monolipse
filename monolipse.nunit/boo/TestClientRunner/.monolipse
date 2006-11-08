@@ -1,0 +1,12 @@
+<settings>
+  <outputType>exe</outputType>
+  <references>
+    <monolipse.core.internal.LocalAssemblyReference-Remembrance>
+      <path>/monolipse.nunit/lib/monolipse.core.dll</path>
+    </monolipse.core.internal.LocalAssemblyReference-Remembrance>
+    <monolipse.core.internal.LocalAssemblyReference-Remembrance>
+      <path>/monolipse.nunit/lib/monolipse.server.exe</path>
+    </monolipse.core.internal.LocalAssemblyReference-Remembrance>
+  </references>
+  <outputFolder>/monolipse.nunit/bin</outputFolder>
+</settings>
