@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Boo Development Tools
 Bundle-SymbolicName: monolipse.ui;singleton:=true
-Bundle-Version: 1.0.29
+Bundle-Version: 1.0.30
 Bundle-Activator: monolipse.ui.BooUI
 Bundle-Vendor: Rodrigo B. de Oliveira
 Bundle-Localization: plugin
@@ -20,7 +20,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.console,
  org.eclipse.ui.views
 Eclipse-LazyStart: true
-Bundle-ClassPath: booclipse.jar
+Bundle-ClassPath: monolipse.ui.jar
 Export-Package: monolipse.ui,
  monolipse.ui.editors,
  monolipse.ui.perspectives,

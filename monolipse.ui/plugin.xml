@@ -142,8 +142,13 @@
       <page
             class="monolipse.ui.resources.BooAssemblySourcePropertyPage"
             id="monolipse.ui.resources.booAssemblySourcePropertyPag"
-            name="Boo Assembly Properties"
-            objectClass="org.eclipse.core.resources.IFolder">
+            name="Boo Assembly Properties">
+            
+            <enabledWhen>
+            <instanceof
+                  value="org.eclipse.core.resources.IFolder">
+            </instanceof>
+            </enabledWhen>
       </page>
    </extension>
    <extension
@@ -151,8 +156,12 @@
       <page
             class="monolipse.ui.views.ReferenceContainerPropertyPage"
             id="monolipse.ui.views.booReferenceContainerPropertyPage"
-            name="Assembly References"
-            objectClass="monolipse.ui.views.ReferenceContainer">
+            name="Assembly References">
+            <enabledWhen>
+            <instanceof
+                  value="monolipse.ui.views.ReferenceContainer">
+            </instanceof>
+            </enabledWhen>
       </page>
    </extension>
    
