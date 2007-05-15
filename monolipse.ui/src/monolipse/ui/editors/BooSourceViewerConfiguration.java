@@ -21,7 +21,6 @@ package monolipse.ui.editors;
 import monolipse.ui.BooUI;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.internal.ui.text.HTMLTextPresenter;
 import org.eclipse.jface.text.DefaultInformationControl;
 import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
@@ -157,7 +156,7 @@ public class BooSourceViewerConfiguration extends SourceViewerConfiguration {
 	public IInformationControlCreator getInformationControlCreator(ISourceViewer sourceViewer) {
 		return new IInformationControlCreator() {
 			public IInformationControl createInformationControl(Shell parent) {
-				return new DefaultInformationControl(parent, SWT.NONE, new HTMLTextPresenter(true));
+				return new DefaultInformationControl(parent, SWT.NONE, new org.eclipse.jface.internal.text.html.HTMLTextPresenter(true));
 			}
 		};
 	}

@@ -25,7 +25,6 @@ import monolipse.ui.editors.MultiLineCommentScanner;
 import monolipse.ui.editors.SingleQuotedStringScanner;
 import monolipse.ui.editors.StringScanner;
 
-import org.eclipse.jdt.internal.ui.text.HTMLTextPresenter;
 import org.eclipse.jface.text.DefaultInformationControl;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IInformationControl;
@@ -110,7 +109,7 @@ public class CSharpSourceViewerConfiguration extends SourceViewerConfiguration {
 	public IInformationControlCreator getInformationControlCreator(ISourceViewer sourceViewer) {
 		return new IInformationControlCreator() {
 			public IInformationControl createInformationControl(Shell parent) {
-				return new DefaultInformationControl(parent, SWT.NONE, new HTMLTextPresenter(true));
+				return new DefaultInformationControl(parent, SWT.NONE, new org.eclipse.jface.internal.text.html.HTMLTextPresenter(true));
 			}
 		};
 	}
