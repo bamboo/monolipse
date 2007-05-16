@@ -3,5 +3,5 @@
    <description url="https://svn.sourceforge.net/svnroot/monolipse/trunk/update-site/">
       Mono Development Tools Update Site
    </description>
-   <feature url="features/monolipse.feature_1.0.2.jar" id="monolipse.feature" version="1.0.2"/>
+   <feature url="features/monolipse.feature_1.0.3.jar" id="monolipse.feature" version="1.0.3"/>
 </site>

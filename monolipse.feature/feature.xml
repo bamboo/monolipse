@@ -2,7 +2,7 @@
 <feature
       id="monolipse.feature"
       label="Mono Development Tools for Eclipse"
-      version="1.0.2">
+      version="1.0.3">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
