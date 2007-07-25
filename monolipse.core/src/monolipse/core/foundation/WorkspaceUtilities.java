@@ -10,8 +10,6 @@ import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
 import org.osgi.framework.Bundle;
 
-
-
 public class WorkspaceUtilities {
 	public static void createTree(IFolder folder) throws CoreException {
 		IContainer parent = folder.getParent();

@@ -268,6 +268,26 @@ public class BooAssemblySource implements IAssemblySource {
 		String path = remembrance.outputFolder;
 		_outputFolder = path == null ? defaultOutputFolder() : WorkspaceUtilities.getFolder(path);
 	}
+	
+	private IFile getSettingsFile() {
+		return _folder.getFile(SETTINGS_FILE);
+	}
+	
+	private XStream createXStream() {
+		XStream stream = new XStream(new DomDriver());
+		stream.alias("settings", AssemblySourceRemembrance.class);
+		return stream;
+	}
+
+	private InputStream encode(String xml) throws CoreException {
+		try {
+			return new ByteArrayInputStream(xml.getBytes(SETTINGS_CHARSET));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			WorkspaceUtilities.throwCoreException(e);
+		}
+		return null;
+	}
 
 	private Reader decode(IFile file) throws CoreException {
 		try {
@@ -295,26 +315,6 @@ public class BooAssemblySource implements IAssemblySource {
 		return extension == null
 			? false
 			: extension.equalsIgnoreCase(getLanguage());
-	}
-
-	private IFile getSettingsFile() {
-		return _folder.getFile(SETTINGS_FILE);
-	}
-	
-	private XStream createXStream() {
-		XStream stream = new XStream(new DomDriver());
-		stream.alias("settings", AssemblySourceRemembrance.class);
-		return stream;
-	}
-
-	private InputStream encode(String xml) throws CoreException {
-		try {
-			return new ByteArrayInputStream(xml.getBytes(SETTINGS_CHARSET));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			WorkspaceUtilities.throwCoreException(e);
-		}
-		return null;
 	}
 
 	public static IAssemblySource getContainer(IResource resource) throws CoreException {

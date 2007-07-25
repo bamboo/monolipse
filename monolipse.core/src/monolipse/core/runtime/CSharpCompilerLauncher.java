@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class CSharpCompilerLauncher extends CompilerLauncher {
 	
-	public static final String CSC_EXECUTABLE = "lib/mono/1.0/mcs.exe";
+	public static final String CSC_EXECUTABLE = "lib/mono/2.0/gmcs.exe";
 	
 	Pattern LINE_ERROR_PATTERN = Pattern
 		.compile("(.+)\\((\\d+),\\d+\\):\\s(error|warning) (\\w+\\d+):\\s(.+)");
