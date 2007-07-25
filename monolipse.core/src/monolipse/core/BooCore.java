@@ -140,7 +140,7 @@ public class BooCore extends Plugin {
 	private static String getMonoHome() {
 		String monoHome = System.getProperty("MONO_HOME", null);
 		if (null == monoHome) {
-			return "c:\\dotnet\\mono-1.1.18";
+			return "/usr/local";
 //			throw new RuntimeException("runtime location is not set, please set the MONO_HOME environment variable");
 		}
 		return monoHome;

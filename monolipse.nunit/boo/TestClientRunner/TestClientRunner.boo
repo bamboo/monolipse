@@ -32,8 +32,8 @@ class TextWriterListener(MarshalByRefObject, EventListener):
 	def SuiteStarted(s as TestSuite):
 		pass
 		
-	def TestOutput(output as NUnit.Core.TestOutput):
-		pass
+#	def TestOutput(output as NUnit.Core.TestOutput):
+#		pass
 		
 	[lock]
 	def TestStarted(t as TestCase):
