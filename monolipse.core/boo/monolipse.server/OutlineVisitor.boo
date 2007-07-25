@@ -55,7 +55,7 @@ class OutlineVisitor(DepthFirstVisitor):
 	def WriteTypeDefinition(node as TypeDefinition):
 		WriteBeginNode()
 		WriteTypeMember(node)
-		Visit(node.Members)
+		for m in node.Members: Visit(m)
 		WriteEndNode()
 		
 	def WriteBeginNode():
