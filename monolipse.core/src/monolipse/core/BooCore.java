@@ -138,11 +138,6 @@ public class BooCore extends Plugin {
 	}
 
 	private static String getMonoHome() {
-		String monoHome = System.getProperty("MONO_HOME", null);
-		if (null == monoHome) {
-			return "/usr/local";
-//			throw new RuntimeException("runtime location is not set, please set the MONO_HOME environment variable");
-		}
-		return monoHome;
+		return System.getProperty("MONO_HOME", "/usr/local");
 	}
 }
