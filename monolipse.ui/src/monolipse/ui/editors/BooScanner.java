@@ -24,6 +24,7 @@ import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.*;
 import org.eclipse.jface.text.source.ISharedTextColors;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 
 public class BooScanner extends RuleBasedScanner {
@@ -58,6 +59,7 @@ public class BooScanner extends RuleBasedScanner {
 		"abstract",
 		"final",
 		"transient",
+		"partial",
 	};
 	
 	static final String[] NAMESPACE = new String[] {
@@ -124,7 +126,13 @@ public class BooScanner extends RuleBasedScanner {
 		"len",
 		"array",
 		"matrix",
-		"print"
+		"print",
+		
+		"case",
+		"match",
+		"otherwise",
+		
+		"data",
 	};
 	
 	static final String[] LITERALS = new String[] {
@@ -142,17 +150,17 @@ public class BooScanner extends RuleBasedScanner {
 		private IToken _identifier;
 		private IToken _invocationTarget;
 
-		public BooWordRule(ISharedTextColors manager) {
-			IToken identifierToken = createToken(manager, BooColorConstants.DEFAULT);
-			IToken keywordToken = createBoldToken(manager, BooColorConstants.KEYWORD);
-			IToken primitiveToken = createBoldToken(manager, BooColorConstants.PRIMITIVE);
-			IToken invocationTarget = createToken(manager, BooColorConstants.INVOCATION);
-			IToken memberToken = createBoldToken(manager, BooColorConstants.MEMBER);			
-			IToken modifierToken = createToken(manager, BooColorConstants.MODIFIER);
-			IToken builtinToken = createBoldToken(manager, BooColorConstants.BUILTIN);			
-			IToken literalsToken = createBoldToken(manager, BooColorConstants.LITERAL);
-			IToken namespaceToken = createBoldToken(manager, BooColorConstants.NAMESPACE);
-			IToken operatorsToken = createBoldToken(manager, BooColorConstants.OPERATORS);
+		public BooWordRule(ISharedTextColors manager, Color backgroundColor) {
+			IToken identifierToken = createToken(manager, BooColorConstants.DEFAULT, backgroundColor);
+			IToken keywordToken = createBoldToken(manager, BooColorConstants.KEYWORD, backgroundColor);
+			IToken primitiveToken = createBoldToken(manager, BooColorConstants.PRIMITIVE, backgroundColor);
+			IToken invocationTarget = createToken(manager, BooColorConstants.INVOCATION, backgroundColor);
+			IToken memberToken = createBoldToken(manager, BooColorConstants.MEMBER, backgroundColor);			
+			IToken modifierToken = createToken(manager, BooColorConstants.MODIFIER, backgroundColor);
+			IToken builtinToken = createBoldToken(manager, BooColorConstants.BUILTIN, backgroundColor);			
+			IToken literalsToken = createBoldToken(manager, BooColorConstants.LITERAL, backgroundColor);
+			IToken namespaceToken = createBoldToken(manager, BooColorConstants.NAMESPACE, backgroundColor);
+			IToken operatorsToken = createBoldToken(manager, BooColorConstants.OPERATORS, backgroundColor);
 
 			_identifier = identifierToken;
 			_invocationTarget = invocationTarget;
@@ -166,17 +174,17 @@ public class BooScanner extends RuleBasedScanner {
 			addWords(OPERATORS, operatorsToken);
 		}
 
-		private Token createBoldToken(ISharedTextColors manager, RGB rgb) {
+		private Token createBoldToken(ISharedTextColors manager, RGB rgb, Color backgroundColor) {
 			return new Token(
 				new TextAttribute(
 					manager.getColor(rgb),
-					null,
+					backgroundColor,
 					SWT.BOLD));
 		}
 
-		private Token createToken(ISharedTextColors manager, RGB rgb) {
+		private Token createToken(ISharedTextColors manager, RGB rgb, Color backgroundColor) {
 			return new Token(
-				new TextAttribute(manager.getColor(rgb)));
+				new TextAttribute(manager.getColor(rgb), backgroundColor, SWT.NORMAL));
 		}
 		
 		private boolean isWordStart(char c) {
@@ -230,18 +238,28 @@ public class BooScanner extends RuleBasedScanner {
 	}
 
 	public BooScanner(ISharedTextColors manager) {
+		this(manager, null);	
+	}
+
+	public BooScanner(ISharedTextColors manager, Color backgroundColor) {
 		IToken defaultToken = 
 			new Token(
-				new TextAttribute(manager.getColor(BooColorConstants.DEFAULT)));
+				new TextAttribute(
+					manager.getColor(BooColorConstants.DEFAULT),
+					backgroundColor,
+					SWT.NORMAL));
+		
 		IToken numberToken = 
 			new Token(
 				new TextAttribute(
-					manager.getColor(BooColorConstants.NUMBER)));
+					manager.getColor(BooColorConstants.NUMBER),
+					backgroundColor,
+					SWT.NORMAL));
 		
 		IRule[] rules = new IRule[] {
 			new WhitespaceRule(new BooWhitespaceDetector()),
 			new NumberRule(numberToken),
-			new BooWordRule(manager),
+			new BooWordRule(manager, backgroundColor),
 		};
 
 		setRules(rules);

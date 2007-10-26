@@ -38,4 +38,5 @@ public interface BooColorConstants {
 	RGB NAMESPACE = new RGB(0, 128, 0);
 	RGB OPERATORS = new RGB(0x55, 0x55, 0xbb);
 	RGB REGEX = new RGB(0xFF, 0x66, 00);
+	RGB CODE_LITERAL_BACKGROUND = new RGB(0xdd, 0xdd, 0xdd);
 }

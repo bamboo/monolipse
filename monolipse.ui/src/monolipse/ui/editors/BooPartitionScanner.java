@@ -35,6 +35,8 @@ public class BooPartitionScanner extends RuleBasedPartitionScanner {
 	
 	static final String REGEX_TYPE = "___regex";
 	
+	static final String CODE_LITERAL = "___code_literal";
+	
 	public static final String[] PARTITION_TYPES = new String[] {
 		IDocument.DEFAULT_CONTENT_TYPE,
 		MULTILINE_COMMENT_TYPE,
@@ -42,7 +44,8 @@ public class BooPartitionScanner extends RuleBasedPartitionScanner {
 		TRIPLE_QUOTED_STRING,
 		DOUBLE_QUOTED_STRING,
 		SINGLE_QUOTED_STRING,
-		REGEX_TYPE
+		REGEX_TYPE,
+		CODE_LITERAL,
 	};
 
 	public BooPartitionScanner() {
@@ -53,6 +56,7 @@ public class BooPartitionScanner extends RuleBasedPartitionScanner {
 		IToken dqs = new Token(DOUBLE_QUOTED_STRING);
 		IToken tqs = new Token(TRIPLE_QUOTED_STRING);
 		IToken regex = new Token(REGEX_TYPE);
+		IToken codeLiteral = new Token(CODE_LITERAL);
 		
 		IPredicateRule[] rules = new IPredicateRule[] {
 			new EndOfLineRule("//", singleLineComment),
@@ -63,6 +67,7 @@ public class BooPartitionScanner extends RuleBasedPartitionScanner {
 			new MultiLineRule("\"\"\"", "\"\"\"", tqs, (char)0, true),
 			new SingleLineRule("\"", "\"", dqs, '\\'),
 			new SingleLineRule("'", "'", sqs, '\\'),
+			new MultiLineRule("[|", "|]", codeLiteral, (char)0, true),
 		};
 		setPredicateRules(rules);
 	}

@@ -46,6 +46,7 @@ import org.eclipse.swt.widgets.Shell;
 public class BooSourceViewerConfiguration extends SourceViewerConfiguration {
 	private BooDoubleClickStrategy _doubleClickStrategy;
 	private BooScanner _scanner;
+	private BooScanner _codeLiteralScanner;
 	private ISharedTextColors _colorManager;
 	private MultiLineCommentScanner _multiLineCommentScanner;
 	private StringScanner _tqsScanner;
@@ -104,6 +105,13 @@ public class BooSourceViewerConfiguration extends SourceViewerConfiguration {
 			_scanner = new BooScanner(_colorManager);
 		}
 		return _scanner;
+	}
+	
+	protected BooScanner getCodeLiteralScanner() {
+		if (_codeLiteralScanner == null) {
+			_codeLiteralScanner = new BooScanner(_colorManager, _colorManager.getColor(BooColorConstants.CODE_LITERAL_BACKGROUND));
+		}
+		return _codeLiteralScanner;
 	}
 	
 	protected MultiLineCommentScanner getMultiLineCommentScanner() {
@@ -171,6 +179,7 @@ public class BooSourceViewerConfiguration extends SourceViewerConfiguration {
 		configureReconciler(reconciler, BooPartitionScanner.DOUBLE_QUOTED_STRING, getDoubleQuotedStringScanner());
 		configureReconciler(reconciler, BooPartitionScanner.TRIPLE_QUOTED_STRING, getTripleQuotedStringScanner());
 		configureReconciler(reconciler, BooPartitionScanner.REGEX_TYPE, getRegexScanner());
+		configureReconciler(reconciler, BooPartitionScanner.CODE_LITERAL, getCodeLiteralScanner());
 
 		return reconciler;
 	}
