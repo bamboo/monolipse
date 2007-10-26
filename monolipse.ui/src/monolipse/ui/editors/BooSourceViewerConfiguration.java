@@ -85,7 +85,8 @@ public class BooSourceViewerConfiguration extends SourceViewerConfiguration {
 	}
 	
 	public IAutoEditStrategy[] getAutoEditStrategies(ISourceViewer sourceViewer, String contentType) {
-		if (IDocument.DEFAULT_CONTENT_TYPE == contentType) {
+		if (IDocument.DEFAULT_CONTENT_TYPE == contentType
+			|| BooPartitionScanner.CODE_LITERAL == contentType) {
 			return new IAutoEditStrategy[] { new BooAutoEditStrategy() };
 		}
 		return super.getAutoEditStrategies(sourceViewer, contentType);

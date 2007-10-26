@@ -57,6 +57,7 @@ public class CSharpScanner extends RuleBasedScanner {
 	};	            
 	
 	static final String[] MODIFIERS = new String[] {
+		"partial",
 		"override",
 		"static",
 		"virtual",

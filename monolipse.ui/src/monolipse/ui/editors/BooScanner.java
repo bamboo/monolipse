@@ -256,8 +256,12 @@ public class BooScanner extends RuleBasedScanner {
 					backgroundColor,
 					SWT.NORMAL));
 		
+		IToken whitespace = backgroundColor == null
+			? Token.WHITESPACE
+			: new Token(new TextAttribute(null, backgroundColor, SWT.NORMAL));
+		
 		IRule[] rules = new IRule[] {
-			new WhitespaceRule(new BooWhitespaceDetector()),
+			new BooWhitespaceRule(new BooWhitespaceDetector(), whitespace),
 			new NumberRule(numberToken),
 			new BooWordRule(manager, backgroundColor),
 		};
