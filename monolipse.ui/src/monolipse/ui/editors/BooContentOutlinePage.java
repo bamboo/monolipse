@@ -1,24 +1,18 @@
 package monolipse.ui.editors;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import monolipse.core.compiler.OutlineNode;
-import monolipse.ui.BooUI;
-import monolipse.ui.IBooUIConstants;
+import monolipse.ui.*;
 
 import org.eclipse.jdt.internal.ui.text.AbstractInformationControl;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.IInformationControl;
-import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.action.*;
+import org.eclipse.jface.text.*;
 import org.eclipse.jface.viewers.*;
-import org.eclipse.swt.graphics.*;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.*;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
@@ -34,17 +28,10 @@ public class BooContentOutlinePage extends ContentOutlinePage {
 
 		protected TreeViewer createTreeViewer(Composite parent, int style) {
 			
-			TreeViewer viewer = new TreeViewer(newTree(parent, style));
+			final TreeViewer viewer = new TreeViewer(newTree(parent, style));
 			viewer.setAutoExpandLevel(4);
 			viewer.setContentProvider(new OutlineContentProvider());
 			viewer.setLabelProvider(new OutlineLabelProvider());
-//			tree.addSelectionChangedListener(new ISelectionChangedListener() {
-//				public void selectionChanged(SelectionChangedEvent event) {
-//					Object selected = ((IStructuredSelection) event.getSelection()).getFirstElement();
-//					if (null == selected) return;
-//					goToNode(((OutlineNode)selected));
-//				}
-//			});
 			return viewer;
 		}
 
@@ -86,6 +73,7 @@ public class BooContentOutlinePage extends ContentOutlinePage {
 			ILabelProvider labelProvider= (ILabelProvider)getTreeViewer().getLabelProvider();
 			for (int i= 0; i < items.length; i++) {
 				Object element= items[i].getData();
+				if (fStringMatcher == null) return element;
 				if (element != null) {
 					String label= labelProvider.getText(element);
 					if (fStringMatcher.match(label)) {
