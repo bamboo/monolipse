@@ -27,9 +27,11 @@ import monolipse.core.BooCore;
 import monolipse.core.IAssemblyReference;
 import monolipse.core.IAssemblySource;
 import monolipse.core.IGlobalAssemblyCacheReference;
+import monolipse.core.foundation.WorkspaceUtilities;
 import monolipse.ui.BooUI;
 import monolipse.ui.IBooUIConstants;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
@@ -310,8 +312,8 @@ public class ReferenceContainerPropertyPage extends PreferencePage
 		viewer.addFilter(new ViewerFilter() {
 			public boolean select(Viewer viewer, Object parentElement, Object element) {
 				try {
-					if (element instanceof IFolder) {
-						return isOrContainsAssemblySource((IFolder)element);
+					if (element instanceof IContainer) {
+						return isOrContainsAssemblySource((IContainer)element);
 					}
 					
 				} catch (CoreException e) {
@@ -350,7 +352,7 @@ public class ReferenceContainerPropertyPage extends PreferencePage
 		TreeViewer viewer = new TreeViewer(parent, SWT.FILL);
 		viewer.setContentProvider(new WorkbenchContentProvider());
 		viewer.setLabelProvider(new BooExplorerLabelProvider());
-		viewer.setInput(getAssemblySource().getFolder().getProject());
+		viewer.setInput(WorkspaceUtilities.getWorkspaceRoot());
 		
 		viewer.addDoubleClickListener(_doubleClickListener);
 		
@@ -384,7 +386,7 @@ public class ReferenceContainerPropertyPage extends PreferencePage
 		return result[0];
 	}
 	
-	protected boolean isOrContainsAssemblySource(IFolder folder) throws CoreException {
+	protected boolean isOrContainsAssemblySource(IContainer folder) throws CoreException {
 		if (isValidAssemblySourceReference(folder)) return true;
 		final boolean[] result = new boolean[] { false };
 		folder.accept(new IResourceVisitor() {
@@ -399,6 +401,12 @@ public class ReferenceContainerPropertyPage extends PreferencePage
 		});
 		
 		return result[0];
+	}
+
+	private boolean isValidAssemblySourceReference(IContainer folder)
+			throws CoreException {
+		return folder.getType() == IResource.FOLDER
+			&& isValidAssemblySourceReference((IFolder)folder);
 	}
 
 	private boolean isValidAssemblySourceReference(IFolder folder) throws CoreException {

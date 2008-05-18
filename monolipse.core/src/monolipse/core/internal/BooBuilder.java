@@ -262,13 +262,25 @@ public class BooBuilder extends IncrementalProjectBuilder {
 		});
 	}
 
-	private void copyLocalReferences(IAssemblySource source, final IFolder folder, final IProgressMonitor monitor) throws CoreException {
+	private void copyLocalReferences(final IAssemblySource source, final IFolder folder, final IProgressMonitor monitor) throws CoreException {
 		source.visitReferences(new AssemblyReferenceVisitor() {
 			public boolean visit(ILocalAssemblyReference reference) throws CoreException {
 				copyLocalReference(reference, folder, monitor);
 				return true;
 			}
+			
+			public boolean visit(IAssemblySourceReference reference) throws CoreException {
+				if (project(source) != project(reference.getAssemblySource())) {
+					copyFileToFolder(reference.getAssemblySource().getOutputFile(), folder, monitor);
+				}
+				return true;
+			}
 		});
+	}
+	
+
+	private IProject project(final IAssemblySource source) {
+		return source.getFolder().getProject();
 	}
 
 	private void copyLocalReference(ILocalAssemblyReference reference, IFolder folder, IProgressMonitor monitor) throws CoreException {

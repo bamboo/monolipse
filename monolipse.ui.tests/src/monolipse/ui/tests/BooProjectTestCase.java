@@ -67,8 +67,7 @@ public class BooProjectTestCase extends AbstractBooTestCase {
 		assertSame(baz, order[3]);
 	}
 	
-	static class ResourceChangeListener implements IResourceChangeListener
-	{
+	static class ResourceChangeListener implements IResourceChangeListener {
 		private IResourceDelta _delta;
 		
 		public IResourceDelta getDelta() {
