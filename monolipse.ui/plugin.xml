@@ -49,6 +49,12 @@
             categoryId="monolipse.ui.commands.category.source"
             id="monolipse.ui.editors.actions.ExpandCodeAction">
       </command>
+      
+      <command
+      	name="Quick Outline"
+      	description="Quick outline"
+      	categoryId="monolipse.ui.commands.category.source"
+      	id="monolipse.ui.editors.actions.BooQuickOutlineAction" />
    </extension>
    
    <extension 
@@ -75,6 +81,14 @@
             contextId="monolipse.ui.booEditorScope"
             commandId="monolipse.ui.editors.actions.ExpandCodeAction"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+            
+      <key
+      		sequence="M1+O"
+      		contextId="monolipse.ui.booEditorScope"
+      		commandId="monolipse.ui.editors.actions.BooQuickOutlineAction"
+      		schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+           
+      
    </extension>
    
    <extension

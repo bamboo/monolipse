@@ -33,6 +33,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -97,6 +99,15 @@ public class BooUI extends AbstractUIPlugin {
 		declareRegistryImage(registry, IBooUIConstants.STRUCT, "icons/struct.png");
 	}
 	
+	public static ImageDescriptor sharedImage(String img) {
+		return sharedImages().
+			getImageDescriptor(img);
+	}
+
+	public static ISharedImages sharedImages() {
+		return PlatformUI.getWorkbench().getSharedImages();
+	}
+
 	private final static void declareRegistryImage(ImageRegistry registry, String key, String path) {
 		registry.put(key, loadImageDescriptor(path));
 	}

@@ -19,28 +19,48 @@
 package monolipse.ui.editors;
 
 import monolipse.ui.BooUI;
-import monolipse.ui.editors.actions.ExpandCodeAction;
-import monolipse.ui.editors.actions.ToggleCommentAction;
+import monolipse.ui.editors.actions.*;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.*;
+import org.eclipse.jface.text.*;
+import org.eclipse.jface.text.information.*;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.editors.text.TextEditor;
-import org.eclipse.ui.texteditor.ITextEditorActionConstants;
+import org.eclipse.ui.texteditor.*;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 
 public class BooEditor extends TextEditor {
 	
+	private final class BooOutlineInformationProvider implements
+			IInformationProvider, IInformationProviderExtension {
+		public String getInformation(ITextViewer textViewer, IRegion subject) {
+			return null;
+		}
+
+		public IRegion getSubject(ITextViewer textViewer, int offset) {
+			return textViewer.getVisibleRegion();
+		}
+
+		public IInformationControlCreator getInformationPresenterControlCreator() {
+			return quickOutlineCreator();
+		}
+
+		public Object getInformation2(ITextViewer textViewer, IRegion subject) {
+			return outlinePage().outline();
+		}
+	}
+
 	public static final String ID_EDITOR = "monolipse.ui.editors.BooEditor";
 
 	private BooContentOutlinePage _outlinePage;
 
 	public BooEditor() {
 		super();
-		setSourceViewerConfiguration(new BooSourceViewerConfiguration(
-				getSharedColors()));
+		setSourceViewerConfiguration(new BooSourceViewerConfiguration(getSharedColors()));
 		setDocumentProvider(new BooDocumentProvider());
 		setKeyBindingScopes(new String[] { "monolipse.ui.booEditorScope", "org.eclipse.ui.textEditorScope" });
 	}
@@ -48,16 +68,52 @@ public class BooEditor extends TextEditor {
 	protected void createActions() {
 		super.createActions();
 
-		ToggleCommentAction action = new ToggleCommentAction(BooUI
-				.getResourceBundle(), "ToggleComment.", this);
-		action.setAccelerator(Action.convertAccelerator("CTRL+/"));
+		ToggleCommentAction action = new ToggleCommentAction(BooUI.getResourceBundle(), "ToggleComment.", this);
+		action.setAccelerator(Action.convertAccelerator("M1+/"));
 		setAction(ToggleCommentAction.ID, action);
-		setActionActivationCode(ToggleCommentAction.ID, '/', -1, SWT.CTRL);
+		setActionActivationCode(ToggleCommentAction.ID, '/', -1, SWT.MOD1);
 		markAsStateDependentAction(ToggleCommentAction.ID, true);
 		action.configure(getSourceViewer(), getSourceViewerConfiguration());
 		
 		Action eca = new ExpandCodeAction(this);
 		setAction(eca.getId(), eca);
+		
+		final InformationPresenter quickOutline = new InformationPresenter(quickOutlineCreator()) {
+			public IInformationProvider getInformationProvider(String contentType) {
+				return new BooOutlineInformationProvider();
+			}
+		};
+		quickOutline.install(getSourceViewer());
+		final Action outlineAction = new Action("QuickOutline") {
+			public void run() {
+				BusyIndicator.showWhile(getSite().getShell().getDisplay(), new Runnable() {
+					public void run() {
+						quickOutline.showInformation();
+					}
+				});
+				
+			}
+		};
+		outlineAction.setImageDescriptor(BooUI.sharedImage(ISharedImages.IMG_DEF_VIEW));
+		outlineAction.setId("monolipse.ui.editors.actions.BooQuickOutlineAction");
+		outlineAction.setActionDefinitionId(outlineAction.getId());
+		setAction(outlineAction.getId(), outlineAction);
+		
+		toolBarManager().add(outlineAction);
+	}
+
+	private IToolBarManager toolBarManager() {
+		return this.getEditorSite().getActionBars().getToolBarManager();
+	}
+
+	private IInformationControlCreator quickOutlineCreator() {
+		return new IInformationControlCreator() {
+			public IInformationControl createInformationControl(Shell parent) {
+				int shellStyle= SWT.RESIZE;
+				int treeStyle= SWT.V_SCROLL | SWT.H_SCROLL;
+				return outlinePage().createQuickOutline(parent, shellStyle, treeStyle);
+			}
+		};
 	}
 
 	protected void editorContextMenuAboutToShow(IMenuManager menu) {
@@ -69,13 +125,18 @@ public class BooEditor extends TextEditor {
 
 	public Object getAdapter(Class required) {
 		if (IContentOutlinePage.class.equals(required)) {
-			if (_outlinePage == null) {
-				_outlinePage = new BooContentOutlinePage(getDocumentProvider(), this);
-				_outlinePage.setInput(getEditorInput());
-			}
-			return _outlinePage;
+			return outlinePage();
 		}
 		return super.getAdapter(required);
 	}
+
+	private BooContentOutlinePage outlinePage() {
+		if (_outlinePage == null) {
+			_outlinePage = new BooContentOutlinePage(getDocumentProvider(), this);
+			_outlinePage.setInput(getEditorInput());
+		}
+		return _outlinePage;
+	}
+
 
 }
