@@ -14,7 +14,7 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IInformationControl;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.viewers.*;
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.ISharedImages;
@@ -28,6 +28,7 @@ public class BooContentOutlinePage extends ContentOutlinePage {
 
 		public BooOutlineInformationControl(Shell parent, int shellStyle, int treeStyle) {
 			super(parent, shellStyle, treeStyle);
+			
 		}
 
 		protected TreeViewer createTreeViewer(Composite parent, int style) {
@@ -35,17 +36,24 @@ public class BooContentOutlinePage extends ContentOutlinePage {
 			tree.setAutoExpandLevel(4);
 			tree.setContentProvider(new OutlineContentProvider());
 			tree.setLabelProvider(new OutlineLabelProvider());
-			tree.addSelectionChangedListener(new ISelectionChangedListener() {
-				public void selectionChanged(SelectionChangedEvent event) {
-					Object selected = ((IStructuredSelection) event.getSelection()).getFirstElement();
-					if (null == selected) return;
-					int line = ((OutlineNode)selected).line()-1;
-					gotoLine(line);
-				}
-			});
+//			tree.addSelectionChangedListener(new ISelectionChangedListener() {
+//				public void selectionChanged(SelectionChangedEvent event) {
+//					Object selected = ((IStructuredSelection) event.getSelection()).getFirstElement();
+//					if (null == selected) return;
+//					goToNode(((OutlineNode)selected));
+//				}
+//			});
 			return tree;
 		}
-
+		
+		protected Object getSelectedElement() {
+			OutlineNode node = (OutlineNode)super.getSelectedElement();
+			if (null != node) {
+				goToNode(node);
+			}
+			return node;
+		}
+		
 		protected String getId() {
 			return getClass().getName();
 		}
@@ -235,5 +243,10 @@ public class BooContentOutlinePage extends ContentOutlinePage {
 	public IInformationControl createQuickOutline(Shell parent, int shellStyle,
 			int treeStyle) {
 		return new BooOutlineInformationControl(parent, shellStyle, treeStyle);
+	}
+
+	private void goToNode(final OutlineNode node) {
+		int line = node.line()-1;
+		gotoLine(line);
 	}
 }
