@@ -42,7 +42,7 @@ public class BooEditor extends TextEditor {
 		}
 
 		public IRegion getSubject(ITextViewer textViewer, int offset) {
-			return textViewer.getVisibleRegion();
+			return new Region(offset, 1);
 		}
 
 		public IInformationControlCreator getInformationPresenterControlCreator() {
