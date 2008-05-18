@@ -7,6 +7,9 @@ import monolipse.core.compiler.OutlineNode;
 import monolipse.ui.BooUI;
 import monolipse.ui.IBooUIConstants;
 
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -16,9 +19,12 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
@@ -90,7 +96,14 @@ public class BooContentOutlinePage extends ContentOutlinePage {
 		
 		setUpOutline();
 		
-		TreeViewer tree = getTreeViewer();
+		setUpTreeViewer();
+		
+		toolBarManager().add(createSortAction());
+		
+	}
+
+	private void setUpTreeViewer() {
+		final TreeViewer tree = getTreeViewer();
 		tree.setAutoExpandLevel(4);
 		tree.setContentProvider(new OutlineContentProvider());
 		tree.setLabelProvider(new OutlineLabelProvider());
@@ -103,6 +116,30 @@ public class BooContentOutlinePage extends ContentOutlinePage {
 				gotoLine(line);
 			}
 		});
+	}
+
+	private IToolBarManager toolBarManager() {
+		return getSite().getActionBars().getToolBarManager();
+	}
+
+	private Action createSortAction() {
+		Action sortAction = new Action("Sort", Action.AS_CHECK_BOX) {
+			public void run() {
+				getTreeViewer().setComparator(isChecked() ? new ViewerComparator() : null);
+			}
+		};
+		sortAction.setToolTipText("sorts by name");
+		sortAction.setImageDescriptor(sharedImage(ISharedImages.IMG_DEF_VIEW));
+		return sortAction;
+	}
+
+	private ImageDescriptor sharedImage(String img) {
+		return sharedImages().
+			getImageDescriptor(img);
+	}
+
+	private ISharedImages sharedImages() {
+		return PlatformUI.getWorkbench().getSharedImages();
 	}
 	
 	void setUpOutline() {
