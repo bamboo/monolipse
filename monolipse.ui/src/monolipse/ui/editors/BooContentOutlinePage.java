@@ -15,6 +15,7 @@ import org.eclipse.jface.text.IInformationControl;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.graphics.*;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.ISharedImages;
@@ -32,10 +33,11 @@ public class BooContentOutlinePage extends ContentOutlinePage {
 		}
 
 		protected TreeViewer createTreeViewer(Composite parent, int style) {
-			TreeViewer tree = new TreeViewer(parent, style);
-			tree.setAutoExpandLevel(4);
-			tree.setContentProvider(new OutlineContentProvider());
-			tree.setLabelProvider(new OutlineLabelProvider());
+			
+			TreeViewer viewer = new TreeViewer(newTree(parent, style));
+			viewer.setAutoExpandLevel(4);
+			viewer.setContentProvider(new OutlineContentProvider());
+			viewer.setLabelProvider(new OutlineLabelProvider());
 //			tree.addSelectionChangedListener(new ISelectionChangedListener() {
 //				public void selectionChanged(SelectionChangedEvent event) {
 //					Object selected = ((IStructuredSelection) event.getSelection()).getFirstElement();
@@ -43,6 +45,15 @@ public class BooContentOutlinePage extends ContentOutlinePage {
 //					goToNode(((OutlineNode)selected));
 //				}
 //			});
+			return viewer;
+		}
+
+		private Tree newTree(Composite parent, int style) {
+			Tree tree = new Tree(parent, style);
+			GridData gd= new GridData(GridData.FILL_BOTH);
+			gd.heightHint= tree.getItemHeight() * 12;
+			gd.widthHint = gd.heightHint * 2;
+			tree.setLayoutData(gd);
 			return tree;
 		}
 		
