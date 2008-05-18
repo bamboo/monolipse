@@ -138,6 +138,6 @@ public class BooCore extends Plugin {
 	}
 
 	private static String getMonoHome() {
-		return System.getProperty("MONO_HOME", "/usr/local");
+		return System.getProperty("MONO_HOME", "/opt/local");
 	}
 }
