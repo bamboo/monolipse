@@ -1,9 +1,7 @@
 namespace monolipse.server
 
 import System
-import System.IO
 import Boo.Lang.Compiler
-import Boo.Lang.Compiler.TypeSystem
 import monolipse.core
 
 class CompilerService(AbstractService):

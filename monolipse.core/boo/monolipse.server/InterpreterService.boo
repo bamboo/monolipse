@@ -1,9 +1,7 @@
 namespace monolipse.server
 
 import System
-import System.IO
 import Boo.Lang.Interpreter
-import Useful.Attributes from Boo.Lang.Useful
 import monolipse.core
 
 class InterpreterService(AbstractService):
@@ -13,7 +11,6 @@ class InterpreterService(AbstractService):
 	def constructor(client as ProcessMessengerClient):
 		super(client)
 
-//	[once]
 	def getInterpreter():
 		if _interpreter is not null: return _interpreter
 		_interpreter = InteractiveInterpreter(RememberLastValue: true, Print: writeLine)
