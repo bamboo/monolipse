@@ -5,6 +5,9 @@
     <monolipse.core.internal.AssemblySourceReference-Remembrance>
       <path>/monolipse.core/boo/monolipse.core</path>
     </monolipse.core.internal.AssemblySourceReference-Remembrance>
+    <monolipse.core.internal.LocalAssemblyReference-Remembrance>
+      <path>/monolipse.core/lib/Boo.PatternMatching.dll</path>
+    </monolipse.core.internal.LocalAssemblyReference-Remembrance>
   </references>
   <outputFolder>/monolipse.core/bin</outputFolder>
   <additionalOptions></additionalOptions>

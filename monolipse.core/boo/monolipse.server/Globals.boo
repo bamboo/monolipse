@@ -1,9 +1,9 @@
 namespace monolipse.server
 
 import Boo.Lang.Interpreter
-import Boo.Lang.Compiler
 import Boo.Lang.Compiler.Ast
 import Boo.Lang.Compiler.TypeSystem
+import Boo.PatternMatching
 
 def describeEntity(entity as IEntity):
 	ie = entity as IInternalEntity
@@ -11,20 +11,22 @@ def describeEntity(entity as IEntity):
 	return InteractiveInterpreter.DescribeEntity(entity)
 	
 def describeNode(node as Node):
-	field = node as Field
-	return describeField(field) if field is not null
-	
-	method = node as Method
-	return describeMethod(method) if method is not null
-	
-	p = node as Property
-	return describeProperty(p) if p is not null
-	
-	member = node as TypeMember
-	return member.Name if member is not null
-	
-	return node.ToString()
-	
+	match node:
+		case field = Field():
+			return describeField(field)
+		case method = Method():
+			return describeMethod(method)
+		case p = Property():
+			return describeProperty(p)
+		case member = TypeMember():
+			return member.Name
+		case macro = MacroStatement(Name: macroName, Arguments: args):
+			if len(args) > 0: 
+				return "${macroName} ${args[0]}"
+			return macroName
+		otherwise:
+			return node.ToString()
+
 def describeField(field as Field):
 	return "${field.Name}${optionalTypeReference(field.Type)}"
 
