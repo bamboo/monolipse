@@ -31,11 +31,7 @@ import monolipse.core.foundation.WorkspaceUtilities;
 import monolipse.ui.BooUI;
 import monolipse.ui.IBooUIConstants;
 
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Platform;
@@ -332,8 +328,8 @@ public class ReferenceContainerPropertyPage extends PreferencePage
 		viewer.addFilter(new ViewerFilter() {
 			public boolean select(Viewer viewer, Object parentElement, Object element) {
 				try {
-					if (element instanceof IFolder) {
-						return containsLibrary((IFolder)element);
+					if (element instanceof IContainer) {
+						return containsLibrary((IContainer)element);
 					}
 					if (element instanceof IFile) {
 						return isLibrary((IFile)element);
@@ -352,7 +348,6 @@ public class ReferenceContainerPropertyPage extends PreferencePage
 		TreeViewer viewer = new TreeViewer(parent, SWT.FILL);
 		viewer.setContentProvider(new WorkbenchContentProvider());
 		viewer.setLabelProvider(new BooExplorerLabelProvider());
-		viewer.setInput(WorkspaceUtilities.getWorkspaceRoot());
 		
 		viewer.addDoubleClickListener(_doubleClickListener);
 		
@@ -360,17 +355,19 @@ public class ReferenceContainerPropertyPage extends PreferencePage
 		resourcePatternFilter.setPatterns(new String[] { ".*" });
 		viewer.addFilter(resourcePatternFilter);
 		viewer.addFilter(DerivedResourceFilter.DEFAULT);
+		
+		viewer.setInput(WorkspaceUtilities.getWorkspaceRoot());
 		return viewer;
 	}
 
 	protected boolean isLibrary(IFile file) {
-		String extension = file.getFileExtension();
-		return null == extension
+		String name = file.getName().toLowerCase();
+		return null == name
 			? false
-			: (extension.equals("dll") || extension.equals("exe"));
+			: (name.endsWith(".dll") || name.endsWith(".exe"));
 	}
 
-	protected boolean containsLibrary(IFolder folder) throws CoreException {
+	protected boolean containsLibrary(IContainer folder) throws CoreException {
 		final boolean[] result = new boolean[] { false };
 		folder.accept(new IResourceVisitor() {
 			public boolean visit(IResource resource) throws CoreException {
