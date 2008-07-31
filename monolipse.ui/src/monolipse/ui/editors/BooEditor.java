@@ -98,12 +98,6 @@ public class BooEditor extends TextEditor {
 		outlineAction.setId("monolipse.ui.editors.actions.BooQuickOutlineAction");
 		outlineAction.setActionDefinitionId(outlineAction.getId());
 		setAction(outlineAction.getId(), outlineAction);
-		
-		toolBarManager().add(outlineAction);
-	}
-
-	private IToolBarManager toolBarManager() {
-		return this.getEditorSite().getActionBars().getToolBarManager();
 	}
 
 	private IInformationControlCreator quickOutlineCreator() {

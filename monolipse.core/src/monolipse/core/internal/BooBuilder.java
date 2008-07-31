@@ -21,34 +21,12 @@ package monolipse.core.internal;
 import java.io.IOException;
 import java.util.Map;
 
-import monolipse.core.AssemblyReferenceVisitor;
-import monolipse.core.BooCore;
-import monolipse.core.IAssemblyReference;
-import monolipse.core.IAssemblySource;
-import monolipse.core.IAssemblySourceReference;
-import monolipse.core.ILocalAssemblyReference;
-import monolipse.core.IMonoProject;
+import monolipse.core.*;
 import monolipse.core.foundation.WorkspaceUtilities;
-import monolipse.core.runtime.CompilerError;
-import monolipse.core.runtime.CompilerLauncher;
+import monolipse.core.runtime.*;
 
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.IResourceVisitor;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
-import org.eclipse.core.resources.WorkspaceJob;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
-
-
+import org.eclipse.core.resources.*;
+import org.eclipse.core.runtime.*;
 
 public class BooBuilder extends IncrementalProjectBuilder {
 
@@ -67,15 +45,15 @@ public class BooBuilder extends IncrementalProjectBuilder {
 		super.startupOnInitialize();
 	}
 	
-	private void scheduleProjectRebuild() {
-		WorkspaceJob job = new WorkspaceJob("boo build") {
-			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-				getProject().build(IncrementalProjectBuilder.FULL_BUILD, monitor);
-				return Status.OK_STATUS;
-			}
-		};
-		job.schedule();
-	}
+//	private void scheduleProjectRebuild() {
+//		WorkspaceJob job = new WorkspaceJob("boo build") {
+//			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+//				getProject().build(IncrementalProjectBuilder.FULL_BUILD, monitor);
+//				return Status.OK_STATUS;
+//			}
+//		};
+//		job.schedule();
+//	}
 	
 	private void addMarker(IResource resource, String message, int lineNumber,
 			int severity) {
