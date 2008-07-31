@@ -10,6 +10,16 @@ class OutlineVisitor(DepthFirstVisitor):
 	def constructor(writer as TextWriter):
 		_writer = writer
 		
+	override def OnModule(node as Module):
+		VisitCollection(node.Members)
+		Visit(node.Globals)
+		
+	override def OnMacroStatement(node as MacroStatement):
+		WriteBeginNode()
+		WriteNodeLine(node)
+		Visit(node.Block)
+		WriteEndNode()
+		
 	override def OnClassDefinition(node as ClassDefinition):
 		WriteTypeDefinition(node)
 		
@@ -39,7 +49,7 @@ class OutlineVisitor(DepthFirstVisitor):
 		
 	override def OnProperty(node as Property):
 		WriteBeginNode()
-		WriteTypeMember(node)
+		WriteNodeLine(node)
 		Visit(node.Getter)
 		Visit(node.Setter)
 		WriteEndNode()	
@@ -49,12 +59,12 @@ class OutlineVisitor(DepthFirstVisitor):
 		
 	def WriteMemberNode(node as TypeMember):
 		WriteBeginNode()
-		WriteTypeMember(node)
+		WriteNodeLine(node)
 		WriteEndNode()
 		
 	def WriteTypeDefinition(node as TypeDefinition):
 		WriteBeginNode()
-		WriteTypeMember(node)
+		WriteNodeLine(node)
 		VisitCollection(node.Members)
 		WriteEndNode()
 		
@@ -64,5 +74,5 @@ class OutlineVisitor(DepthFirstVisitor):
 	def WriteEndNode():
 		_writer.WriteLine("END-NODE")
 		
-	def WriteTypeMember(node as TypeMember):
+	def WriteNodeLine(node as Node):
 		_writer.WriteLine("${node.NodeType}:${describeNode(node)}:${node.LexicalInfo.Line}")
