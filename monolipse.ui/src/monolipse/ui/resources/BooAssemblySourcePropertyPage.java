@@ -143,11 +143,13 @@ public class BooAssemblySourcePropertyPage extends PreferencePage
 		
 		data = new String[] {
 				IAssemblySourceLanguage.BOO,
-				IAssemblySourceLanguage.CSHARP
+				IAssemblySourceLanguage.CSHARP,
+				IAssemblySourceLanguage.CSHARP_1_1,
 		};
 		labels = new String[] { 
 				"boo",
 				"c#",
+				"c# 1.1 (no generics)",
 		};
 		_languageButtons = createButtonGroup(composite, "Language", labels, data, source.getLanguage());
 		

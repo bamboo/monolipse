@@ -27,7 +27,7 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 		if (language.equals(IAssemblySourceLanguage.BOO)) {
 			return new BooCompilerLauncher();
 		}
-		return new CSharpCompilerLauncher();
+		return new CSharpCompilerLauncher(language);
 	}
 	
 	public static CompilerLauncher createLauncher(IAssemblySource source) throws IOException {
