@@ -20,7 +20,6 @@ import monolipse.core.foundation.WorkspaceUtilities;
 
 import org.eclipse.core.resources.IFile;
 
-
 public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 	
 	public static CompilerLauncher createLauncher(String language) throws IOException {
@@ -39,7 +38,7 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 		return launcher;
 	}
 
-	private IMonoLauncher _launcher;
+	private final IMonoLauncher _launcher;
 	private ResponseFile _responseFile;
 	
 	protected CompilerLauncher(String compiler) throws IOException {

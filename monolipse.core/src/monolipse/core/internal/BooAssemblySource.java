@@ -311,10 +311,17 @@ public class BooAssemblySource implements IAssemblySource {
 	
 	boolean isBooFile(IResource resource) {
 		if (IResource.FILE != resource.getType()) return false;
-		String extension = resource.getFileExtension();
-		return extension == null
-			? false
-			: extension.equalsIgnoreCase(getLanguage());
+		final String extension = resource.getFileExtension();
+		if (extension == null) return false;
+		return extension.equalsIgnoreCase(expectedSourceFileExtension());
+	}
+
+	private String expectedSourceFileExtension() {
+		final String language = getLanguage();
+		final String expectedExtension = language.equals(IAssemblySourceLanguage.BOO)
+			? "boo"
+			: "cs";
+		return expectedExtension;
 	}
 
 	public static IAssemblySource getContainer(IResource resource) throws CoreException {
