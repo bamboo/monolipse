@@ -3,7 +3,7 @@ namespace monolipse.server
 import Boo.Lang.Interpreter
 import Boo.Lang.Compiler.Ast
 import Boo.Lang.Compiler.TypeSystem
-import Boo.PatternMatching
+import Boo.Lang.PatternMatching
 
 def describeEntity(entity as IEntity):
 	ie = entity as IInternalEntity
