@@ -15,6 +15,6 @@ public interface IMonoProject {
 	IAssemblySource[] getAffectedAssemblySources(
 			IResourceDelta delta) throws CoreException;
 
-	IAssemblySource[] getAssemblySourceOrder(IAssemblySource[] sources) throws CoreException;
+	IAssemblySource[] getAssemblySourceOrder(IAssemblySource... sources) throws CoreException;
 
 }

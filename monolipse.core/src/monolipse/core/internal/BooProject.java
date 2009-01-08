@@ -156,7 +156,7 @@ public class BooProject implements IMonoProject {
 	}
 
 	public IAssemblySource[] getAssemblySourceOrder(
-			IAssemblySource[] sources) throws CoreException {
+			IAssemblySource... sources) throws CoreException {
 		return new TopoSorter(sources).sorted();
 	}
 

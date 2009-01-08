@@ -2,8 +2,8 @@
 
 import System
 import System.IO
-import NUnit.Core
-import NUnit.Util
+import NUnit.Core from nunit.core
+import NUnit.Util from nunit.util
 import monolipse.core
 
 // TODO: report errors
