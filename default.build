@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<project name="monolipse" default="all">
+	
+	<property name="target.dir" value="./plugins" />
+	<property name="boo.dir" value="../boo/build" />
+	
+	<target name="all" depends="monolipse.core, monolipse.nunit, monolipse.ui">
+	</target>
+	
+	<target name="monolipse.core" depends="init">
+	
+		<booc target="library" output="monolipse.core/bin/monolipse.core.dll">
+			<sources basedir="monolipse.core/boo/monolipse.core">
+				<include name="*.boo" />
+			</sources>
+		</booc>
+		
+		<booc target="exe" output="monolipse.core/bin/monolipse.server.exe">
+			<sources basedir="monolipse.core/boo/monolipse.server">
+				<include name="*.boo" />
+			</sources>
+			<references basedir="monolipse.core/bin">
+				<include name="monolipse.core.dll" />
+			</references>
+		</booc>
+	
+		<property name="plugin" value="monolipse.core" />
+		<call target="package-plugin" />
+		
+	</target>
+	
+	<target name="package-plugin">
+	
+		<boo>
+		import System.IO
+		
+		def bundleVersion():
+			matchResult = /Bundle-Version:\s*((\d|\.)+)\s+/.Match(readManifest())
+			return matchResult.Groups[1].ToString()
+		
+		def readManifest():
+			return File.ReadAllText("${plugin()}/META-INF/MANIFEST.MF")
+			
+		def plugin():
+			return Project.Properties["plugin"]
+			
+		Project.Properties["bundle.version"] = bundleVersion()
+		</boo>
+	
+		<property name="plugin.dir" value="${target.dir}/${plugin}_${bundle.version}" />
+		
+		<copy todir="${plugin.dir}">
+			<fileset basedir="${plugin}">
+				<include name="bin/*.exe" />
+				<include name="bin/*.dll" />
+				<include name="bin/*.mdb" />
+				<include name="lib/**/**" />
+				<include name="icons/**" />
+				<include name="META-INF/**" />
+				<include name="plugin.xml" />
+			</fileset>
+		</copy>
+		
+		<zip zipfile="${plugin.dir}/${plugin}.jar">
+			<fileset basedir="${plugin}/bin">
+				<include name="**/*.class" />
+			</fileset>
+		</zip>
+	</target>
+	
+	<target name="monolipse.nunit" depends="monolipse.core, monolipse.ui">
+	
+		<copy todir="monolipse.nunit/lib">
+			<fileset basedir="monolipse.core/bin">
+				<include name="*.dll" />
+				<include name="*.exe" />
+				<include name="*.mdb" />
+			</fileset>
+		</copy>
+		
+		<copy todir="monolipse.nunit/bin">
+			<fileset basedir="monolipse.nunit/lib">
+				<include name="**/**" />
+			</fileset>
+		</copy>
+	
+		<booc target="exe" output="monolipse.nunit/bin/TestClientRunner.exe">
+			<sources basedir="monolipse.nunit/boo/TestClientRunner">
+				<include name="*.boo" />
+			</sources>
+			<references basedir="monolipse.nunit/bin">
+				<include name="monolipse.core.dll" />
+			</references>
+		</booc>
+	
+		<property name="plugin" value="monolipse.nunit" />
+		<call target="package-plugin" />
+		
+	</target>
+	
+	<target name="monolipse.ui" depends="monolipse.core">
+	
+		<property name="plugin" value="monolipse.ui" />
+		<call target="package-plugin" />
+	</target>
+	
+	<target name="init">
+		<loadtasks assembly="${boo.dir}/Boo.NAnt.Tasks.dll" />
+	</target>
+
+</project>

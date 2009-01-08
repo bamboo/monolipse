@@ -20,7 +20,7 @@ public interface IAssemblySource extends IAdaptable {
 
 	IFile[] getSourceFiles() throws CoreException;
 
-	void setReferences(IAssemblyReference[] references);
+	void setReferences(IAssemblyReference... references);
 
 	IAssemblyReference[] getReferences();
 	

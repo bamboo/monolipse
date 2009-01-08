@@ -21,22 +21,26 @@ public class CompilerServicesTestCase extends AbstractBooTestCase {
 	}
 	
 	public void testGetOutline() throws Exception {
-		OutlineNode outline = builder.getOutline(loadResourceAsString("Outline.boo"));
-		OutlineNode[] children = outline.children();
-		assertEquals(2, children.length);
+		final OutlineNode outline = outlineFor("Outline.boo");
+		final OutlineNode[] children = outline.children();
+		assertEquals(3, children.length);
 		
-		assertEquals("Foo", children[0].name());
-		assertEquals(OutlineNode.CLASS, children[0].type());
-		assertEquals(3, children[0].line());
-		assertEquals("global()", children[1].name());
-		assertEquals(17, children[1].line());
-		assertEquals(OutlineNode.METHOD, children[1].type());
-	}
-	
-	public void testGetCompletionProposals() {
-		
+		assertOutlineNode(children[0], "Foo", OutlineNode.CLASS, 3);
+		assertOutlineNode(children[1], "global()", OutlineNode.METHOD, 17);
 	}
 
+	private OutlineNode outlineFor(final String resource) throws IOException {
+		return builder.getOutline(loadResourceAsString(resource));
+	}
+
+	private void assertOutlineNode(final OutlineNode node,
+			final String expectedName, final String expectedType,
+			final int expectedLine) {
+		assertEquals(expectedName, node.name());
+		assertEquals(expectedType, node.type());
+		assertEquals(expectedLine, node.line());
+	}
+	
 	private String loadResourceAsString(String resource) throws IOException {
 		return IOUtilities.toString(getResourceStream(resource));
 	}

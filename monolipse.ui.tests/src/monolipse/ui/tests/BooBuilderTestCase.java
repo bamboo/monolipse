@@ -20,7 +20,7 @@ public class BooBuilderTestCase extends AbstractBooTestCase {
 		IFile file = copyResourceTo("TestClass.dll", "lib");
 		IAssemblyReference reference = BooCore.createAssemblyReference(file);
 		_assemblySource = _booProject.addAssemblySource(new Path("src/Test"));
-		_assemblySource.setReferences(new IAssemblyReference[] { reference });
+		_assemblySource.setReferences(reference);
 		copyResourceTo("Program.boo", "src/Test");
 		build();
 	}

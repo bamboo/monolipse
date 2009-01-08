@@ -154,7 +154,7 @@ public class BooAssemblySource implements IAssemblySource {
 	/* (non-Javadoc)
 	 * @see monolipse.core.IBooAssemblySource#setReferences(monolipse.core.IBooAssemblyReference[])
 	 */
-	public void setReferences(IAssemblyReference[] references) {
+	public void setReferences(IAssemblyReference... references) {
 		if (null == references) throw new IllegalArgumentException("references");
 		_references = references;
 	}

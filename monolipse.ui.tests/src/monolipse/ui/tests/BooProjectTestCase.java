@@ -1,7 +1,6 @@
 ﻿package monolipse.ui.tests;
 
 import monolipse.core.BooCore;
-import monolipse.core.IAssemblyReference;
 import monolipse.core.IAssemblySource;
 import monolipse.core.IMonoProject;
 
@@ -52,15 +51,15 @@ public class BooProjectTestCase extends AbstractBooTestCase {
 		IAssemblySource baz = addAssemblySource("src/Baz");
 		IAssemblySource bang = addAssemblySource("src/Bang");
 
-		foo.setReferences(new IAssemblyReference[] { BooCore.createAssemblyReference(bar) });
-		baz.setReferences(new IAssemblyReference[] { BooCore.createAssemblyReference(foo) });
-		bang.setReferences(new IAssemblyReference[] { BooCore.createAssemblyReference(foo) });
+		foo.setReferences(BooCore.createAssemblyReference(bar));
+		baz.setReferences(BooCore.createAssemblyReference(foo));
+		bang.setReferences(BooCore.createAssemblyReference(foo));
 		
 		// (baz, bang) -> foo -> bar
 		// build order should be:
 		// bang, bar, foo, baz
 		
-		IAssemblySource[] order = _booProject.getAssemblySourceOrder(new IAssemblySource[] { bang, foo, bar, baz });
+		IAssemblySource[] order = _booProject.getAssemblySourceOrder(bang, foo, bar, baz);
 		assertSame(bar, order[0]);
 		assertSame(foo, order[1]);
 		assertSame(bang, order[2]);
@@ -89,8 +88,8 @@ public class BooProjectTestCase extends AbstractBooTestCase {
 		final IAssemblySource foo = addAssemblySource("src/Foo");
 		final IAssemblySource bar = addAssemblySource("src/Bar");
 		final IAssemblySource baz = addAssemblySource("src/Baz");
-		foo.setReferences(new IAssemblyReference[] { BooCore.createAssemblyReference(bar) });
-		baz.setReferences(new IAssemblyReference[] { BooCore.createAssemblyReference(foo) });
+		foo.setReferences(BooCore.createAssemblyReference(bar));
+		baz.setReferences(BooCore.createAssemblyReference(foo));
 		
 		final ResourceChangeListener listener = new ResourceChangeListener();
 		final IWorkspace workspace = getProject().getWorkspace();
