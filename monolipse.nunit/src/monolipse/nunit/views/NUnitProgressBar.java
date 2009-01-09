@@ -150,13 +150,13 @@ public class NUnitProgressBar extends Canvas {
 		return size;
 	}
 	
-	public void step(int failures) {
+	public void step(boolean hasFailures) {
 		_currentTickCount++;
 		int x= _colorBarWidth;
 
 		_colorBarWidth= scale(_currentTickCount);
 
-		if (!_error && failures > 0) {
+		if (!_error && hasFailures) {
 			_error= true;
 			x= 1;
 		}

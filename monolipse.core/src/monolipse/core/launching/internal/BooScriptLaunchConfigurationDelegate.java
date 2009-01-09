@@ -39,7 +39,7 @@ public class BooScriptLaunchConfigurationDelegate extends AbstractBooLaunchConfi
 		launcher.addSourceFiles(new IFile[] { scriptFile });
 		launcher.setWorkingDir(scriptFile.getParent().getLocation().toFile());
 
-		IAssemblySource container = BooCore.getAssemblySourceContainer(scriptFile);
+		IAssemblySource container = BooCore.assemblySourceContaining(scriptFile);
 		if (null != container) launcher.addReferences(container.getReferences());
 		return launcher.launch();
 	}

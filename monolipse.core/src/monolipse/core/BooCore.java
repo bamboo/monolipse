@@ -91,7 +91,7 @@ public class BooCore extends Plugin {
 	private void registerPreferenceListeners() {
 	}
 
-	public static IAssemblySource getAssemblySourceContainer(IResource resource) {
+	public static IAssemblySource assemblySourceContaining(IResource resource) {
 		try {
 			return BooAssemblySource.getContainer(resource);
 		} catch (CoreException e) {

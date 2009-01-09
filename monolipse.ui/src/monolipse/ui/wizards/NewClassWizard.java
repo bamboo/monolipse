@@ -118,7 +118,7 @@ public class NewClassWizard extends Wizard implements INewWizard {
 	}
 	
 	private String calcNamespace(IResource resource) {
-		IAssemblySource source = BooCore.getAssemblySourceContainer(resource);
+		IAssemblySource source = BooCore.assemblySourceContaining(resource);
 		if (null != source) {
 			IFolder folder = source.getFolder();
 			String parentFullPath = folder.getParent().getFullPath().toPortableString();

@@ -3,29 +3,18 @@ package monolipse.nunit.views;
 import java.util.ArrayList;
 
 import monolipse.core.IAssemblySource;
-import monolipse.nunit.ITestRunListener;
-import monolipse.nunit.NUnitPlugin;
-import monolipse.ui.BooUI;
-import monolipse.ui.IBooUIConstants;
+import monolipse.nunit.*;
+import monolipse.nunit.launching.NUnitLauncher;
+import monolipse.ui.*;
 
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.custom.ViewForm;
+import org.eclipse.swt.custom.*;
+import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.layout.*;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.part.ViewPart;
 
 
@@ -33,12 +22,18 @@ import org.eclipse.ui.part.ViewPart;
 public class NUnitView extends ViewPart {
 	
 	static class FailureInfo {
-		private String _testName;
-		private String _trace;
+		private final String _testName;
+		private final String _trace;
+		private final IAssemblySource _assemblySource;
 
-		public FailureInfo(String testName, String trace) {
+		public FailureInfo(IAssemblySource assemblySource, String testName, String trace) {
+			_assemblySource = assemblySource;
 			_testName = testName;
 			_trace = trace;
+		}
+		
+		public IAssemblySource getAssemblySource() {
+			return _assemblySource;
 		}
 		
 		public String getTestName() {
@@ -57,7 +52,7 @@ public class NUnitView extends ViewPart {
 	
 	private final TestListener _listener = new TestListener();
 	
-	ArrayList _failures = new ArrayList();
+	private final ArrayList<FailureInfo> _failures = new ArrayList();
 	private TableViewer _failureView;
 	private StackTraceViewer _traceView;
 
@@ -112,8 +107,42 @@ public class NUnitView extends ViewPart {
 				_traceView.setStackTrace(((FailureInfo)element).getTrace());
 			}
 		});
+		final Table failureTableWidget = _failureView.getTable();
+		failureTableWidget.setMenu(createFailureMenu(failureTableWidget));
 
 		left.setContent(_failureView.getControl());
+	}
+
+	private Menu createFailureMenu(final Table failureTableWidget) {
+		final Menu menu = new Menu(failureTableWidget);
+		final MenuItem rerunFailures = new MenuItem(menu, SWT.PUSH);
+		rerunFailures.setText("Rerun failed tests");
+		rerunFailures.addSelectionListener(new SelectionListener() {
+			public void widgetSelected(SelectionEvent e) {
+				rerunLastFailures();
+			}
+		
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
+		return menu;
+	}
+
+	protected void rerunLastFailures() {
+		if (_failures.isEmpty())
+			return;
+		try {
+			NUnitLauncher.launch(_failures.get(0).getAssemblySource(), "run", failedTestNames());
+		} catch (CoreException x) {
+			NUnitPlugin.logException(x);
+		}
+	}
+
+	private ArrayList<String> failedTestNames() {
+		final ArrayList<String> failedTests = new ArrayList<String>();
+		for (FailureInfo failure : _failures)
+			failedTests.add(failure.getTestName());
+		return failedTests;
 	}
 
 	private void setFormLabel(ViewForm form, final String labelText) {
@@ -121,7 +150,6 @@ public class NUnitView extends ViewPart {
 		label.setText(labelText);
 		form.setTopLeft(label);
 	}
-
 	
 	protected Composite createProgressCountPanel(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
@@ -147,6 +175,17 @@ public class NUnitView extends ViewPart {
 	public void setFocus() {
 	}
 	
+	private void selectFirstFailure() {
+		if (_failures.isEmpty())
+			return;
+		
+		_failureView.setSelection(new StructuredSelection(_failures.get(0)), true);
+	}
+
+	private void activateNUnitView() {
+		getSite().getPage().activate(NUnitView.this);
+	}
+
 	class FailureContentProvider implements IStructuredContentProvider {
 
 		public void dispose() {
@@ -194,62 +233,67 @@ public class NUnitView extends ViewPart {
 
 		private int _runs;
 		
-		public synchronized void testsStarted(IAssemblySource source, final int testCount) {
-			getDisplay().asyncExec(new Runnable() {
-				public void run() {
-					_failures.clear();
-					_runs = _errors = 0;
-					_counterPanel.setTotal(testCount);
-					
-					_progressBar.reset();
-					_progressBar.setMaximum(testCount);
+		public void testsStarted(IAssemblySource source, final int testCount) {
+			updateUI(new Runnable() { public void run() {
+				_failures.clear();
+				_runs = 0;
+				_errors = 0;
+				_counterPanel.setTotal(testCount);
+				
+				_progressBar.reset();
+				_progressBar.setMaximum(testCount);
 
-					_traceView.setStackTrace("nothing");
-					
-					updateUI();
-				}
-			});
+				_traceView.setStackTrace("");
+			}});
 		}
 
+		public void testsFinished(IAssemblySource source) {
+			updateUI(new Runnable() { public void run() {
+				activateNUnitView();
+				selectFirstFailure();
+			}});
+		}
+
+		public void testStarted(IAssemblySource source, final String fullName) {
+			updateUI(new Runnable() { public void run() {
+				updateProgressBar();
+				++_runs;
+			}});
+		}
+
+		public void testFailed(final IAssemblySource source, final String fullName, final String trace) {
+			updateUI(new Runnable() { public void run() {
+				_failures.add(new FailureInfo(source, fullName, trace));
+				_progressBar.refresh(failuresOccurred());
+			}});
+		}
+		
+		private void updateUI(final Runnable runnable) {
+			getDisplay().asyncExec(new Runnable() { public void run() {
+				synchronized(TestListener.this) {
+					runnable.run();
+					updateUI();
+				}
+			}});
+		}
+		
 		private Display getDisplay() {
 			return _counterComposite.getDisplay();
 		}
 
-		public synchronized void testsFinished(IAssemblySource source) {
-			getDisplay().asyncExec(new Runnable() {
-				public void run() {
-					getSite().getPage().activate(NUnitView.this);
-					if (!_failures.isEmpty()) {
-						_failureView.setSelection(new StructuredSelection(_failures.get(0)), true);
-					}
-				}
-			});
-		}
-
-		public synchronized void testStarted(IAssemblySource source, final String fullName) {
-			getDisplay().asyncExec(new Runnable() {
-				public void run() {
-					_progressBar.step(_failures.size());
-					++_runs;
-					updateUI();
-				}
-			});
-		}
-
-		public synchronized void testFailed(IAssemblySource source, final String fullName, final String trace) {
-			getDisplay().asyncExec(new Runnable() {
-				public void run() {
-					_failures.add(new FailureInfo(fullName, trace));
-					updateUI();
-				}
-			});
-		}
-
-		private synchronized void updateUI() {
+		private void updateUI() {
 			_counterPanel.setFailureValue(_failures.size());
 			_counterPanel.setRunValue(_runs);
 			_counterPanel.setErrorValue(_errors);
 			_failureView.refresh();
+		}
+
+		private void updateProgressBar() {
+			_progressBar.step(failuresOccurred());
+		}
+
+		private boolean failuresOccurred() {
+			return !_failures.isEmpty();
 		}
 		
 	}

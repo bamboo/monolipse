@@ -1,6 +1,7 @@
 package monolipse.nunit.launching;
 
 import java.io.IOException;
+import java.util.*;
 
 import monolipse.core.IAssemblySource;
 import monolipse.core.launching.BooLauncher;
@@ -19,10 +20,12 @@ public class NUnitLaunchConfigurationDelegate implements ILaunchConfigurationDel
 		NUnitPlugin.logInfo("NUnitLaunchConfigurationDelegate.launch");
 		
 		final IAssemblySource source = BooLauncher.getConfiguredAssemblySource(configuration);
-		if (null == source) return;
+		if (null == source)
+			return;
 		
+		final List<String> testNames = configuration.getAttribute(NUnitLaunchConfigurationConstants.ATTR_TEST_NAMES, Collections.emptyList());
 		try {
-			new TestRunner(source).run();
+			new TestRunner(source, testNames).run();
 		} catch (IOException e) {
 			NUnitPlugin.logException(e);
 		}

@@ -23,7 +23,7 @@ public class BooApplicationLaunchShortcut extends AbstractBooLaunchShortcut {
 	}
 
 	protected void launch(IFile file, String mode) {
-		IAssemblySource source = BooCore.getAssemblySourceContainer(file);
+		IAssemblySource source = BooCore.assemblySourceContaining(file);
 		if (null == source) return;
 		
 		try {

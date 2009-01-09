@@ -28,11 +28,16 @@ public class IOUtilities {
 			throws IOException {
 
 		final BufferedReader bufferedReader = new BufferedReader(reader);
+		return toString(bufferedReader);
+	}
+
+	public static String toString(final BufferedReader bufferedReader)
+			throws IOException {
+		final String lineSeparator = System.getProperty("line.separator");
 		final StringWriter writer = new StringWriter();
-		String line = null;
-		while (null != (line = bufferedReader.readLine())) {
+		for (String line = bufferedReader.readLine(); line != null; line = bufferedReader.readLine()) {
 			writer.write(line);
-			writer.write("\n");
+			writer.write(lineSeparator);
 		}
 		return writer.toString();
 	}

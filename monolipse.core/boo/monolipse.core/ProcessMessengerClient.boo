@@ -23,7 +23,7 @@ transient class ProcessMessengerClient(System.MarshalByRefObject):
 	
 	def OnMessage([required] name as string, [required] handler as MessageHandler):
 		_handlers.Add(name, handler)
-		
+	
 	def Start(portNumber as int):
 		try:
 			using _client = Connect(portNumber):
@@ -37,7 +37,8 @@ transient class ProcessMessengerClient(System.MarshalByRefObject):
 			_writer = null
 				
 	def Stop():
-		assert _client is not null
+		if _client is null:
+			return
 		_client.Close()
 		_running = false
 		

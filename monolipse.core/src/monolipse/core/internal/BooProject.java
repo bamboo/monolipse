@@ -130,7 +130,7 @@ public class BooProject implements IMonoProject {
 				IResource resource = delta.getResource();
 				if (IResource.FILE == resource.getType()) {
 					IAssemblySource parent = BooCore
-							.getAssemblySourceContainer(resource);
+							.assemblySourceContaining(resource);
 					if (null != parent && !affected.contains(parent)) {
 						affected.add(parent);
 						addDependents(affected, sources, parent);

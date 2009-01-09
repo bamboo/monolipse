@@ -57,13 +57,27 @@ class TextWriterListener(MarshalByRefObject, EventListener):
 		Console.Error.WriteLine(e)
 
 client = ProcessMessengerClient()
+
+def sendTestsStarted(count as int):
+	client.Send("TESTS-STARTED", count.ToString())
+	
+def runTestCases(assemblyName as string, testCases as (string)):
+	domain = TestDomain()
+	test = domain.Load(assemblyName)
+	if len(testCases) > 0:
+		sendTestsStarted len(testCases)
+		domain.Run(TextWriterListener(client), testCases)
+	else:
+		sendTestsStarted test.CountTestCases()
+		test.Run(TextWriterListener(client))
+	
 client.OnMessage("RUN") do (message as Message):
 	try:
-		assemblyName = message.Payload.Trim()
-		domain = TestDomain()
-		test = domain.Load(assemblyName)
-		client.Send("TESTS-STARTED", test.CountTestCases().ToString())
-		test.Run(TextWriterListener(client))
+		arguments = /,/.Split(message.Payload.Trim())
+		
+		assemblyName = arguments[0]
+		testCases = arguments[1:]
+		runTestCases assemblyName, testCases
 	except x:
 		Console.Error.WriteLine(x)
 	client.Send("TESTS-FINISHED", "")
