@@ -31,7 +31,9 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 public class StackTraceViewer {
 	
-	private static final Pattern STACK_PATTERN = Pattern.compile("in\\s(.+\\.(boo|cs|js)):(\\d+)");
+	private static final Pattern MONO_STACK_PATTERN = Pattern.compile("in\\s(.+\\.(boo|cs|js)):(\\d+)");
+	
+	private static final Pattern JAVA_STACK_PATTERN = Pattern.compile("\\((.+\\.(boo|cs|js)):(\\d+)\\)");
 	
 	private static final Pattern COMPILER_OUTPUT_PATTERN = Pattern.compile("\\b(.+\\.(boo|cs|js))\\((\\d+),\\d+\\)");
 	
@@ -118,7 +120,9 @@ public class StackTraceViewer {
 	
 	private String createHyperLinks(String trace) {
 		if (0 == trace.length()) return trace;
-		return createHyperLinks(COMPILER_OUTPUT_PATTERN, createHyperLinks(STACK_PATTERN, trace));
+		return createHyperLinks(COMPILER_OUTPUT_PATTERN,
+				createHyperLinks(MONO_STACK_PATTERN,
+					createHyperLinks(JAVA_STACK_PATTERN, trace)));
 	}
 
 	private String createHyperLinks(Pattern pattern, String trace) {
