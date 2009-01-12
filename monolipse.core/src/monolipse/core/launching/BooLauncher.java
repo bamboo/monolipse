@@ -96,17 +96,11 @@ public class BooLauncher {
 				WorkspaceUtilities.getPortablePath(file));
 	}
 
-	private static ILaunchConfiguration findLaunchConfiguration(
-			ILaunchConfigurationType configType, String attributeName,
-			String attributeValue) throws CoreException {
-		ILaunchConfiguration[] existing = getLaunchManager()
-				.getLaunchConfigurations(configType);
-		for (int i = 0; i < existing.length; ++i) {
-			if (attributeValue.equals(existing[i].getAttribute(attributeName,
-					""))) {
-				return existing[i];
-			}
-		}
+	static ILaunchConfiguration findLaunchConfiguration(ILaunchConfigurationType configType, String attributeName, String attributeValue) throws CoreException {
+		ILaunchConfiguration[] existing = getLaunchManager().getLaunchConfigurations(configType);
+		for (ILaunchConfiguration config : existing)
+			if (attributeValue.equals(config.getAttribute(attributeName, "")))
+				return config;
 		return null;
 	}
 

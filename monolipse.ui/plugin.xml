@@ -268,6 +268,21 @@
     </launchConfigurationTabGroup>
 	</extension>
 	
+	<extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+       <launchConfigurationTypeImage
+               icon="icons/BooScript.png"
+               configTypeID="monolipse.core.launching.boojayLaunchConfigurationType"
+ 		       id="monolipse.ui.launchConfigurationTypeImage.boojay">
+    	</launchConfigurationTypeImage>
+	</extension>
+	
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="org.eclipse.jdt.internal.debug.ui.launcher.LocalJavaApplicationTabGroup"
+            id="monolipse.core.launching.boojayTabGroup"
+            type="monolipse.core.launching.boojayLaunchConfigurationType"/>
+   </extension>
 	
 	<extension point="org.eclipse.debug.ui.launchShortcuts">
     <shortcut

@@ -120,6 +120,10 @@ public class BooAssemblySource implements IAssemblySource {
 		_outputFolder = folder;
 	}
 	
+	public IFolder getOutputFolder() {
+		return _outputFolder;
+	}
+	
 	/* (non-Javadoc)
 	 * @see monolipse.core.IBooAssemblySource#getFolder()
 	 */

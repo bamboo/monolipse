@@ -38,6 +38,8 @@ public interface IAssemblySource extends IAdaptable {
 	
 	void setOutputFolder(IFolder folder);
 
+	IFolder getOutputFolder();
+	
 	void refresh(IProgressMonitor monitor) throws CoreException;
 
 	void save(IProgressMonitor monitor) throws CoreException;
@@ -45,4 +47,5 @@ public interface IAssemblySource extends IAdaptable {
 	String getAdditionalOptions();
 
 	void setAdditionalOptions(String additionalOptions);
+
 }

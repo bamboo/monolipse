@@ -1,7 +1,7 @@
 package monolipse.ui.launching;
 
 import monolipse.core.*;
-import monolipse.core.launching.BooLauncher;
+import monolipse.core.launching.*;
 import monolipse.ui.BooUI;
 
 import org.eclipse.core.resources.IFile;
@@ -16,8 +16,9 @@ public class BooApplicationLaunchShortcut extends AbstractBooLaunchShortcut {
 		if (null == source) return;
 		
 		try {
-			ILaunchConfiguration configuration = BooLauncher
-					.getAppLaunchConfiguration(source);
+			ILaunchConfiguration configuration = source.getLanguage().equals(IAssemblySourceLanguage.BOOJAY)
+				? BoojayLauncher.launchConfigurationFor(file)
+				: BooLauncher.getAppLaunchConfiguration(source);
 			DebugUITools.launch(configuration, mode);
 		} catch (CoreException e) {
 			BooUI.logException(e);
