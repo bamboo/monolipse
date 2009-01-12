@@ -12,22 +12,22 @@ public class BoojayLauncher {
 	
 	private static final String LAUNCH_CONFIG_ID = "monolipse.core.launching.boojayLaunchConfigurationType";
 
-	public static ILaunchConfiguration launchConfigurationFor(IFile file) throws CoreException {
-//		final IFolder outputFolder = BooCore.assemblySourceContaining(file).getOutputFolder();
-		
-		return new BoojayLaunchConfigurationBuilder(file).build();
+	public static ILaunchConfiguration launchConfigurationFor(IFile file, String mode) throws CoreException {
+		return new BoojayLaunchConfigurationBuilder(file, mode).build();
 	}
 	
 	static class BoojayLaunchConfigurationBuilder {
 		
 		private final IFile file;
-		private String mainTypeName;
-		private ILaunchConfigurationType configurationType;
+		private final String mainTypeName;
+		private final ILaunchConfigurationType configurationType;
+		private final String mode;
 		
-		public BoojayLaunchConfigurationBuilder(IFile file) {
+		public BoojayLaunchConfigurationBuilder(IFile file, String mode) {
 			this.file = file;
 			this.mainTypeName = mainTypeNameFor(file);
 			this.configurationType = BooLauncher.getLaunchConfigurationType(LAUNCH_CONFIG_ID);
+			this.mode = mode;
 		}
 
 		public ILaunchConfiguration build() throws CoreException {
@@ -50,7 +50,13 @@ public class BoojayLauncher {
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, classpathFor(file));
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, false);
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, mainTypeName);
+			if (isDebugMode())
+				workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_STOP_IN_MAIN, true);
 			return workingCopy;
+		}
+
+		private boolean isDebugMode() {
+			return "debug".equals(mode);
 		}
 	
 		private static List<String> classpathFor(IFile file) throws CoreException {
@@ -69,5 +75,4 @@ public class BoojayLauncher {
 			return file.getFullPath().removeFileExtension().lastSegment();
 		}
 	}
-
 }
