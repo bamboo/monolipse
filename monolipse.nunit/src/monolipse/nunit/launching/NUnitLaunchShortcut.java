@@ -1,38 +1,23 @@
 package monolipse.nunit.launching;
 
-import monolipse.core.BooCore;
-import monolipse.core.IAssemblySource;
+import monolipse.core.*;
 import monolipse.nunit.NUnitPlugin;
+import monolipse.ui.launching.AbstractBooLaunchShortcut;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.debug.ui.ILaunchShortcut;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IFileEditorInput;
 
 
-public class NUnitLaunchShortcut implements ILaunchShortcut {
+public class NUnitLaunchShortcut extends AbstractBooLaunchShortcut {
 
-	public void launch(ISelection selection, String mode) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void launch(IEditorPart editor, String mode) {
-		IFileEditorInput editorInput = (IFileEditorInput) editor.getEditorInput();
-		
+	@Override
+	protected void launch(IFile file, String mode) {
 		try {
-			run(editorInput.getFile(), mode);
+			final IAssemblySource source = BooCore.assemblySourceContaining(file);
+			NUnitLauncher.launch(source, mode);
 		} catch (CoreException e) {
 			NUnitPlugin.logException(e);
 		}
-	}
-
-	private void run(IFile file, String mode) throws CoreException {
-		final IAssemblySource source = BooCore.assemblySourceContaining(file);
-		
-		NUnitLauncher.launch(source, mode);
 	}
 
 }

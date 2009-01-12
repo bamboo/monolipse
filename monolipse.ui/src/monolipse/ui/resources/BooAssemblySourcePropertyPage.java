@@ -48,8 +48,7 @@ import org.eclipse.ui.IWorkbenchPropertyPage;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 
 
-public class BooAssemblySourcePropertyPage extends PreferencePage
-	implements IWorkbenchPropertyPage {
+public class BooAssemblySourcePropertyPage extends PreferencePage implements IWorkbenchPropertyPage {
 
 	private IAdaptable _element;
 	private Button[] _outputTypeButtons;
@@ -143,11 +142,13 @@ public class BooAssemblySourcePropertyPage extends PreferencePage
 		
 		data = new String[] {
 				IAssemblySourceLanguage.BOO,
+				IAssemblySourceLanguage.BOOJAY,
 				IAssemblySourceLanguage.CSHARP,
 				IAssemblySourceLanguage.CSHARP_1_1,
 		};
 		labels = new String[] { 
 				"boo",
+				"boojay",
 				"c#",
 				"c# 1.1 (no generics)",
 		};

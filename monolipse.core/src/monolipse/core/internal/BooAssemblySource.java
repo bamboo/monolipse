@@ -317,11 +317,14 @@ public class BooAssemblySource implements IAssemblySource {
 	}
 
 	private String expectedSourceFileExtension() {
-		final String language = getLanguage();
-		final String expectedExtension = language.equals(IAssemblySourceLanguage.BOO)
+		return isBooLanguage(getLanguage())
 			? "boo"
 			: "cs";
-		return expectedExtension;
+	}
+
+	private boolean isBooLanguage(final String language) {
+		return language.equals(IAssemblySourceLanguage.BOO)
+			|| language.equals(IAssemblySourceLanguage.BOOJAY);
 	}
 
 	public static IAssemblySource getContainer(IResource resource) throws CoreException {

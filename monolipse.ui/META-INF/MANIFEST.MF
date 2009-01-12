@@ -23,6 +23,7 @@ Eclipse-LazyStart: true
 Bundle-ClassPath: monolipse.ui.jar
 Export-Package: monolipse.ui,
  monolipse.ui.editors,
+ monolipse.ui.launching,
  monolipse.ui.perspectives,
  monolipse.ui.resources,
  monolipse.ui.views,

@@ -1,37 +1,27 @@
 package monolipse.core.runtime;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
-import monolipse.core.BooCore;
-import monolipse.core.IAssemblyReference;
-import monolipse.core.IAssemblySource;
-import monolipse.core.IAssemblySourceLanguage;
-import monolipse.core.IMonoCompilerLauncher;
-import monolipse.core.IMonoLauncher;
-import monolipse.core.IMonoRuntime;
-import monolipse.core.foundation.IOUtilities;
+import monolipse.core.*;
 import monolipse.core.foundation.WorkspaceUtilities;
 
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.*;
 
 public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 	
 	public static CompilerLauncher createLauncher(String language) throws IOException {
-		if (language.equals(IAssemblySourceLanguage.BOO)) {
+		if (language.equals(IAssemblySourceLanguage.BOO))
 			return new BooCompilerLauncher();
-		}
+		if (language.equals(IAssemblySourceLanguage.BOOJAY))
+			return new BoojayCompilerLauncher();
 		return new CSharpCompilerLauncher(language);
 	}
 	
 	public static CompilerLauncher createLauncher(IAssemblySource source) throws IOException {
 		CompilerLauncher launcher = createLauncher(source.getLanguage());
-		launcher.setOutputFile(source.getOutputFile());
+		launcher.setOutput(source.getOutputFile());
 		launcher.setOutputType(source.getOutputType());
 		launcher.addReferences(source.getReferences());
 		launcher.add(source.getAdditionalOptions().split("\\s+"));
@@ -42,12 +32,15 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 	private ResponseFile _responseFile;
 	
 	protected CompilerLauncher(String compiler) throws IOException {
-		IMonoRuntime runtime = BooCore.getRuntime();
-		_launcher = runtime.createLauncher(IOUtilities.combinePath(runtime.getLocation(), compiler));
+		this(BooCore.createLauncherWithRuntimeLocation(compiler));
+	}
+
+	protected CompilerLauncher(final IMonoLauncher launcher) throws IOException {
+		_launcher = launcher;
 		enableDebugging();
 		enableResponseFile();
 	}
-	
+
 	private void enableResponseFile() throws IOException {
 		_responseFile = new ResponseFile();
 	}
@@ -60,13 +53,17 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 	
 	public void add(String arg) {
 		if (null != _responseFile) {
-			try {
-				_responseFile.add(arg);
-			} catch (IOException e) {
-				BooCore.logException(e);
-			}
+			addToResponseFile(arg);
 		} else {
 			_launcher.add(arg);
+		}
+	}
+
+	private void addToResponseFile(String arg) {
+		try {
+			_responseFile.add(arg);
+		} catch (IOException e) {
+			BooCore.logException(e);
 		}
 	}
 	
@@ -99,8 +96,8 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 		add("-target:" + outputType);
 	}
 	
-	public void setOutputFile(IFile outputFile) {
-		add("-out:" + WorkspaceUtilities.getLocation(outputFile));
+	public void setOutput(IResource output) {
+		add("-out:" + WorkspaceUtilities.getLocation(output));
 	}
 	
 	public void addReferences(IAssemblyReference[] references) {		

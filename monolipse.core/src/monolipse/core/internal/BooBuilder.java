@@ -49,7 +49,7 @@ public class BooBuilder extends IncrementalProjectBuilder {
 
 	public static final String BUILDER_ID = BooCore.ID_PLUGIN + ".booBuilder";
 
-	private static final String MARKER_TYPE = BooCore.ID_PLUGIN + ".booProblem";
+	public static final String BOO_PROBLEM_MARKER_TYPE = BooCore.ID_PLUGIN + ".booProblem";
 	
 	protected void startupOnInitialize() {
 //		BooCore.getDefault().getPluginPreferences().addPropertyChangeListener(new IPropertyChangeListener() {
@@ -75,7 +75,7 @@ public class BooBuilder extends IncrementalProjectBuilder {
 	private void addMarker(IResource resource, String message, int lineNumber,
 			int severity) {
 		try {
-			IMarker marker = resource.createMarker(MARKER_TYPE);
+			IMarker marker = resource.createMarker(BOO_PROBLEM_MARKER_TYPE);
 			marker.setAttribute(IMarker.MESSAGE, message);
 			marker.setAttribute(IMarker.SEVERITY, severity);
 			if (lineNumber == -1) {
@@ -150,7 +150,7 @@ public class BooBuilder extends IncrementalProjectBuilder {
 
 	private void deleteMarkers(IResource resource) {
 		try {
-			resource.deleteMarkers(MARKER_TYPE, false, IResource.DEPTH_INFINITE);
+			resource.deleteMarkers(BOO_PROBLEM_MARKER_TYPE, false, IResource.DEPTH_INFINITE);
 		} catch (CoreException e) {
 			BooCore.logException(e);
 		}
@@ -200,7 +200,7 @@ public class BooBuilder extends IncrementalProjectBuilder {
 	}
 
 	private boolean hasErrors(IAssemblySource source) throws CoreException {
-		IMarker[] markers = source.getFolder().findMarkers(MARKER_TYPE, false, IResource.DEPTH_INFINITE);
+		IMarker[] markers = source.getFolder().findMarkers(BOO_PROBLEM_MARKER_TYPE, false, IResource.DEPTH_INFINITE);
 		for (int i=0; i<markers.length; ++i) {
 			if (IMarker.SEVERITY_ERROR == markers[i].getAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR)) {
 				return true;

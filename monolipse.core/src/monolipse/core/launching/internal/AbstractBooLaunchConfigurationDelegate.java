@@ -17,8 +17,7 @@ public abstract class AbstractBooLaunchConfigurationDelegate implements
 			throws CoreException {
 
 		logInfo("getLaunch");
-		Launch launch = new Launch(configuration, mode, null);
-		return launch;
+		return new Launch(configuration, mode, null);
 	}
 
 	public boolean buildForLaunch(ILaunchConfiguration configuration,

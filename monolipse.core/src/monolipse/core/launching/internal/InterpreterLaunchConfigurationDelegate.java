@@ -2,16 +2,11 @@ package monolipse.core.launching.internal;
 
 import java.io.IOException;
 
-import monolipse.core.BooCore;
-import monolipse.core.IMonoLauncher;
-import monolipse.core.foundation.WorkspaceUtilities;
+import monolipse.core.*;
 import monolipse.core.launching.BooLauncher;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.ILaunch;
-import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.core.runtime.*;
+import org.eclipse.debug.core.*;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 
 
@@ -35,7 +30,7 @@ public class InterpreterLaunchConfigurationDelegate implements ILaunchConfigurat
 	}
 
 	private String getResourceLocalPath(String path) throws IOException {
-		return WorkspaceUtilities.getResourceLocalPath(BooCore.getDefault().getBundle(), path);
+		return BooCore.resolveBundlePath(path);
 	}
 
 }

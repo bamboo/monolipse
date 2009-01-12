@@ -1,7 +1,6 @@
 package monolipse.core.foundation;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 
 import monolipse.core.BooCore;
@@ -59,6 +58,8 @@ public class WorkspaceUtilities {
 
 	public static String getResourceLocalPath(Bundle bundle, String resourcePath) throws IOException {
 		URL url = FileLocator.find(bundle, new Path(resourcePath), null);
+		if (url == null)
+			throw new FileNotFoundException(resourcePath);
 		return new File(FileLocator.toFileURL(url).getFile()).getCanonicalPath();
 	}
 }

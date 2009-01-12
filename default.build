@@ -99,9 +99,18 @@
 	</target>
 	
 	<target name="monolipse.ui" depends="monolipse.core">
-	
 		<property name="plugin" value="monolipse.ui" />
 		<call target="package-plugin" />
+	</target>
+
+	<target name="update-boojay">
+		<copy todir="monolipse.core/lib/boojay">
+			<fileset basedir="../boo-extensions/boojay/build">
+				<include name="boojay.exe" />
+				<include name="*.dll" />
+				<include name="*.mdb" />
+			</fileset>
+		</copy>
 	</target>
 	
 	<target name="init">

@@ -5,6 +5,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.ui.ILaunchShortcut;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.*;
 
 public abstract class AbstractBooLaunchShortcut implements ILaunchShortcut  {
 
@@ -20,6 +21,14 @@ public abstract class AbstractBooLaunchShortcut implements ILaunchShortcut  {
 		launch(file, mode);
 		
 	}
+	
+	public void launch(IEditorPart editor, String mode) {
+		IFileEditorInput editorInput = (IFileEditorInput) editor
+				.getEditorInput();
+
+		launch(editorInput.getFile(), mode);
+	}
+
 	
 	protected abstract void launch(IFile file, String mode);
 

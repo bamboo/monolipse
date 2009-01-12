@@ -6,4 +6,6 @@ public interface IAssemblySourceLanguage {
 	public static final String CSHARP = "cs";
 	
 	public static final String CSHARP_1_1 = "cs11";
+
+	public static final String BOOJAY = "boojay";
 }

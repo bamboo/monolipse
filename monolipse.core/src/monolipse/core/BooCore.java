@@ -1,23 +1,12 @@
 package monolipse.core;
 
-import java.io.IOException;
+import java.io.*;
 
-import monolipse.core.internal.BooAssemblyReference;
-import monolipse.core.internal.BooAssemblyReferenceAdapterFactory;
-import monolipse.core.internal.BooAssemblySource;
-import monolipse.core.internal.BooAssemblySourceAdapterFactory;
-import monolipse.core.internal.BooProject;
-import monolipse.core.internal.BooProjectAdapterFactory;
+import monolipse.core.foundation.*;
+import monolipse.core.internal.*;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Plugin;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.resources.*;
+import org.eclipse.core.runtime.*;
 import org.osgi.framework.BundleContext;
 
 
@@ -139,5 +128,24 @@ public class BooCore extends Plugin {
 
 	private static String getMonoHome() {
 		return System.getProperty("MONO_HOME", "/opt/local");
+	}
+
+	public static IMonoLauncher createLauncherWithRuntimeLocation(String compiler) throws IOException {
+		return getRuntime().createLauncher(IOUtilities.combinePath(runtimeLocation(), compiler));
+	}
+
+	private static String runtimeLocation() {
+		return getRuntime().getLocation();
+	}
+
+	public static IMonoLauncher createLauncherFromBundle(String resource) throws IOException {
+		final String path = resolveBundlePath(resource);
+		final IMonoLauncher launcher = getRuntime().createLauncher(path);
+//		launcher.setWorkingDir(new File(path).getParentFile());
+		return launcher;
+	}
+
+	public static String resolveBundlePath(String path) throws IOException {
+		return WorkspaceUtilities.getResourceLocalPath(getDefault().getBundle(), path);
 	}
 }
