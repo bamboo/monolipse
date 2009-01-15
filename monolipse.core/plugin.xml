@@ -45,11 +45,8 @@
             delegate="monolipse.core.launching.internal.BoojayLaunchConfigurationDelegate"
             id="monolipse.core.launching.boojayLaunchConfigurationType"
             modes="run,debug"
-            name="Boojay Application" />
-            <!--
-            sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
-            sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer"
-            -->
+            name="Boojay Application"
+            sourceLocatorId="monolipse.core.launching.BoojaySourceLookupDirector" />
    </extension>
    
    
@@ -77,6 +74,14 @@
    <extension point="org.eclipse.core.runtime.preferences">
 		<initializer class="monolipse.core.internal.BooCorePreferencesInitializer" />
 	</extension>
+	
+	   <extension point="org.eclipse.debug.core.sourceLocators">
+   		<sourceLocator
+   			id="monolipse.core.launching.BoojaySourceLookupDirector"
+   			class="monolipse.core.launching.BoojaySourceLookupDirector"
+   			name="Boojay Source Locator">
+   		</sourceLocator>
+   </extension>
    
 
 </plugin>

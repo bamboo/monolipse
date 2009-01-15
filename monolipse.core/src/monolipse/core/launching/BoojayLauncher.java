@@ -1,11 +1,14 @@
 package monolipse.core.launching;
 
+import java.io.IOException;
 import java.util.*;
 
+import monolipse.core.BooCore;
+
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.*;
 import org.eclipse.debug.core.*;
-import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.*;
 import org.eclipse.jdt.launching.*;
 
 public class BoojayLauncher {
@@ -13,7 +16,11 @@ public class BoojayLauncher {
 	private static final String LAUNCH_CONFIG_ID = "monolipse.core.launching.boojayLaunchConfigurationType";
 
 	public static ILaunchConfiguration launchConfigurationFor(IFile file, String mode) throws CoreException {
-		return new BoojayLaunchConfigurationBuilder(file, mode).build();
+		try {
+			return new BoojayLaunchConfigurationBuilder(file, mode).build();
+		} catch (IOException e) {
+			throw new CoreException(new Status(Status.ERROR, BooCore.ID_PLUGIN, e.getMessage(), e));
+		}
 	}
 	
 	static class BoojayLaunchConfigurationBuilder {
@@ -30,7 +37,7 @@ public class BoojayLauncher {
 			this.mode = mode;
 		}
 
-		public ILaunchConfiguration build() throws CoreException {
+		public ILaunchConfiguration build() throws CoreException, IOException {
 		
 			final ILaunchConfiguration existing = findExistingLaunchConfiguration();
 			if (existing != null)
@@ -45,11 +52,12 @@ public class BoojayLauncher {
 			return BooLauncher.findLaunchConfiguration(configurationType, IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, mainTypeName);
 		}
 		
-		private ILaunchConfigurationWorkingCopy newLaunchConfigurationFor() throws CoreException {
+		private ILaunchConfigurationWorkingCopy newLaunchConfigurationFor() throws CoreException, IOException {
 			final ILaunchConfigurationWorkingCopy workingCopy = configurationType.newInstance(null, filenameWithoutExtension(file));
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, classpathFor(file));
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, false);
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, mainTypeName);
+			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, file.getProject().getName());
 			if (isDebugMode())
 				workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_STOP_IN_MAIN, true);
 			return workingCopy;
@@ -59,12 +67,19 @@ public class BoojayLauncher {
 			return "debug".equals(mode);
 		}
 	
-		private static List<String> classpathFor(IFile file) throws CoreException {
-			final IRuntimeClasspathEntry projectClasspath = JavaRuntime.newDefaultProjectClasspathEntry(JavaCore.create(file.getProject()));
-			
+		private static List<String> classpathFor(IFile file) throws CoreException, IOException {
 			final List<String> classPath = new ArrayList<String>();
-			classPath.add(projectClasspath.getMemento());
+			classPath.add(JavaRuntime.newDefaultProjectClasspathEntry(javaProjectFor(file)).getMemento());
+			classPath.add(JavaRuntime.newArchiveRuntimeClasspathEntry(boojayLangJarPath()).getMemento());
 			return classPath;
+		}
+
+		private static IJavaProject javaProjectFor(IFile file) {
+			return JavaCore.create(file.getProject());
+		}
+
+		private static Path boojayLangJarPath() throws IOException {
+			return new Path(BooCore.resolveBundlePath("lib/boojay/boojay.lang.jar"));
 		}
 	
 		private static String mainTypeNameFor(IFile file) {

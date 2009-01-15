@@ -105,10 +105,8 @@
 
 	<target name="update-boojay">
 		<copy todir="monolipse.core/lib/boojay">
-			<fileset basedir="../boo-extensions/boojay/build">
-				<include name="boojay.exe" />
-				<include name="*.dll" />
-				<include name="*.mdb" />
+			<fileset basedir="../boo-extensions/boojay/dist">
+				<include name="*.*" />
 			</fileset>
 		</copy>
 	</target>
