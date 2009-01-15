@@ -18,20 +18,34 @@
             name="Boo Source Code Editor"
             extensions="boo"
             icon="icons/BooFile.png"
-            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
             class="monolipse.ui.editors.BooEditor"
             id="monolipse.ui.editors.BooEditor">
+            
+            
       </editor>
       
       <editor
             name="C# Source Code Editor"
             extensions="cs"
             icon="icons/CSharpFile.png"
-            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
             class="monolipse.ui.editors.csharp.CSharpEditor"
             id="monolipse.ui.editors.csharp.CSharpEditor">
       </editor>
       
+   </extension>
+   
+   <extension point="org.eclipse.ui.editorActions">
+	   <editorContribution
+	        targetID="monolipse.ui.editors.BooEditor"
+	        id="monolipse.ui.editors.booEditor.rulerActions">
+	            <action label="Not Used"
+	                class="org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
+	                style="push" 
+	                actionID="RulerDoubleClick"
+	                id="monolipse.ui.editor.booEditor.doubleClickBreakpointAction" />
+		</editorContribution>
    </extension>
    
    <extension
@@ -392,6 +406,16 @@
 			
 		</decorator>
 	</extension>
+ <extension
+       point="org.eclipse.core.runtime.adapters">
+    <factory
+          adaptableType="org.eclipse.ui.texteditor.ITextEditor"
+          class="monolipse.ui.debug.BreakpointAdapterFactory">
+       <adapter
+             type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget">
+       </adapter>
+    </factory>
+ </extension>
 	
 
 </plugin>

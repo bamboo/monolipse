@@ -124,12 +124,16 @@ public class BooEditor extends TextEditor {
 		return super.getAdapter(required);
 	}
 
-	private BooContentOutlinePage outlinePage() {
+	public BooContentOutlinePage outlinePage() {
 		if (_outlinePage == null) {
 			_outlinePage = new BooContentOutlinePage(getDocumentProvider(), this);
 			_outlinePage.setInput(getEditorInput());
 		}
 		return _outlinePage;
+	}
+
+	public BooDocument getDocument() {
+		return (BooDocument) getDocumentProvider().getDocument(getEditorInput());
 	}
 
 

@@ -28,7 +28,7 @@ public class OutlineNode {
 
 	private String _name;
 
-	private ArrayList _children;
+	private ArrayList<OutlineNode> _children;
 	
 	private OutlineNode _parent;
 
@@ -85,5 +85,21 @@ public class OutlineNode {
 	
 	public void line(int line) {
 		_line = line;
+	}
+	
+	public interface Visitor {
+		boolean visit(OutlineNode node);
+	}
+	
+	public boolean accept(Visitor visitor) {
+		if (!visitor.visit(this))
+			return false;
+	
+		if (null != _children)
+			for (OutlineNode child : _children)
+				if (!child.accept(visitor))
+					return false;
+		
+		return true;
 	}
 }
