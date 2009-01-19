@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import monolipse.core.BooCore;
 import monolipse.core.IAssemblySource;
-import monolipse.core.IAssemblySourceLanguage;
+import monolipse.core.AssemblySourceLanguage;
 import monolipse.core.IBooLaunchConfigurationConstants;
 import monolipse.core.foundation.WorkspaceUtilities;
 import monolipse.core.runtime.CompilerLauncher;
@@ -34,7 +34,7 @@ public class BooScriptLaunchConfigurationDelegate extends AbstractBooLaunchConfi
 			throws CoreException, IOException {
 		IFile scriptFile = getScriptFile(configuration);
 
-		CompilerLauncher launcher = CompilerLauncher.createLauncher(IAssemblySourceLanguage.BOO);
+		CompilerLauncher launcher = CompilerLauncher.createLauncher(AssemblySourceLanguage.BOO);
 		launcher.setPipeline("run");
 		launcher.addSourceFiles(new IFile[] { scriptFile });
 		launcher.setWorkingDir(scriptFile.getParent().getLocation().toFile());

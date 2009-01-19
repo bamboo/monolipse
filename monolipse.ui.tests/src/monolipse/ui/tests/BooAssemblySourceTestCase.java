@@ -2,6 +2,7 @@
 
 import monolipse.core.IAssemblyReference;
 import monolipse.core.IAssemblySource;
+import monolipse.core.AssemblySourceLanguage;
 
 import org.eclipse.core.runtime.Path;
 
@@ -12,7 +13,7 @@ public class BooAssemblySourceTestCase extends AbstractBooTestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		_assemblySource = _booProject.addAssemblySource(new Path("src/Test"));
+		_assemblySource = addAssemblySource(new Path("src/Test"));
 	}
 	
 	public void testDefaultReferences() throws Exception {
@@ -26,6 +27,9 @@ public class BooAssemblySourceTestCase extends AbstractBooTestCase {
 	}
 	
 	public void testOutputFile() throws Exception {
+		
+		_assemblySource.setLanguage(AssemblySourceLanguage.BOO);
+		
 		assertEquals(getFile("bin/Test.exe"), _assemblySource.getOutputFile());
 		
 		_assemblySource.setOutputType(IAssemblySource.OutputType.LIBRARY);

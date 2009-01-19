@@ -170,7 +170,7 @@
       <page
             class="monolipse.ui.resources.BooAssemblySourcePropertyPage"
             id="monolipse.ui.resources.booAssemblySourcePropertyPag"
-            name="Boo Assembly Properties">
+            name="Boo Source Folder Properties">
             
             <enabledWhen>
             <instanceof
@@ -247,7 +247,7 @@
                class="monolipse.ui.wizards.NewAssemblySourceWizard"
                icon="icons/BooFile.png"
                id="monolipse.ui.wizards.NewAssemblySourceWizard"
-               name="Boo Assembly Source"/>
+               name="Boo Source Folder"/>
    </extension>
    
    <extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
@@ -327,7 +327,7 @@
     <shortcut
         id="monolipse.ui.booApplicationLaunchShortcut"
         class="monolipse.ui.launching.BooApplicationLaunchShortcut"
-        label="Mono Application"
+        label="Boo Application"
         icon="icons/BooScript.png"
         modes="run, debug">
             <perspective id="monolipse.ui.booPerspective"/>
@@ -394,7 +394,7 @@
 		<decorator
 			id="monolipse.ui.BooAssemblySourceDecorator" 
 			class="monolipse.ui.decorators.BooAssemblySourceDecorator"
-			label="Boo Assembly Source Decorator"
+			label="Boo Source Folder Decorator"
 			state="true" 
 			icon="icons/AssemblySourceDecorator.gif"
 			lightweight="true" 

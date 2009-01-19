@@ -1,7 +1,7 @@
 package monolipse.ui.tests;
 
 import monolipse.core.IAssemblySource;
-import monolipse.core.IAssemblySourceLanguage;
+import monolipse.core.AssemblySourceLanguage;
 import monolipse.core.internal.BooBuilder;
 
 import org.eclipse.core.resources.*;
@@ -15,7 +15,6 @@ public class BoojayBuilderTestCase extends AbstractBooTestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		_assemblySource = _booProject.addAssemblySource(new Path("src/Java"));
-		_assemblySource.setLanguage(IAssemblySourceLanguage.BOOJAY);
 	}
 
 	public void testBuild() throws Exception {

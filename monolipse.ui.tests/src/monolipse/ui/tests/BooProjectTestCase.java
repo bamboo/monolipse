@@ -1,5 +1,6 @@
 ﻿package monolipse.ui.tests;
 
+import monolipse.core.AssemblySourceLanguage;
 import monolipse.core.BooCore;
 import monolipse.core.IAssemblySource;
 import monolipse.core.IMonoProject;
@@ -13,6 +14,7 @@ import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 
 
@@ -21,6 +23,11 @@ public class BooProjectTestCase extends AbstractBooTestCase {
 	public void testProjectAdapter() {
 		IMonoProject adapted = (IMonoProject) _project.getProject().getAdapter(IMonoProject.class);
 		assertSame(_booProject, adapted);
+	}
+	
+	public void testDefaultLanguageIsBoojay() throws CoreException {
+		final IAssemblySource srcFolder = _booProject.addAssemblySource(new Path("src/Test"));
+		assertEquals(AssemblySourceLanguage.BOOJAY, srcFolder.getLanguage());
 	}
 	
 	public void testAddAssemblySource() throws Exception {

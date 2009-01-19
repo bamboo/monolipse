@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import monolipse.core.IAssemblySourceLanguage;
+import monolipse.core.AssemblySourceLanguage;
 
 
 public class CSharpCompilerLauncher extends CompilerLauncher {
@@ -16,8 +16,8 @@ public class CSharpCompilerLauncher extends CompilerLauncher {
 	Pattern LINE_ERROR_PATTERN = Pattern
 		.compile("(.+)\\((\\d+),\\d+\\):\\s(error|warning) (\\w+\\d+):\\s(.+)");
 
-	CSharpCompilerLauncher(String language) throws IOException {
-		super(language.equals(IAssemblySourceLanguage.CSHARP_1_1) ? MCS_EXECUTABLE : GMCS_EXECUTABLE);
+	CSharpCompilerLauncher(AssemblySourceLanguage language) throws IOException {
+		super(language.equals(AssemblySourceLanguage.CSHARP_1_1) ? MCS_EXECUTABLE : GMCS_EXECUTABLE);
 	}
 
 	protected CompilerError parseCompilerError(String line) {		

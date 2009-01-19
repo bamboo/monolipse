@@ -12,7 +12,7 @@ import java.util.List;
 import monolipse.core.IAssemblyReference;
 import monolipse.core.IAssemblyReferenceVisitor;
 import monolipse.core.IAssemblySource;
-import monolipse.core.IAssemblySourceLanguage;
+import monolipse.core.AssemblySourceLanguage;
 import monolipse.core.IAssemblySourceReference;
 import monolipse.core.IRemembrance;
 import monolipse.core.foundation.WorkspaceUtilities;
@@ -44,7 +44,8 @@ public class BooAssemblySource implements IAssemblySource {
 	public static IAssemblySource create(IFolder folder) throws CoreException {
 		synchronized (folder) {
 			IAssemblySource source = BooAssemblySource.get(folder);
-			if (null != source) return source;
+			if (null != source)
+				return source;
 			source = internalCreate(folder);
 			source.save(null);
 			return source;
@@ -91,7 +92,7 @@ public class BooAssemblySource implements IAssemblySource {
 	
 	private String _outputType;
 
-	private String _language;
+	private AssemblySourceLanguage _language;
 
 	private IFolder _outputFolder;
 
@@ -100,7 +101,8 @@ public class BooAssemblySource implements IAssemblySource {
 	BooAssemblySource(IFolder folder) throws CoreException {
 		if (null == folder || !folder.exists()) throw new IllegalArgumentException();
 		_folder = folder;
-		_outputFolder = defaultOutputFolder(); 
+		_language = AssemblySourceLanguage.BOOJAY;
+		_outputFolder = defaultOutputFolder();
 		refresh(null);
 	}
 
@@ -108,12 +110,14 @@ public class BooAssemblySource implements IAssemblySource {
 		return _folder.getProject().getFolder("bin");
 	}
 	
-	public void setLanguage(String language) {
+	public void setLanguage(AssemblySourceLanguage language) {
 		_language = language;
 	}
 	
-	public String getLanguage() {
-		return _language != null ? _language : IAssemblySourceLanguage.BOO;
+	public AssemblySourceLanguage getLanguage() {
+		return _language == null
+			? AssemblySourceLanguage.BOOJAY
+			: _language;
 	}
 	
 	public void setOutputFolder(IFolder folder) {
@@ -220,11 +224,11 @@ public class BooAssemblySource implements IAssemblySource {
 		public String outputFolder;
 		public String additionalOptions;
 		public AssemblySourceRemembrance(BooAssemblySource source) {
-			language = source._language;
-			outputType = source._outputType;
+			language = source.getLanguage().id();
+			outputType = source.getOutputType();
 			references = new IRemembrance[source._references.length];
-			outputFolder = source._outputFolder.getFullPath().toPortableString();
-			additionalOptions = source._additionalOptions;
+			outputFolder = source.getOutputFolder().getFullPath().toPortableString();
+			additionalOptions = source.getAdditionalOptions();
 			for (int i=0; i<references.length; ++i) {
 				references[i] = source._references[i].getRemembrance();
 			}
@@ -264,7 +268,7 @@ public class BooAssemblySource implements IAssemblySource {
 
 	private void loadSettingsFrom(IFile file) throws CoreException {
 		AssemblySourceRemembrance remembrance = (AssemblySourceRemembrance) createXStream().fromXML(decode(file));
-		_language = remembrance.language;
+		_language = AssemblySourceLanguage.forId(remembrance.language);
 		_outputType = remembrance.outputType;
 		_references = remembrance.activateReferences();
 		_additionalOptions = remembrance.additionalOptions;
@@ -321,14 +325,7 @@ public class BooAssemblySource implements IAssemblySource {
 	}
 
 	private String expectedSourceFileExtension() {
-		return isBooLanguage(getLanguage())
-			? "boo"
-			: "cs";
-	}
-
-	private boolean isBooLanguage(final String language) {
-		return language.equals(IAssemblySourceLanguage.BOO)
-			|| language.equals(IAssemblySourceLanguage.BOOJAY);
+		return getLanguage().fileExtension();
 	}
 
 	public static IAssemblySource getContainer(IResource resource) throws CoreException {

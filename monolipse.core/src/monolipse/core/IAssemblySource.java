@@ -30,9 +30,9 @@ public interface IAssemblySource extends IAdaptable {
 
 	void setOutputType(String outputType);
 	
-	String getLanguage();
+	AssemblySourceLanguage getLanguage();
 	
-	void setLanguage(String language);
+	void setLanguage(AssemblySourceLanguage language);
 
 	IFile getOutputFile();
 	

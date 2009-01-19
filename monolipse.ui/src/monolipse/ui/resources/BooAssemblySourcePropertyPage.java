@@ -21,7 +21,7 @@ package monolipse.ui.resources;
 
 import monolipse.core.BooCore;
 import monolipse.core.IAssemblySource;
-import monolipse.core.IAssemblySourceLanguage;
+import monolipse.core.AssemblySourceLanguage;
 import monolipse.core.foundation.WorkspaceUtilities;
 import monolipse.ui.BooUI;
 import monolipse.ui.views.BooExplorerLabelProvider;
@@ -84,19 +84,19 @@ public class BooAssemblySourcePropertyPage extends PreferencePage implements IWo
 		return _additionalOptions.getText();
 	}
 
-	private String getSelectedLanguage() {
-		return getSelectedButtonData(_languageButtons);
+	private AssemblySourceLanguage getSelectedLanguage() {
+		return (AssemblySourceLanguage) getSelectedButtonData(_languageButtons);
 	}
 
 	private String getSelectedOutputType() {
-		return getSelectedButtonData(_outputTypeButtons);
+		return (String) getSelectedButtonData(_outputTypeButtons);
 	}
 
-	private String getSelectedButtonData(Button[] buttons) {
+	private Object getSelectedButtonData(Button[] buttons) {
 		for (int i = 0; i < buttons.length; i++) {
 			Button button = buttons[i];
 			if (button.getSelection()) {
-				return (String) button.getData();
+				return button.getData();
 			}
 		}
 		return null;
@@ -128,31 +128,26 @@ public class BooAssemblySourcePropertyPage extends PreferencePage implements IWo
 		composite.setLayout(new RowLayout(SWT.VERTICAL));
 		
 		
-		String[] data = new String[] {
+		final String[] data = new String[] {
 			    	IAssemblySource.OutputType.CONSOLE_APPLICATION,
 			    	IAssemblySource.OutputType.WINDOWS_APPLICATION,
 			    	IAssemblySource.OutputType.LIBRARY,
 			    };
-		String[] labels = new String[] {
+		final String[] labels = new String[] {
 			    	"Console Application",
 			    	"Windows Application",
 			    	"Library",
 			    };
 		_outputTypeButtons = createButtonGroup(composite, "Output Type", labels, data, source.getOutputType());
 		
-		data = new String[] {
-				IAssemblySourceLanguage.BOO,
-				IAssemblySourceLanguage.BOOJAY,
-				IAssemblySourceLanguage.CSHARP,
-				IAssemblySourceLanguage.CSHARP_1_1,
-		};
-		labels = new String[] { 
-				"boo",
+		Object[] sourceLanguages = AssemblySourceLanguage.values();
+		String[] languageLabels = new String[] { 
 				"boojay",
+				"boo",
 				"c#",
 				"c# 1.1 (no generics)",
 		};
-		_languageButtons = createButtonGroup(composite, "Language", labels, data, source.getLanguage());
+		_languageButtons = createButtonGroup(composite, "Language", languageLabels, sourceLanguages, source.getLanguage());
 		
 		createOutputFolderGroup(composite, source);
 		
@@ -221,7 +216,7 @@ public class BooAssemblySourcePropertyPage extends PreferencePage implements IWo
 		return (IFolder)_outputPath.getData();
 	}
 
-	private Button[] createButtonGroup(Composite parent, String groupLabel, String[] labels, String[] data, String selectedData) {
+	private Button[] createButtonGroup(Composite parent, String groupLabel, String[] labels, Object[] data, Object selectedItem) {
 		Group group = createGroup(parent, groupLabel);
 	    
 	    Button[] buttons = new Button[data.length];
@@ -229,7 +224,7 @@ public class BooAssemblySourcePropertyPage extends PreferencePage implements IWo
 	    	Button button = new Button(group, SWT.RADIO);
 	    	button.setText(labels[i]);
 	    	button.setData(data[i]);
-	    	if (data[i].equals(selectedData)) {
+	    	if (data[i].equals(selectedItem)) {
 	    		button.setSelection(true);
 	    	}
 	    	buttons[i] = button;

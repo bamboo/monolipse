@@ -16,7 +16,7 @@ public class BooApplicationLaunchShortcut extends AbstractBooLaunchShortcut {
 		if (null == source) return;
 		
 		try {
-			ILaunchConfiguration configuration = source.getLanguage().equals(IAssemblySourceLanguage.BOOJAY)
+			ILaunchConfiguration configuration = source.getLanguage().equals(AssemblySourceLanguage.BOOJAY)
 				? BoojayLauncher.launchConfigurationFor(file, mode)
 				: BooLauncher.getAppLaunchConfiguration(source);
 			DebugUITools.launch(configuration, mode);

@@ -1,7 +1,7 @@
 ﻿package monolipse.ui.tests;
 
 import monolipse.core.IAssemblySource;
-import monolipse.core.IAssemblySourceLanguage;
+import monolipse.core.AssemblySourceLanguage;
 
 import org.eclipse.core.runtime.Path;
 
@@ -15,7 +15,7 @@ public class CSharpBuilderTestCase extends AbstractBooTestCase {
 		
 		_assemblySource = _booProject.addAssemblySource(new Path("src/CSharp"));
 		_assemblySource.setOutputType(IAssemblySource.OutputType.LIBRARY);
-		_assemblySource.setLanguage(IAssemblySourceLanguage.CSHARP);
+		_assemblySource.setLanguage(AssemblySourceLanguage.CSHARP);
 		copyResourceTo("TestClass.cs", "src/CSharp");
 		build();
 	}

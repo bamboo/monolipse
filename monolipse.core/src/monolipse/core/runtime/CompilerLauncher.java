@@ -11,10 +11,10 @@ import org.eclipse.core.resources.*;
 
 public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 	
-	public static CompilerLauncher createLauncher(String language) throws IOException {
-		if (language.equals(IAssemblySourceLanguage.BOO))
+	public static CompilerLauncher createLauncher(AssemblySourceLanguage language) throws IOException {
+		if (language.equals(AssemblySourceLanguage.BOO))
 			return new BooCompilerLauncher();
-		if (language.equals(IAssemblySourceLanguage.BOOJAY))
+		if (language.equals(AssemblySourceLanguage.BOOJAY))
 			return new BoojayCompilerLauncher();
 		return new CSharpCompilerLauncher(language);
 	}

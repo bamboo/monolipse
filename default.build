@@ -49,7 +49,7 @@
 	
 		<property name="plugin.dir" value="${target.dir}/${plugin}_${bundle.version}" />
 		
-		<copy todir="${plugin.dir}">
+		<copy todir="${plugin.dir}" overwrite="true">
 			<fileset basedir="${plugin}">
 				<include name="bin/*.exe" />
 				<include name="bin/*.dll" />

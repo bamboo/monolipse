@@ -4,6 +4,7 @@ import java.io.InputStream;
 
 import junit.framework.TestCase;
 
+import monolipse.core.AssemblySourceLanguage;
 import monolipse.core.BooCore;
 import monolipse.core.IAssemblySource;
 import monolipse.core.IMonoProject;
@@ -58,7 +59,14 @@ public abstract class AbstractBooTestCase extends TestCase{
 	}
 
 	protected IAssemblySource addAssemblySource(String path) throws CoreException {
-		return _booProject.addAssemblySource(new Path(path));
+		return addAssemblySource(new Path(path));
+	}
+
+	protected IAssemblySource addAssemblySource(final Path path)
+			throws CoreException {
+		final IAssemblySource srcFolder = _booProject.addAssemblySource(path);
+		srcFolder.setLanguage(AssemblySourceLanguage.BOO);
+		return srcFolder;
 	}
 
 	protected IFile copyResourceTo(String resource, String path) throws Exception {
