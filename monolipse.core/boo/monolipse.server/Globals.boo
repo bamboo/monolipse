@@ -1,14 +1,31 @@
 namespace monolipse.server
 
-import Boo.Lang.Interpreter
+import Boo.Lang.Interpreter.Help
 import Boo.Lang.Compiler.Ast
 import Boo.Lang.Compiler.TypeSystem
 import Boo.Lang.PatternMatching
 
+def getEntityType(entity as IEntity):
+	if EntityType.Type == entity.EntityType:
+		type = entity as IType
+		return "Interface" if type.IsInterface
+		return "Enum" if type.IsEnum
+		return "Struct" if type.IsValueType
+		return "Callable" if type isa ICallableType
+		return "Class"
+	return entity.EntityType.ToString()
+	
+def writeTypeSystemEntitiesTo(entities as (IEntity), response as System.IO.TextWriter):
+	for member in entities:
+		try:
+			response.WriteLine("${getEntityType(member)}:${member.Name}:${describeEntity(member)}")
+		except x:
+			print x
+
 def describeEntity(entity as IEntity):
 	ie = entity as IInternalEntity
 	return describeNode(ie.Node) if ie is not null
-	return InteractiveInterpreter.DescribeEntity(entity)
+	return DescribeEntity(entity)
 	
 def describeNode(node as Node):
 	match node:
@@ -48,8 +65,7 @@ def describeParameter(p as ParameterDeclaration):
 	
 def optionalTypeReference(t as TypeReference):
 	return "" if t is null
-	
 	external = TypeSystemServices.GetOptionalEntity(t) as ExternalType
 	if external is not null:
-		return " as ${InteractiveInterpreter.GetBooTypeName(external.ActualType)}"
+		return " as ${GetBooTypeName(external.ActualType)}"
 	return " as ${t}" if t is not null

@@ -6,7 +6,6 @@ import Boo.Lang.Compiler.Ast
 import Boo.Lang.Compiler.IO
 import Boo.Lang.Compiler.Steps
 import Boo.Lang.Compiler.TypeSystem
-import System.IO
 
 class ContentAssistProcessor(ProcessMethodBodiesWithDuckTyping):
 	
@@ -14,16 +13,13 @@ class ContentAssistProcessor(ProcessMethodBodiesWithDuckTyping):
 	
 	static def getProposals(source as string):
 		
-		hunter = ContentAssistProcessor(source)
+		contentAssist = ContentAssistProcessor(source)
 		compiler = BooCompiler()		
-		compiler.Parameters.OutputWriter = StringWriter()
-		compiler.Parameters.Pipeline = configurePipeline(hunter)
+		compiler.Parameters.Pipeline = configurePipeline(contentAssist)
 		compiler.Parameters.Input.Add(StringInput("none", source))
-		compiler.Run()
-#		result = compiler.Run()
-//		print(result.Errors.ToString(true))
-		
-		return hunter.Members
+		result = compiler.Run()
+		print result.Errors
+		return contentAssist.Members
 
 	[getter(Members)]
 	_members = array(IEntity, 0)
@@ -74,7 +70,6 @@ class ContentAssistProcessor(ProcessMethodBodiesWithDuckTyping):
 	
 	protected static def configurePipeline(hunter):
 		pipeline = ResolveExpressions(BreakOnErrors: false)
-		index = pipeline.Find(Boo.Lang.Compiler.Steps.ProcessMethodBodiesWithDuckTyping)
-		pipeline[index] = hunter
+		pipeline.Replace(Boo.Lang.Compiler.Steps.ProcessMethodBodiesWithDuckTyping, hunter)
 		return pipeline
 		

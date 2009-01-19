@@ -1,12 +1,11 @@
 ﻿package monolipse.ui.tests;
 
 import java.util.ArrayList;
-
-import monolipse.core.compiler.CompilerProposal;
-import monolipse.core.interpreter.IInterpreterListener;
-import monolipse.core.interpreter.InteractiveInterpreter;
+import java.util.concurrent.*;
 
 import junit.framework.TestCase;
+import monolipse.core.compiler.CompilerProposal;
+import monolipse.core.interpreter.*;
 
 public class InteractiveInterpreterTestCase extends TestCase {
 	
@@ -36,18 +35,20 @@ public class InteractiveInterpreterTestCase extends TestCase {
 	}
 	
 	public void testGetCompletionProposals() throws Exception {
-		final Object mutex = new Object();
+		
+		final Exchanger<Boolean> exchanger = new Exchanger<Boolean>();
 		_interpreter.addListener(new IInterpreterListener() {
-			public void evalFinished(String result) {
-				synchronized (mutex) {
-					mutex.notify();
+			public void evalFinished(String result)  {
+				try {
+					exchanger.exchange(true);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
 		});
-		synchronized (mutex) {
-			_interpreter.eval("class Foo:\n\tdef foo():\n\t\tpass\nf = Foo()");
-			mutex.wait(3000);
-		}
+		_interpreter.eval("class Foo:\n\tdef foo():\n\t\tpass\nf = Foo()");
+		exchanger.exchange(true, 3, TimeUnit.SECONDS);
+		
 		CompilerProposal[] proposals = _interpreter.getCompletionProposals("f.__codecomplete__");
 		String[] expected = new String[] {
 				"foo",

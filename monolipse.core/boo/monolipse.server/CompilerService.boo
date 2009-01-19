@@ -4,39 +4,28 @@ import System
 import Boo.Lang.Compiler
 import monolipse.core
 
-class CompilerService(AbstractService):
-	def constructor(client as ProcessMessengerClient):
-		super(client)
-		
-	def registerMessageHandlers():
-		_client.OnMessage("GET-OUTLINE") do (message as Message):
-			resetBuffer()
-			try:
-				compiler = BooCompiler()
-				compiler.Parameters.Pipeline = Pipelines.Parse()
-				compiler.Parameters.Input.Add(Boo.Lang.Compiler.IO.StringInput("outline", message.Payload))
-				module = compiler.Run().CompileUnit.Modules[0]
-				module.Accept(OutlineVisitor(_buffer))
-			except x:
-				Console.Error.WriteLine(x)
-				resetBuffer()
-			flush("OUTLINE-RESPONSE")
+service CompilerService:
+	
+	onMessageWithResponse "GET-OUTLINE":
+		module = parse(message.Payload)
+		module.Accept(OutlineVisitor(response))
 			
-		_client.OnMessage("GET-COMPILER-PROPOSALS") do (message as Message):
-			resetBuffer()
-			try:
-				writeTypeSystemEntities(ContentAssistProcessor.getProposals(message.Payload))
-			except x:
-				Console.Error.WriteLine(x)
-				resetBuffer()
-			flush("COMPILER-PROPOSALS")
+	onMessageWithResponse "GET-COMPILER-PROPOSALS":
+		proposals = ContentAssistProcessor.getProposals(message.Payload)
+		writeTypeSystemEntitiesTo proposals, response
 			
-		_client.OnMessage("EXPAND") do (message as Message):
-			resetBuffer()
-			compiler = BooCompiler()
-			compiler.Parameters.Pipeline = Pipelines.Compile()
-			compiler.Parameters.Input.Add(Boo.Lang.Compiler.IO.StringInput("expand", message.Payload))
-			writeLine(compiler.Run().CompileUnit.ToCodeString())
-			flush("EXPAND-RESPONSE")
-			
-			
+	onMessageWithResponse "EXPAND":
+		result = compileCodeWithPipeline(message.Payload, Pipelines.Compile())
+		writeLine result.CompileUnit.ToCodeString()
+
+def parse(code as string):
+	result = compileCodeWithPipeline(code, Pipelines.Parse())
+	return result.CompileUnit.Modules[0]
+	
+def compileCodeWithPipeline(code as string, pipeline as CompilerPipeline):
+	compiler = newCompilerWithPipeline(pipeline)
+	compiler.Parameters.Input.Add(Boo.Lang.Compiler.IO.StringInput("code", code))
+	return compiler.Run()
+	
+def newCompilerWithPipeline(pipeline as CompilerPipeline):
+	return BooCompiler(CompilerParameters(Pipeline: pipeline))

@@ -14,7 +14,7 @@ public class InteractiveInterpreter extends AbstractBooServiceClient {
 	IInterpreterListener _listener;
 	
 	public InteractiveInterpreter() throws CoreException {
-		setMessageHandler("EVAL-FINISHED", new IProcessMessageHandler() {
+		setMessageHandler("EVAL-RESPONSE", new IProcessMessageHandler() {
 			public void handle(ProcessMessage message) {
 				if (null == _listener) return;
 				_listener.evalFinished(message.payload);
@@ -25,11 +25,7 @@ public class InteractiveInterpreter extends AbstractBooServiceClient {
 	public void eval(String code) throws IOException {
 		send("EVAL", code);
 	}
-
-	protected String getProposalsResponseMessageId() {
-		return "INTERPRETER-PROPOSALS";
-	}
-
+	
 	protected String getProposalsMessageId() {
 		return "GET-INTERPRETER-PROPOSALS";
 	}

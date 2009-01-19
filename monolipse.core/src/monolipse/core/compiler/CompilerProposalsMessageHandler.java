@@ -1,49 +1,57 @@
 package monolipse.core.compiler;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.concurrent.*;
 
 import monolipse.core.BooCore;
-import monolipse.core.launching.IProcessMessageHandler;
-import monolipse.core.launching.ProcessMessage;
+import monolipse.core.launching.*;
 
 
 public class CompilerProposalsMessageHandler implements IProcessMessageHandler {
-	private final ArrayList _proposals;
-
-	public CompilerProposalsMessageHandler() {
-		this._proposals = new ArrayList();
-	}
-	
-	public Object getMessageLock() {
-		return _proposals;
-	}
+	private static final CompilerProposal[] EMPTY = new CompilerProposal[0];
+	private final Exchanger<ArrayList<CompilerProposal>> _proposalExchanger = new Exchanger();
 	
 	public CompilerProposal[] getProposals() {
-		synchronized (getMessageLock()) {
-			return (CompilerProposal[]) _proposals.toArray(new CompilerProposal[_proposals.size()]);
-		}
+		final ArrayList<CompilerProposal> proposals = exchange(null);
+		return null == proposals
+			? EMPTY
+			: proposals.toArray(EMPTY);
 	}
 
 	public void handle(ProcessMessage response) {
-		Object lock = getMessageLock();
-		synchronized (lock) {
-			_proposals.clear();
-			
-			String messagePayload = response.payload;
-			BufferedReader reader = new BufferedReader(new StringReader(messagePayload));	
+		final ArrayList proposals = new ArrayList();
+		collectProposals(proposals, response);
+		exchange(proposals);
+	}
+
+	private ArrayList<CompilerProposal> exchange(final ArrayList proposals) {
+		try {
+			 return _proposalExchanger.exchange(proposals, 3, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			BooCore.logException(e);
+		} catch (TimeoutException e) {
+			BooCore.logException(e);
+		}
+		return null;
+	}
+
+	private void collectProposals(final ArrayList resultingProposals,
+			ProcessMessage response) {
+		String messagePayload = response.payload;
+		BufferedReader reader = new BufferedReader(new StringReader(messagePayload));	
+		try {
 			String line;
-			try {
-				while (null != (line = reader.readLine())) {
-					String[] parts = line.split(":");
-					_proposals.add(new CompilerProposal(parts[0], parts[1], parts[2]));
+			while (null != (line = reader.readLine())) {
+				String[] parts = line.split(":");
+				if (parts.length != 3) {
+					BooCore.logInfo("Invalid proposal: " + line);
+					continue;
 				}
-			} catch (IOException unexpected) {
-				BooCore.logException(unexpected);
+				resultingProposals.add(new CompilerProposal(parts[0], parts[1], parts[2]));
 			}
-			lock.notify();
+		} catch (IOException unexpected) {
+			BooCore.logException(unexpected);
 		}
 	}
 }

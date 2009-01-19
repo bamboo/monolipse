@@ -3,8 +3,7 @@
  */
 package monolipse.core.launching;
 
-import java.io.BufferedWriter;
-import java.io.PrintWriter;
+import java.io.*;
 
 public class ProcessMessage {
 	
@@ -18,7 +17,7 @@ public class ProcessMessage {
 		this.payload = payload;
 	}
 	
-	public void writeTo(BufferedWriter writer) {
+	public void writeTo(Writer writer) {
 		PrintWriter printer = new PrintWriter(writer);
 		printer.println(name);
 		printer.println(payload);

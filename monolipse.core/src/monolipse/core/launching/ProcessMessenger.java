@@ -26,8 +26,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.debug.core.*;
 
 
 public class ProcessMessenger {
@@ -88,7 +87,12 @@ public class ProcessMessenger {
 	}
 
 	private void doSend(ProcessMessage message) throws IOException {
-		message.writeTo(buffered(_socket.getOutputStream()));
+		final BufferedWriter buffered = buffered(_socket.getOutputStream());
+		try {
+			message.writeTo(buffered);
+		} finally {
+			buffered.flush();
+		}
 	}
 
 	public void unload() {
@@ -186,7 +190,7 @@ public class ProcessMessenger {
 			try {
 				synchronized (_socketMutex) {
 					_socket = server.accept();
-					_socketMutex.notify();
+					_socketMutex.notifyAll();
 				}
 				try {
 					while (!monitor.isCanceled()) {
@@ -194,7 +198,7 @@ public class ProcessMessenger {
 						if (null == message) break;
 						if (message.name.equals("QUIT")) {
 							synchronized (_socketMutex) {
-								_socketMutex.notify();
+								_socketMutex.notifyAll();
 							}
 							break;
 						}
@@ -220,6 +224,7 @@ public class ProcessMessenger {
 		if (null == handler) return;
 		SafeRunner.run(new ISafeRunnable() {
 			public void handleException(Throwable exception) {
+				BooCore.logException(exception);
 			}
 
 			public void run() throws Exception {

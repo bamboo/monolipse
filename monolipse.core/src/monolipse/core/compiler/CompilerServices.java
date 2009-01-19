@@ -10,7 +10,6 @@ import monolipse.core.launching.ProcessMessage;
 
 import org.eclipse.core.runtime.CoreException;
 
-
 public class CompilerServices extends AbstractBooServiceClient {
 
 	public static synchronized CompilerServices getInstance() throws CoreException {
@@ -27,7 +26,7 @@ public class CompilerServices extends AbstractBooServiceClient {
 	OutlineNode _outline;
 	
 	private CompilerServices() throws CoreException {
-		setMessageHandler("OUTLINE-RESPONSE", new IProcessMessageHandler() {
+		setMessageHandler("GET-OUTLINE-RESPONSE", new IProcessMessageHandler() {
 			public void handle(ProcessMessage message) {
 				updateOutline(message.payload);
 			}
@@ -105,9 +104,5 @@ public class CompilerServices extends AbstractBooServiceClient {
 
 	protected String getProposalsMessageId() {
 		return "GET-COMPILER-PROPOSALS";
-	}
-
-	protected String getProposalsResponseMessageId() {
-		return "COMPILER-PROPOSALS";
 	}
 }

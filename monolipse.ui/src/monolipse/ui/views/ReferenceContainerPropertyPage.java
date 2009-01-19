@@ -384,6 +384,9 @@ public class ReferenceContainerPropertyPage extends PreferencePage
 	}
 	
 	protected boolean isOrContainsAssemblySource(IContainer folder) throws CoreException {
+		if (!folder.getProject().isOpen())
+			return false;
+		
 		if (isValidAssemblySourceReference(folder)) return true;
 		final boolean[] result = new boolean[] { false };
 		folder.accept(new IResourceVisitor() {

@@ -37,7 +37,7 @@ class TextWriterListener(MarshalByRefObject, EventListener):
 		
 	[lock]
 	def TestStarted(t as TestCase):
-		_client.Send("TEST-STARTED", t.FullName)
+		Send("TEST-STARTED", t.FullName)
 		_error = null
 
 	[lock]
@@ -50,13 +50,16 @@ class TextWriterListener(MarshalByRefObject, EventListener):
 		writer.WriteLine(r.Test.FullName)
 		writer.WriteLine(r.Message)
 		writer.WriteLine(r.StackTrace)
-		_client.Send("TEST-FAILED", writer.ToString())
+		Send("TEST-FAILED", writer.ToString())
 		
 	def UnhandledException(e as Exception):
 		Console.Error.WriteLine("UnhandledException")
 		Console.Error.WriteLine(e)
+		
+	def Send(messageName as string, payload as string):
+		_client.Send(Message(Name: messageName, Payload: payload))
 
-client = ProcessMessengerClient()
+client = NetworkProcessMessengerClient()
 
 def sendTestsStarted(count as int):
 	client.Send("TESTS-STARTED", count.ToString())

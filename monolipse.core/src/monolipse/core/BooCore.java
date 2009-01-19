@@ -63,11 +63,11 @@ public class BooCore extends Plugin {
 		adapterManager.registerAdapters(new BooAssemblyReferenceAdapterFactory(), IFile.class);
 	}
 	
-	public static void logException(Exception e) {
-		e.printStackTrace();
+	public static void logException(Throwable exception) {
+		exception.printStackTrace();
 		BooCore plugin = getDefault();
 		if (null == plugin) return;
-		plugin.getLog().log(new Status(Status.ERROR, ID_PLUGIN, -1, e.getMessage(), e));
+		plugin.getLog().log(new Status(Status.ERROR, ID_PLUGIN, -1, exception.getMessage(), exception));
 	}
 	
 	public static void logInfo(String message) {

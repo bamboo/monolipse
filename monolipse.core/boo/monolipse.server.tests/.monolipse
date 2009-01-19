@@ -1,0 +1,14 @@
+<settings>
+  <language>boo</language>
+  <outputType>library</outputType>
+  <references>
+    <monolipse.core.internal.AssemblySourceReference-Remembrance>
+      <path>/monolipse.core/boo/monolipse.server</path>
+    </monolipse.core.internal.AssemblySourceReference-Remembrance>
+    <monolipse.core.internal.AssemblySourceReference-Remembrance>
+      <path>/monolipse.core/boo/monolipse.core</path>
+    </monolipse.core.internal.AssemblySourceReference-Remembrance>
+  </references>
+  <outputFolder>/monolipse.core/bin</outputFolder>
+  <additionalOptions></additionalOptions>
+</settings>

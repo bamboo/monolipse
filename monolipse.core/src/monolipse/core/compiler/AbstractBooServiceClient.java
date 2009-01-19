@@ -24,24 +24,17 @@ public abstract class AbstractBooServiceClient {
 	
 	public AbstractBooServiceClient() throws CoreException {
 		_messenger = new ProcessMessenger(createLaunchConfiguration());
-		_messenger.setMessageHandler(getProposalsResponseMessageId(), _proposalsHandler);
+		_messenger.setMessageHandler(getProposalsMessageId() + "-RESPONSE", _proposalsHandler);
 	}
 	
 	public CompilerProposal[] getCompletionProposals(String code) throws IOException {
-		
-		CompilerProposal[] proposals = null;
-		
-		Object lock = _proposalsHandler.getMessageLock();
-		synchronized (lock) {
-			try {
-				_messenger.send(createMessage(getProposalsMessageId(), code));
-				lock.wait(_messenger.getTimeout());
-				proposals = _proposalsHandler.getProposals();
-			} catch (Exception e) {
-				BooCore.logException(e);
-			}
+		try {
+			_messenger.send(createMessage(getProposalsMessageId(), code));
+			return _proposalsHandler.getProposals();
+		} catch (Exception e) {
+			BooCore.logException(e);
 		}
-		return proposals;
+		return null;
 	}
 	
 	public void unload() {
@@ -57,8 +50,6 @@ public abstract class AbstractBooServiceClient {
 	}
 	
 	protected abstract String getProposalsMessageId();
-	
-	protected abstract String getProposalsResponseMessageId();
 	
 	protected ProcessMessage createMessage(String name, String code) {
 		return new ProcessMessage(name, code);
@@ -79,5 +70,4 @@ public abstract class AbstractBooServiceClient {
 		wc.setAttribute(DebugPlugin.ATTR_CAPTURE_OUTPUT, true);
 		return wc;
 	}
-
 }

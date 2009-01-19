@@ -4,31 +4,13 @@ import System
 import Boo.Lang.Interpreter
 import monolipse.core
 
-class InterpreterService(AbstractService):
+service InterpreterService:
 	
-	_interpreter as InteractiveInterpreter
+	interpreter = InteractiveInterpreter(RememberLastValue: true, Print: writeLine)
 	
-	def constructor(client as ProcessMessengerClient):
-		super(client)
+	onMessageWithResponse "EVAL":
+		interpreter.LoopEval(message.Payload)
 
-	def getInterpreter():
-		if _interpreter is not null: return _interpreter
-		_interpreter = InteractiveInterpreter(RememberLastValue: true, Print: writeLine)
-		return _interpreter
-
-	def registerMessageHandlers():	
-		_client.OnMessage("EVAL") do (message as Message):
-			resetBuffer()
-			try:
-				getInterpreter().LoopEval(message.Payload)
-			except x:
-				writeLine(x)
-			flush("EVAL-FINISHED")
-
-		_client.OnMessage("GET-INTERPRETER-PROPOSALS") do (message as Message):
-			resetBuffer()
-			try:
-				writeTypeSystemEntities(getInterpreter().SuggestCodeCompletion(message.Payload))
-			except x:
-				Console.Error.WriteLine(x)
-			flush("INTERPRETER-PROPOSALS")
+	onMessageWithResponse "GET-INTERPRETER-PROPOSALS":
+		proposals = interpreter.SuggestCodeCompletion(message.Payload)
+		writeTypeSystemEntitiesTo proposals, response
