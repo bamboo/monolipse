@@ -70,7 +70,7 @@
 	
 	<target name="monolipse.nunit" depends="monolipse.core, monolipse.ui">
 	
-		<copy todir="monolipse.nunit/lib">
+		<copy todir="monolipse.nunit/lib" overwrite="true">
 			<fileset basedir="monolipse.core/bin">
 				<include name="*.dll" />
 				<include name="*.exe" />
