@@ -268,7 +268,10 @@ public class BooAssemblySource implements IAssemblySource {
 
 	private void loadSettingsFrom(IFile file) throws CoreException {
 		AssemblySourceRemembrance remembrance = (AssemblySourceRemembrance) createXStream().fromXML(decode(file));
-		_language = AssemblySourceLanguage.forId(remembrance.language);
+		final String language = remembrance.language;
+		_language = isEmptyOrNull(language)
+				? AssemblySourceLanguage.BOO
+				: AssemblySourceLanguage.forId(language);
 		_outputType = remembrance.outputType;
 		_references = remembrance.activateReferences();
 		_additionalOptions = remembrance.additionalOptions;
@@ -277,6 +280,10 @@ public class BooAssemblySource implements IAssemblySource {
 		_outputFolder = path == null ? defaultOutputFolder() : WorkspaceUtilities.getFolder(path);
 	}
 	
+	private boolean isEmptyOrNull(String language) {
+		return language == null || language.isEmpty();
+	}
+
 	private IFile getSettingsFile() {
 		return _folder.getFile(SETTINGS_FILE);
 	}
