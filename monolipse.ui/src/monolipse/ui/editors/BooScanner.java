@@ -206,7 +206,8 @@ public class BooScanner extends RuleBasedScanner {
 				scanner.unread();
 
 				IToken token = (IToken) _words.get(_buffer.toString());
-				if (token != null) return token;
+				if (token != null && !followsADot(scanner, _buffer.length()))
+					return token;
 				return '(' == peekNextValidChar(scanner) ? _invocationTarget : _identifier;
 			}
 
@@ -215,6 +216,36 @@ public class BooScanner extends RuleBasedScanner {
 
 		}
 		
+		private boolean followsADot(ICharacterScanner scanner, int length) {
+			return '.' == peekPreviousValidChar(scanner, length);
+		}
+
+		private int peekPreviousValidChar(ICharacterScanner scanner, int length) {
+			unreadMany(scanner, length);
+			
+			int unreadCount = 0;
+			int c = peekPrevious(scanner);
+			while (c != ICharacterScanner.EOF && Character.isWhitespace((char)c)) {
+				scanner.unread();
+				c = peekPrevious(scanner);
+				++unreadCount;
+			}
+			
+			skip(scanner, unreadCount + length);
+			
+			return c;
+		}
+
+		private int peekPrevious(ICharacterScanner scanner) {
+			scanner.unread();
+			return scanner.read();
+		}
+
+		private void skip(ICharacterScanner scanner, final int skipCount) {
+			for (int i=0; i<skipCount; ++i)
+				scanner.read();
+		}
+
 		private int peekNextValidChar(ICharacterScanner scanner) {
 			int readCount = 1;
 			int c = scanner.read();
@@ -222,11 +253,15 @@ public class BooScanner extends RuleBasedScanner {
 				c = scanner.read();
 				++readCount;
 			}
-			while (readCount > 0) {
-				scanner.unread();
-				--readCount;
-			}
+			unreadMany(scanner, readCount);
 			return c;
+		}
+
+		private void unreadMany(ICharacterScanner scanner, int count) {
+			while (count > 0) {
+				scanner.unread();
+				--count;
+			}
 		}
 
 		private void addWords(String[] words, IToken token) {
