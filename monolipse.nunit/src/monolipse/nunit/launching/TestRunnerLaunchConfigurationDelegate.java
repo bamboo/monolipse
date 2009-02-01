@@ -30,7 +30,7 @@ public class TestRunnerLaunchConfigurationDelegate implements ILaunchConfigurati
 	}
 	
 	private String getTestRunnerLocation() throws IOException {
-		return WorkspaceUtilities.getResourceLocalPath(NUnitPlugin.getDefault().getBundle(), "bin/TestClientRunner.exe");
+		return WorkspaceUtilities.getResourceLocalPath(NUnitPlugin.getDefault().getBundle(), "bin/monolipse.nunit.server.exe");
 	}
 
 }

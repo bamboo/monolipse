@@ -4,6 +4,7 @@ import System.IO
 
 class AbstractService:
 	
+	[getter(client)]
 	_client as ProcessMessengerClient
 	
 	[getter(response)] 
@@ -24,4 +25,12 @@ class AbstractService:
 		_response.GetStringBuilder().Length = 0
 		
 	def flush(name as string):
-		_client.Send(Message(Name: name, Payload: _response.ToString()))
+		payload = _response.ToString()
+		resetBuffer()
+		send name, payload
+		
+	def send(name as string, payload):
+		_client.Send(Message(Name: name, Payload: payload.ToString()))
+		
+	def send(name as string):
+		send(name, "")

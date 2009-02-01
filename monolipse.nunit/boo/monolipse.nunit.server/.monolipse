@@ -8,6 +8,12 @@
     <monolipse.core.internal.LocalAssemblyReference-Remembrance>
       <path>/monolipse.nunit/lib/monolipse.server.exe</path>
     </monolipse.core.internal.LocalAssemblyReference-Remembrance>
+    <monolipse.core.internal.GlobalAssemblyCacheReference-Remembrance>
+      <name>Boo.Lang.PatternMatching</name>
+      <version>2.0.0.0</version>
+      <culture>neutral</culture>
+      <token>32c39770e9a21a67</token>
+    </monolipse.core.internal.GlobalAssemblyCacheReference-Remembrance>
   </references>
   <outputFolder>/monolipse.nunit/bin</outputFolder>
   <additionalOptions></additionalOptions>

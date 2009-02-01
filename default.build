@@ -84,8 +84,8 @@
 			</fileset>
 		</copy>
 	
-		<booc target="exe" output="monolipse.nunit/bin/TestClientRunner.exe">
-			<sources basedir="monolipse.nunit/boo/TestClientRunner">
+		<booc target="exe" output="monolipse.nunit/bin/monolipse.nunit.server.exe">
+			<sources basedir="monolipse.nunit/boo/monolipse.nunit.server">
 				<include name="*.boo" />
 			</sources>
 			<references basedir="monolipse.nunit/bin">
@@ -109,6 +109,15 @@
 				<include name="*.*" />
 			</fileset>
 		</copy>
+	</target>
+
+	<target name="clean">
+		<delete>
+			<fileset basedir=".">
+				<include name="**/monolipse.*.dll" />
+				<include name="**/monolipse.*.exe" />
+			</fileset>
+		</delete>
 	</target>
 	
 	<target name="init">

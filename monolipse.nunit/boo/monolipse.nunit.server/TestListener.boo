@@ -1,13 +1,11 @@
-﻿namespace TestClientRunner
+namespace monolipse.nunit.server
 
 import System
 import System.IO
-import NUnit.Core from nunit.core
-import NUnit.Util from nunit.util
+import NUnit.Core
 import monolipse.core
 
-// TODO: report errors
-class TextWriterListener(MarshalByRefObject, EventListener):
+class TestListener(MarshalByRefObject, EventListener):
 
 	_client as ProcessMessengerClient
 	_error as Exception
@@ -32,15 +30,10 @@ class TextWriterListener(MarshalByRefObject, EventListener):
 	def SuiteStarted(s as TestSuite):
 		pass
 		
-#	def TestOutput(output as NUnit.Core.TestOutput):
-#		pass
-		
-	[lock]
 	def TestStarted(t as TestCase):
 		Send("TEST-STARTED", t.FullName)
 		_error = null
 
-	[lock]
 	def TestFinished(r as TestCaseResult):
 		unless r.IsFailure /*or r.SetupFailure*/: return
 
@@ -59,35 +52,3 @@ class TextWriterListener(MarshalByRefObject, EventListener):
 	def Send(messageName as string, payload as string):
 		_client.Send(Message(Name: messageName, Payload: payload))
 
-client = NetworkProcessMessengerClient()
-
-def sendTestsStarted(count as int):
-	client.Send("TESTS-STARTED", count.ToString())
-	
-def runTestCases(assemblyName as string, testCases as (string)):
-	domain = TestDomain()
-	test = domain.Load(assemblyName)
-	if len(testCases) > 0:
-		sendTestsStarted len(testCases)
-		domain.Run(TextWriterListener(client), testCases)
-	else:
-		sendTestsStarted test.CountTestCases()
-		test.Run(TextWriterListener(client))
-	
-client.OnMessage("RUN") do (message as Message):
-	try:
-		arguments = /,/.Split(message.Payload.Trim())
-		
-		assemblyName = arguments[0]
-		testCases = arguments[1:]
-		runTestCases assemblyName, testCases
-	except x:
-		Console.Error.WriteLine(x)
-	client.Send("TESTS-FINISHED", "")
-	client.Stop()
-	
-portNumber, = argv
-try:
-	client.Start(int.Parse(portNumber))
-except x:
-	Console.Error.WriteLine(x)
