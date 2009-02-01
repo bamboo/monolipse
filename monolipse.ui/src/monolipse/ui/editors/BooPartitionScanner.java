@@ -59,11 +59,11 @@ public class BooPartitionScanner extends RuleBasedPartitionScanner {
 		IToken codeLiteral = new Token(CODE_LITERAL);
 		
 		IPredicateRule[] rules = new IPredicateRule[] {
-			new EndOfLineRule("//", singleLineComment),
 			new EndOfLineRule("#", singleLineComment),
 			new MultiLineRule("/*", "*/", multiLineComment, (char)0, true),
-			new SingleLineRule("/", "/", regex, '\\'),
-			new SingleLineRule("@/", "/", regex, '\\'),
+			new PatternRule("@/", "/", regex, '\\', false, false),
+			new EndOfLineRule("//", singleLineComment),
+			new PatternRule("/", "/", regex, '\\', false, false),
 			new MultiLineRule("\"\"\"", "\"\"\"", tqs, (char)0, true),
 			new SingleLineRule("\"", "\"", dqs, '\\'),
 			new SingleLineRule("'", "'", sqs, '\\'),
