@@ -87,6 +87,7 @@ public class BooScanner extends RuleBasedScanner {
 		"else",
 		"elif",
 		"except",
+		"failure",
 		"ensure",
 		"for",
 		"in",
