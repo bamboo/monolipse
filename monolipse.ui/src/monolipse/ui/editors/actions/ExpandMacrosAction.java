@@ -5,13 +5,13 @@ import monolipse.ui.editors.BooEditor;
 
 import org.eclipse.core.runtime.CoreException;
 
-public class ExpandCodeAction extends AbstractCodeExpansionAction {
+public class ExpandMacrosAction extends AbstractCodeExpansionAction {
 
-	public static final String ID = "monolipse.ui.editors.actions.ExpandCodeAction";
+	public static final String ID = "monolipse.ui.editors.actions.ExpandMacrosAction";
 
-	public ExpandCodeAction(BooEditor editor) {
-		setText("Expand All");
-		setDescription("Completely expands the current code in a new editor");
+	public ExpandMacrosAction(BooEditor editor) {
+		setText("Expand Macros and Attributes");
+		setDescription("Expands the macros and attributes in the current code in a new editor");
 		setActionDefinitionId(ID);
 		setId(ID);
 		_editor = editor;
@@ -19,7 +19,7 @@ public class ExpandCodeAction extends AbstractCodeExpansionAction {
 
 	@Override
 	protected String expand() throws CoreException {
-		return compilerServices().expand(getEditorContents());
+		return compilerServices().expandMacros(getEditorContents());
 	}
 
 	private CompilerServices compilerServices() throws CoreException {

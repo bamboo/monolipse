@@ -17,6 +17,11 @@ service CompilerService:
 	onMessageWithResponse "EXPAND":
 		result = compileCodeWithPipeline(message.Payload, Pipelines.Compile())
 		writeLine result.CompileUnit.ToCodeString()
+		
+	onMessageWithResponse "EXPAND-MACROS":
+		result = compileCodeWithPipeline(message.Payload, Pipelines.ExpandMacros())
+		writeLine result.CompileUnit.ToCodeString()
+	
 
 def parse(code as string):
 	result = compileCodeWithPipeline(code, Pipelines.Parse())

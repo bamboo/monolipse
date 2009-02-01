@@ -8,16 +8,23 @@ import monolipse.core.foundation.IOUtilities;
 
 public class CompilerServicesTestCase extends AbstractBooTestCase {
 	
-	private CompilerServices builder;
+	private CompilerServices subject;
 
 	public void setUp() throws Exception {
 		super.setUp();
-		builder = CompilerServices.getInstance();
+		subject = CompilerServices.getInstance();
 	}
 	
 	protected void tearDown() throws Exception {
-		builder.dispose();
+		subject.dispose();
 		super.tearDown();
+	}
+	
+	public void testExpandMacros() {
+		String code = "print 'Hello World!'";
+		String expected = "System.Console.WriteLine('Hello World!')";
+		
+		assertEquals(expected, subject.expandMacros(code).trim());
 	}
 	
 	public void testGetOutline() throws Exception {
@@ -30,7 +37,7 @@ public class CompilerServicesTestCase extends AbstractBooTestCase {
 	}
 
 	private OutlineNode outlineFor(final String resource) throws IOException {
-		return builder.getOutline(loadResourceAsString(resource));
+		return subject.getOutline(loadResourceAsString(resource));
 	}
 
 	private void assertOutlineNode(final OutlineNode node,

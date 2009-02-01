@@ -3,6 +3,7 @@ package monolipse.core.compiler;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.concurrent.*;
 
 import monolipse.core.BooCore;
 import monolipse.core.launching.IProcessMessageHandler;
@@ -21,66 +22,49 @@ public class CompilerServices extends AbstractBooServiceClient {
 	
 	private static CompilerServices _instance;
 	
-	private Object _outlineMutex = new Object();
-	
-	OutlineNode _outline;
-	
 	private CompilerServices() throws CoreException {
-		setMessageHandler("GET-OUTLINE-RESPONSE", new IProcessMessageHandler() {
-			public void handle(ProcessMessage message) {
-				updateOutline(message.payload);
-			}
-		});
+	}
+
+	public String expandMacros(String code) {
+		return rpc("EXPAND-MACROS", code);
 	}
 	
 	public synchronized String expand(String code) {
-		final String[] returnValue = new String[1];
-		
+		return rpc("EXPAND", code);
+	}
+
+	private String rpc(final String messageName, String payload) {
+		final String messageResponse = messageName + "-RESPONSE";
+		final Exchanger<String> returnValue = new Exchanger<String>();
 		try {
-			setMessageHandler("EXPAND-RESPONSE", new IProcessMessageHandler() {
+			setMessageHandler(messageResponse, new IProcessMessageHandler() {
 				public void handle(ProcessMessage message) {
-					synchronized (returnValue) {
-						returnValue[0] = message.payload;
-						returnValue.notify();
+					try {
+						returnValue.exchange(message.payload, 3, TimeUnit.SECONDS);
+					} catch (Exception e) {
+						BooCore.logException(e);
 					}
-				};
+				}
 			});
-			synchronized (returnValue) {
-				send("EXPAND", code);
-				returnValue.wait(3000);
-			}
+			send(messageName, payload);
+			return returnValue.exchange(null, 3, TimeUnit.SECONDS);
 		} catch (Exception e) {
 			BooCore.logException(e);
 		} finally {
-			setMessageHandler("EXPAND-RESPONSE", null);
+			setMessageHandler(messageResponse, null);
 		}
-		return returnValue[0];
+		return null;
 	}
 
 	public OutlineNode getOutline(String text) throws IOException {
-		synchronized (_outlineMutex) {
-			send("GET-OUTLINE", text);
-			try {
-				_outlineMutex.wait(3000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				return null;
-			}
-		}
-		return _outline;
+		final String outlineString = rpc("GET-OUTLINE", text);
+		return outlineString == null
+			? null
+			: parseOutline(outlineString);
 	}
 	
-	void updateOutline(String outline) {
-		synchronized (_outlineMutex) {
-			_outline = parseOutline(outline);
-			_outlineMutex.notify();
-		}
-	}
-
 	private OutlineNode parseOutline(String text) {
-		
 		OutlineNode node = new OutlineNode();
-		
 		BufferedReader reader = new BufferedReader(new StringReader(text));
 		String line = null;
 		try {

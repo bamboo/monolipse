@@ -56,10 +56,17 @@
             description="Boo source editor commands"
             id="monolipse.ui.commands.category.source">
       </category>      
+     
+      <command
+            name="Expand Macros"
+            description="Expands the macros in the code currently being edited"
+            categoryId="monolipse.ui.commands.category.source"
+            id="monolipse.ui.editors.actions.ExpandMacrosAction">
+      </command>
       
       <command
-            name="Expand Code"
-            description="Expands the code currently being edited"
+            name="Expand Types"
+            description="Completely expand the code currently being edited"
             categoryId="monolipse.ui.commands.category.source"
             id="monolipse.ui.editors.actions.ExpandCodeAction">
       </command>
@@ -91,9 +98,15 @@
       
 <!-- edit -->
       <key
-            sequence="M1+M2+M3+E"
+            sequence="M1+M2+M3+T"
             contextId="monolipse.ui.booEditorScope"
             commandId="monolipse.ui.editors.actions.ExpandCodeAction"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+            
+      <key
+            sequence="M1+M2+M3+M"
+            contextId="monolipse.ui.booEditorScope"
+            commandId="monolipse.ui.editors.actions.ExpandMacrosAction"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
             
       <key
@@ -306,6 +319,7 @@
         icon="icons/BooScript.png"
         modes="run, debug">
             <perspective id="monolipse.ui.booPerspective"/>
+            <perspective id="org.eclipse.jdt.ui.JavaPerspective" />
             <perspective id="org.eclipse.debug.ui.DebugPerspective"/>
             
           <contextualLaunch>
@@ -331,6 +345,7 @@
         icon="icons/BooScript.png"
         modes="run, debug">
             <perspective id="monolipse.ui.booPerspective"/>
+            <perspective id="org.eclipse.jdt.ui.JavaPerspective" />
             <perspective id="org.eclipse.debug.ui.DebugPerspective"/>
             
           <contextualLaunch>
