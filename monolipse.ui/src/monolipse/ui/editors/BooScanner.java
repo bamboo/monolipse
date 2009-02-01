@@ -129,11 +129,10 @@ public class BooScanner extends RuleBasedScanner {
 		"matrix",
 		"print",
 		
-		"case",
+		"macro",
 		"match",
+		"case",
 		"otherwise",
-		
-		"data",
 	};
 	
 	static final String[] LITERALS = new String[] {
