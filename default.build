@@ -8,6 +8,12 @@
 	</target>
 	
 	<target name="monolipse.core" depends="init">
+
+		<copy todir="monolipse.core/bin">
+			<fileset basedir="monolipse.core/lib/boojay">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
 	
 		<booc target="library" output="monolipse.core/bin/monolipse.core.dll">
 			<sources basedir="monolipse.core/boo/monolipse.core">
@@ -21,6 +27,7 @@
 			</sources>
 			<references basedir="monolipse.core/bin">
 				<include name="monolipse.core.dll" />
+				<include name="Boojay.Compilation.dll" />
 			</references>
 		</booc>
 	

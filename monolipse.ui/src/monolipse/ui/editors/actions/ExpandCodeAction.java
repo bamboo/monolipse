@@ -19,7 +19,7 @@ public class ExpandCodeAction extends AbstractCodeExpansionAction {
 
 	@Override
 	protected String expand() throws CoreException {
-		return compilerServices().expand(getEditorContents());
+		return compilerServices().expand(getEditorContents(), sourceLanguage());
 	}
 
 	private CompilerServices compilerServices() throws CoreException {

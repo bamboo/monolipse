@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.concurrent.*;
 
-import monolipse.core.BooCore;
+import monolipse.core.*;
 import monolipse.core.launching.IProcessMessageHandler;
 import monolipse.core.launching.ProcessMessage;
 
@@ -25,12 +25,19 @@ public class CompilerServices extends AbstractBooServiceClient {
 	private CompilerServices() throws CoreException {
 	}
 
-	public String expandMacros(String code) {
-		return rpc("EXPAND-MACROS", code);
+	public String expandMacros(String code, AssemblySourceLanguage language) {
+		assertBooLanguage(language);
+		return rpc("EXPAND-" + language.toString() + "-MACROS", code);
+	}
+
+	private void assertBooLanguage(AssemblySourceLanguage language) {
+		if (language != AssemblySourceLanguage.BOO && language != AssemblySourceLanguage.BOOJAY)
+			throw new IllegalArgumentException();
 	}
 	
-	public synchronized String expand(String code) {
-		return rpc("EXPAND", code);
+	public String expand(String code, AssemblySourceLanguage language) {
+		assertBooLanguage(language);
+		return rpc("EXPAND-" + language.toString(), code);
 	}
 
 	private String rpc(final String messageName, String payload) {

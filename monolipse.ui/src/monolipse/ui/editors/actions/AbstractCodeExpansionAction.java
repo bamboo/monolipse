@@ -1,9 +1,11 @@
 package monolipse.ui.editors.actions;
 
+import monolipse.core.*;
 import monolipse.ui.BooUI;
 import monolipse.ui.editors.BooEditor;
 import monolipse.ui.editors.input.StringInput;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -32,23 +34,50 @@ public abstract class AbstractCodeExpansionAction extends Action {
 	}
 
 	public void run() {
-		IWorkbenchWindow window = _editor.getSite().getPage()
-				.getWorkbenchWindow();
-		IWorkbenchPage page = window.getActivePage();
-		if (page != null) {
-			try {				
-				String expansion = expand();
-				if (null == expansion) return;
-				IStorageEditorInput input = new StringInput(expansion);
-				page.openEditor(input, BooEditor.ID_EDITOR);
-			} catch (CoreException e) {
-				BooUI.logException(e);
-			}
+		IWorkbenchPage activePage = getActivePage();
+		if (activePage == null)
+			return;
+		
+		try {				
+			String expansion = expand();
+			if (null == expansion)
+				return;
+			
+			openBooEditorForString(activePage, expansion);
+			
+		} catch (CoreException e) {
+			BooUI.logException(e);
 		}
 	}
 
+	private void openBooEditorForString(IWorkbenchPage activePage,
+			String booCode) throws PartInitException {
+		IStorageEditorInput input = new StringInput(booCode);
+		activePage.openEditor(input, BooEditor.ID_EDITOR);
+	}
+
+	private IWorkbenchPage getActivePage() {
+		IWorkbenchWindow window = _editor.getSite().getPage().getWorkbenchWindow();
+		return window.getActivePage();
+	}
+
 	protected String getEditorContents() {
-		return _editor.getDocumentProvider().getDocument(_editor.getEditorInput()).get();
+		return _editor.getDocumentProvider().getDocument(editorInput()).get();
+	}
+
+	protected IEditorInput editorInput() {
+		return _editor.getEditorInput();
+	}
+
+	protected AssemblySourceLanguage sourceLanguage() {
+		final IFile file = (IFile) editorInput().getAdapter(IFile.class);
+		if (null != file) {
+			final IAssemblySource source = BooCore.assemblySourceContaining(file);
+			if (null != source) {
+				return source.getLanguage();
+			}
+		}
+		return AssemblySourceLanguage.BOO;
 	}
 
 }

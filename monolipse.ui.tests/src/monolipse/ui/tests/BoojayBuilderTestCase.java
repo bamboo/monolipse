@@ -1,7 +1,6 @@
 package monolipse.ui.tests;
 
 import monolipse.core.IAssemblySource;
-import monolipse.core.AssemblySourceLanguage;
 import monolipse.core.internal.BooBuilder;
 
 import org.eclipse.core.resources.*;

@@ -2,6 +2,7 @@
 
 import java.io.IOException;
 
+import monolipse.core.AssemblySourceLanguage;
 import monolipse.core.compiler.CompilerServices;
 import monolipse.core.compiler.OutlineNode;
 import monolipse.core.foundation.IOUtilities;
@@ -15,16 +16,22 @@ public class CompilerServicesTestCase extends AbstractBooTestCase {
 		subject = CompilerServices.getInstance();
 	}
 	
-	protected void tearDown() throws Exception {
-		subject.dispose();
-		super.tearDown();
+	public void testExpandBoojayMacros() {
+		String code = "print 'Hello World!'";
+		String expected = "java.lang.System.out.println('Hello World!')";
+		
+		assertMacroExpansion(expected, code, AssemblySourceLanguage.BOOJAY);
 	}
 	
-	public void testExpandMacros() {
+	public void testExpandBooMacros() {
 		String code = "print 'Hello World!'";
 		String expected = "System.Console.WriteLine('Hello World!')";
 		
-		assertEquals(expected, subject.expandMacros(code).trim());
+		assertMacroExpansion(expected, code, AssemblySourceLanguage.BOO);
+	}
+
+	private void assertMacroExpansion(String expected, String code, final AssemblySourceLanguage language) {
+		assertEquals(expected, subject.expandMacros(code, language).trim());
 	}
 	
 	public void testGetOutline() throws Exception {

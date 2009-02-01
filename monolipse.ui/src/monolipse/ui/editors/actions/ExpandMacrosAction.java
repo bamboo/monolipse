@@ -19,7 +19,7 @@ public class ExpandMacrosAction extends AbstractCodeExpansionAction {
 
 	@Override
 	protected String expand() throws CoreException {
-		return compilerServices().expandMacros(getEditorContents());
+		return compilerServices().expandMacros(getEditorContents(), sourceLanguage());
 	}
 
 	private CompilerServices compilerServices() throws CoreException {
