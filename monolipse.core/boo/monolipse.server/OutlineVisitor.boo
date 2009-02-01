@@ -17,7 +17,7 @@ class OutlineVisitor(DepthFirstVisitor):
 	override def OnMacroStatement(node as MacroStatement):
 		WriteBeginNode()
 		WriteNodeLine(node)
-		Visit(node.Block)
+		Visit(node.Body)
 		WriteEndNode()
 		
 	override def OnClassDefinition(node as ClassDefinition):
