@@ -281,7 +281,7 @@ public class BooAssemblySource implements IAssemblySource {
 	}
 	
 	private boolean isEmptyOrNull(String language) {
-		return language == null || language.isEmpty();
+		return language == null || language.length() == 0;
 	}
 
 	private IFile getSettingsFile() {

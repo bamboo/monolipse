@@ -78,6 +78,9 @@ public class BooEditor extends TextEditor {
 		Action eca = new ExpandCodeAction(this);
 		setAction(eca.getId(), eca);
 		
+		Action ema = new ExpandMacrosAction(this);
+		setAction(ema.getId(), ema);
+		
 		final InformationPresenter quickOutline = new InformationPresenter(quickOutlineCreator()) {
 			public IInformationProvider getInformationProvider(String contentType) {
 				return new BooOutlineInformationProvider();
