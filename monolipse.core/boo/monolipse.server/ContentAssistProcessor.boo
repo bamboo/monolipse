@@ -17,8 +17,7 @@ class ContentAssistProcessor(ProcessMethodBodiesWithDuckTyping):
 		compiler = BooCompiler()		
 		compiler.Parameters.Pipeline = configurePipeline(contentAssist)
 		compiler.Parameters.Input.Add(StringInput("none", source))
-		result = compiler.Run()
-		print result.Errors
+		compiler.Run()
 		return contentAssist.Members
 
 	[getter(Members)]
