@@ -112,7 +112,7 @@
 
 	<target name="update-boojay">
 		<copy todir="monolipse.core/lib/boojay">
-			<fileset basedir="../boo-extensions/boojay/dist">
+			<fileset basedir="../boojay/dist">
 				<include name="*.*" />
 			</fileset>
 		</copy>
