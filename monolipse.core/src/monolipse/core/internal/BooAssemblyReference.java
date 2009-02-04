@@ -18,6 +18,9 @@ public class BooAssemblyReference {
 	}
 	
 	public static IAssemblyReference get(IFile file) throws CoreException {
+		if (!file.exists())
+			return new LocalAssemblyReference(file);
+		
 		IAssemblyReference reference = getCachedReference(file);
 		if (null == reference) {
 			reference = new LocalAssemblyReference(file);
