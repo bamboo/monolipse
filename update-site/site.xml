@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
    <description url="https://svn.sourceforge.net/svnroot/monolipse/trunk/update-site/">
-      Mono Development Tools Update Site
+      Boo Development Tools Update Site
    </description>
-   <feature url="features/monolipse.feature_1.0.3.jar" id="monolipse.feature" version="1.0.3"/>
+   <feature url="features/monolipse.feature_1.0.5.jar" id="monolipse.feature" version="1.0.5"/>
 </site>

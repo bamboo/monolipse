@@ -2,7 +2,7 @@
 <project name="monolipse" default="all">
 	
 	<property name="target.dir" value="./plugins" />
-	<property name="boo.dir" value="../boo/build" />
+	<property name="boo.dir" value="../boo/bin" />
 	
 	<target name="all" depends="monolipse.core, monolipse.nunit, monolipse.ui">
 	</target>

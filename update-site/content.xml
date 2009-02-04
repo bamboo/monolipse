@@ -1,0 +1,1209 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?metadataRepository class='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1.0.0'?>
+<repository name='file:/Users/rodrigob/projects/monolipse/update-site/ - metadata' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1.0.0'>
+  <properties size='2'>
+    <property name='p2.compressed' value='false'/>
+    <property name='p2.timestamp' value='1233708485671'/>
+  </properties>
+  <units size='29'>
+    <unit id='tooling.osgi.bundle.default' version='1.0.0' singleton='false'>
+      <hostRequirements size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' range='0.0.0' multiple='true' greedy='false'/>
+      </hostRequirements>
+      <properties size='1'>
+        <property name='org.eclipse.equinox.p2.type.fragment' value='true'/>
+      </properties>
+      <provides size='2'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='tooling.osgi.bundle.default' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.flavor' name='tooling' version='1.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' range='0.0.0' multiple='true' greedy='false'/>
+      </requires>
+      <touchpoint id='null' version='0.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='4'>
+          <instruction key='uninstall'>
+            uninstallBundle(bundle:${artifact})
+          </instruction>
+          <instruction key='configure'>
+            setStartLevel(startLevel:4);
+          </instruction>
+          <instruction key='install'>
+            installBundle(bundle:${artifact})
+          </instruction>
+          <instruction key='unconfigure'>
+
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='monolipse.ui' version='1.0.31'>
+      <update id='monolipse.ui' range='[0.0.0,1.0.31)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Boo Development Tools'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Rodrigo B. de Oliveira'/>
+      </properties>
+      <provides size='9'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.ui' version='1.0.31'/>
+        <provided namespace='osgi.bundle' name='monolipse.ui' version='1.0.31'/>
+        <provided namespace='java.package' name='monolipse.ui' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.editors' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.perspectives' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.resources' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.views' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.wizards' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='13'>
+        <required namespace='osgi.bundle' name='org.eclipse.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jface.text' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.editors' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.resources' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.ide' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jdt.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.workbench.texteditor' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.core' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='monolipse.core' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.console' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.views' range='0.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='monolipse.ui' version='1.0.31'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Export-Package: monolipse.ui,monolipse.ui.editors,monolipse.ui.perspectives,monolipse.ui.resources,monolipse.ui.views,monolipse.ui.wizards&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.jface.text,org.eclipse.ui.editors,org.eclipse.core.resources,org.eclipse.ui.ide,org.eclipse.jdt.ui,org.eclipse.ui.workbench.texteditor,org.eclipse.debug.core,org.eclipse.debug.ui,monolipse.core,org.eclipse.ui.console,org.eclipse.ui.views&#xA;Bundle-Activator: monolipse.ui.BooUI&#xA;Bundle-Name: Boo Development Tools&#xA;Bundle-Version: 1.0.31&#xA;Bundle-Vendor: Rodrigo B. de Oliveira&#xA;Bundle-SymbolicName: monolipse.ui;singleton:=true&#xA;Manifest-Version: 1.0&#xA;Bundle-ClassPath: monolipse.ui.jar&#xA;Eclipse-LazyStart: true
+          </instruction>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='monolipse.feature.feature.jar' version='1.0.1'>
+      <update id='monolipse.feature.feature.jar' range='[0.0.0,1.0.1)' severity='0'/>
+      <properties size='3'>
+        <property name='org.eclipse.equinox.p2.name' value='Mono Development Tools for Eclipse'/>
+        <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
+        <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
+      </properties>
+      <provides size='3'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.feature.feature.jar' version='1.0.1'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' version='1.0.0'/>
+        <provided namespace='org.eclipse.update.feature' name='monolipse.feature' version='1.0.1'/>
+      </provides>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <artifacts size='1'>
+        <artifact classifier='org.eclipse.update.feature' id='monolipse.feature' version='1.0.1'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+      <licenses size='1'>
+        <license url='http://www.example.com/license'>
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright url='http://www.example.com/copyright'>
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id='monolipse.feature.feature.group' version='1.0.1' singleton='false'>
+      <update id='monolipse.feature.feature.group' range='[0.0.0,1.0.1)' severity='0'/>
+      <properties size='4'>
+        <property name='org.eclipse.equinox.p2.name' value='Mono Development Tools for Eclipse'/>
+        <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
+        <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
+        <property name='org.eclipse.equinox.p2.type.group' value='true'/>
+      </properties>
+      <provides size='1'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.feature.feature.group' version='1.0.1'/>
+      </provides>
+      <requires size='4'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.core' range='[1.0.32,1.0.32]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.ui' range='[1.0.29,1.0.29]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.nunit' range='[1.0.28,1.0.28]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.feature.feature.jar' range='[1.0.1,1.0.1]'>
+          <filter>
+            (org.eclipse.update.install.features=true)
+          </filter>
+        </required>
+      </requires>
+      <touchpoint id='null' version='0.0.0'/>
+      <licenses size='1'>
+        <license url='http://www.example.com/license'>
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright url='http://www.example.com/copyright'>
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id='monolipse.ui' version='1.0.30'>
+      <update id='monolipse.ui' range='[0.0.0,1.0.30)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Boo Development Tools'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Rodrigo B. de Oliveira'/>
+      </properties>
+      <provides size='9'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.ui' version='1.0.30'/>
+        <provided namespace='osgi.bundle' name='monolipse.ui' version='1.0.30'/>
+        <provided namespace='java.package' name='monolipse.ui' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.editors' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.perspectives' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.resources' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.views' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.wizards' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='13'>
+        <required namespace='osgi.bundle' name='org.eclipse.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jface.text' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.editors' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.resources' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.ide' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jdt.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.workbench.texteditor' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.core' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='monolipse.core' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.console' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.views' range='0.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='monolipse.ui' version='1.0.30'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Export-Package: monolipse.ui,monolipse.ui.editors,monolipse.ui.perspectives,monolipse.ui.resources,monolipse.ui.views,monolipse.ui.wizards&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.jface.text,org.eclipse.ui.editors,org.eclipse.core.resources,org.eclipse.ui.ide,org.eclipse.jdt.ui,org.eclipse.ui.workbench.texteditor,org.eclipse.debug.core,org.eclipse.debug.ui,monolipse.core,org.eclipse.ui.console,org.eclipse.ui.views&#xA;Bundle-Activator: monolipse.ui.BooUI&#xA;Bundle-Name: Boo Development Tools&#xA;Bundle-Version: 1.0.30&#xA;Bundle-Vendor: Rodrigo B. de Oliveira&#xA;Bundle-SymbolicName: monolipse.ui;singleton:=true&#xA;Manifest-Version: 1.0&#xA;Bundle-ClassPath: monolipse.ui.jar&#xA;Eclipse-LazyStart: true
+          </instruction>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='monolipse.feature.feature.jar' version='1.0.0'>
+      <update id='monolipse.feature.feature.jar' range='[0.0.0,1.0.0)' severity='0'/>
+      <properties size='3'>
+        <property name='org.eclipse.equinox.p2.name' value='Mono Development Tools for Eclipse'/>
+        <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
+        <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
+      </properties>
+      <provides size='3'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.feature.feature.jar' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' version='1.0.0'/>
+        <provided namespace='org.eclipse.update.feature' name='monolipse.feature' version='1.0.0'/>
+      </provides>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <artifacts size='1'>
+        <artifact classifier='org.eclipse.update.feature' id='monolipse.feature' version='1.0.0'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+      <licenses size='1'>
+        <license url='http://www.example.com/license'>
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright url='http://www.example.com/copyright'>
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id='tooling.org.eclipse.update.feature.default' version='1.0.0' singleton='false'>
+      <hostRequirements size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' range='0.0.0' optional='true' multiple='true' greedy='false'/>
+      </hostRequirements>
+      <properties size='1'>
+        <property name='org.eclipse.equinox.p2.type.fragment' value='true'/>
+      </properties>
+      <provides size='2'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='tooling.org.eclipse.update.feature.default' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.flavor' name='tooling' version='1.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' range='0.0.0' optional='true' multiple='true' greedy='false'/>
+      </requires>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <touchpoint id='null' version='0.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='uninstall'>
+            uninstallFeature(feature:${artifact},featureId:default,featureVersion:default)
+          </instruction>
+          <instruction key='install'>
+            installFeature(feature:${artifact},featureId:default,featureVersion:default)
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='monolipse.nunit' version='1.0.30'>
+      <update id='monolipse.nunit' range='[0.0.0,1.0.30)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Nunit for Boo Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Rodrigo B. de Oliveira'/>
+      </properties>
+      <provides size='6'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.nunit' version='1.0.30'/>
+        <provided namespace='osgi.bundle' name='monolipse.nunit' version='1.0.30'/>
+        <provided namespace='java.package' name='monolipse.nunit' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.nunit.launching' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.nunit.views' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='10'>
+        <required namespace='osgi.bundle' name='org.eclipse.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='monolipse.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='monolipse.core' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.core' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.resources' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.ide' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jface.text' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.workbench.texteditor' range='0.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='monolipse.nunit' version='1.0.30'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Export-Package: monolipse.nunit,monolipse.nunit.launching,monolipse.nunit.views&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,monolipse.ui,monolipse.core,org.eclipse.debug.core,org.eclipse.debug.ui,org.eclipse.core.resources,org.eclipse.ui.ide,org.eclipse.jface.text,org.eclipse.ui.workbench.texteditor&#xA;Bundle-Activator: monolipse.nunit.NUnitPlugin&#xA;Bundle-Name: Nunit for Boo Plug-in&#xA;Bundle-Version: 1.0.30&#xA;Bundle-Vendor: Rodrigo B. de Oliveira&#xA;Bundle-SymbolicName: monolipse.nunit;singleton:=true&#xA;Manifest-Version: 1.0&#xA;Bundle-ClassPath: monolipse.nunit.jar&#xA;Eclipse-LazyStart: true
+          </instruction>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='monolipse.feature.feature.jar' version='1.0.2'>
+      <update id='monolipse.feature.feature.jar' range='[0.0.0,1.0.2)' severity='0'/>
+      <properties size='3'>
+        <property name='org.eclipse.equinox.p2.name' value='Mono Development Tools for Eclipse'/>
+        <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
+        <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
+      </properties>
+      <provides size='3'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.feature.feature.jar' version='1.0.2'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' version='1.0.0'/>
+        <provided namespace='org.eclipse.update.feature' name='monolipse.feature' version='1.0.2'/>
+      </provides>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <artifacts size='1'>
+        <artifact classifier='org.eclipse.update.feature' id='monolipse.feature' version='1.0.2'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+      <licenses size='1'>
+        <license url='http://www.example.com/license'>
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright url='http://www.example.com/copyright'>
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id='monolipse.core' version='1.0.33'>
+      <update id='monolipse.core' range='[0.0.0,1.0.33)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Boo Core Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Rodrigo B. de Oliveira'/>
+      </properties>
+      <provides size='27'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.core' version='1.0.33'/>
+        <provided namespace='osgi.bundle' name='monolipse.core' version='1.0.33'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.alias' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.basic' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.collections' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.enums' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.extended' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.javabean' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.reflection' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.core' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.core.util' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.io' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.io.path' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.io.xml' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.io.xml.xppdom' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.mapper' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.compiler' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.foundation' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.internal' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.interpreter' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.launching' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.launching.internal' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.runtime' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='3'>
+        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.resources' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.core' range='0.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='monolipse.core' version='1.0.33'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Export-Package: com.thoughtworks.xstream,com.thoughtworks.xstream.alias,com.thoughtworks.xstream.converters,com.thoughtworks.xstream.converters.basic,com.thoughtworks.xstream.converters.collections,com.thoughtworks.xstream.converters.enums,com.thoughtworks.xstream.converters.extended,com.thoughtworks.xstream.converters.javabean,com.thoughtworks.xstream.converters.reflection,com.thoughtworks.xstream.core,com.thoughtworks.xstream.core.util,com.thoughtworks.xstream.io,com.thoughtworks.xstream.io.path,com.thoughtworks.xstream.io.xml,com.thoughtworks.xstream.io.xml.xppdom,com.thoughtworks.xstream.mapper,monolipse.core,monolipse.core.compiler,monolipse.core.foundation,monolipse.core.internal;x-internal:=true,monolipse.core.interpreter,monolipse.core.launching,monolipse.core.launching.internal;x-internal:=true,monolipse.core.runtime&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.core.runtime,org.eclipse.core.resources,org.eclipse.debug.core&#xA;Bundle-Activator: monolipse.core.BooCore&#xA;Bundle-Name: Boo Core Plug-in&#xA;Bundle-Version: 1.0.33&#xA;Bundle-Vendor: Rodrigo B. de Oliveira&#xA;Bundle-SymbolicName: monolipse.core;singleton:=true&#xA;Manifest-Version: 1.0&#xA;Bundle-ClassPath: lib/xstream/xstream-1.1.2.jar,monolipse.core.jar&#xA;Eclipse-LazyStart: true
+          </instruction>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='config.a.jre' version='1.6.0' singleton='false'>
+      <hostRequirements size='1'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='a.jre' range='1.6.0'/>
+      </hostRequirements>
+      <properties size='1'>
+        <property name='org.eclipse.equinox.p2.type.fragment' value='true'/>
+      </properties>
+      <provides size='1'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='config.a.jre' version='1.6.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='a.jre' range='1.6.0'/>
+      </requires>
+      <touchpoint id='org.eclipse.equinox.p2.native' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='install'>
+
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='monolipse.feature.feature.group' version='1.0.0' singleton='false'>
+      <update id='monolipse.feature.feature.group' range='[0.0.0,1.0.0)' severity='0'/>
+      <properties size='4'>
+        <property name='org.eclipse.equinox.p2.name' value='Mono Development Tools for Eclipse'/>
+        <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
+        <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
+        <property name='org.eclipse.equinox.p2.type.group' value='true'/>
+      </properties>
+      <provides size='1'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.feature.feature.group' version='1.0.0'/>
+      </provides>
+      <requires size='4'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.core' range='[1.0.31,1.0.31]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.ui' range='[1.0.29,1.0.29]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.nunit' range='[1.0.27,1.0.27]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.feature.feature.jar' range='[1.0.0,1.0.0]'>
+          <filter>
+            (org.eclipse.update.install.features=true)
+          </filter>
+        </required>
+      </requires>
+      <touchpoint id='null' version='0.0.0'/>
+      <licenses size='1'>
+        <license url='http://www.example.com/license'>
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright url='http://www.example.com/copyright'>
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id='monolipse.ui' version='1.0.29'>
+      <update id='monolipse.ui' range='[0.0.0,1.0.29)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Boo Development Tools'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Rodrigo B. de Oliveira'/>
+      </properties>
+      <provides size='9'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.ui' version='1.0.29'/>
+        <provided namespace='osgi.bundle' name='monolipse.ui' version='1.0.29'/>
+        <provided namespace='java.package' name='monolipse.ui' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.editors' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.perspectives' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.resources' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.views' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.wizards' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='13'>
+        <required namespace='osgi.bundle' name='org.eclipse.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jface.text' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.editors' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.resources' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.ide' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jdt.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.workbench.texteditor' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.core' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='monolipse.core' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.console' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.views' range='0.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='monolipse.ui' version='1.0.29'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Export-Package: monolipse.ui,monolipse.ui.editors,monolipse.ui.perspectives,monolipse.ui.resources,monolipse.ui.views,monolipse.ui.wizards&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.jface.text,org.eclipse.ui.editors,org.eclipse.core.resources,org.eclipse.ui.ide,org.eclipse.jdt.ui,org.eclipse.ui.workbench.texteditor,org.eclipse.debug.core,org.eclipse.debug.ui,monolipse.core,org.eclipse.ui.console,org.eclipse.ui.views&#xA;Bundle-Activator: monolipse.ui.BooUI&#xA;Bundle-Name: Boo Development Tools&#xA;Bundle-Version: 1.0.29&#xA;Bundle-Vendor: Rodrigo B. de Oliveira&#xA;Bundle-SymbolicName: monolipse.ui;singleton:=true&#xA;Manifest-Version: 1.0&#xA;Bundle-ClassPath: booclipse.jar&#xA;Eclipse-LazyStart: true
+          </instruction>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='monolipse.feature.feature.jar' version='1.0.3'>
+      <update id='monolipse.feature.feature.jar' range='[0.0.0,1.0.3)' severity='0'/>
+      <properties size='3'>
+        <property name='org.eclipse.equinox.p2.name' value='Mono Development Tools for Eclipse'/>
+        <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
+        <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
+      </properties>
+      <provides size='3'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.feature.feature.jar' version='1.0.3'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' version='1.0.0'/>
+        <provided namespace='org.eclipse.update.feature' name='monolipse.feature' version='1.0.3'/>
+      </provides>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <artifacts size='1'>
+        <artifact classifier='org.eclipse.update.feature' id='monolipse.feature' version='1.0.3'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+      <licenses size='1'>
+        <license url='http://www.example.com/license'>
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright url='http://www.example.com/copyright'>
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id='monolipse.nunit' version='1.0.31'>
+      <update id='monolipse.nunit' range='[0.0.0,1.0.31)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Nunit for Boo Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Rodrigo B. de Oliveira'/>
+      </properties>
+      <provides size='6'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.nunit' version='1.0.31'/>
+        <provided namespace='osgi.bundle' name='monolipse.nunit' version='1.0.31'/>
+        <provided namespace='java.package' name='monolipse.nunit' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.nunit.launching' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.nunit.views' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='10'>
+        <required namespace='osgi.bundle' name='org.eclipse.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='monolipse.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='monolipse.core' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.core' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.resources' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.ide' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jface.text' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.workbench.texteditor' range='0.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='monolipse.nunit' version='1.0.31'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Export-Package: monolipse.nunit,monolipse.nunit.launching,monolipse.nunit.views&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,monolipse.ui,monolipse.core,org.eclipse.debug.core,org.eclipse.debug.ui,org.eclipse.core.resources,org.eclipse.ui.ide,org.eclipse.jface.text,org.eclipse.ui.workbench.texteditor&#xA;Bundle-Activator: monolipse.nunit.NUnitPlugin&#xA;Bundle-Name: Nunit for Boo Plug-in&#xA;Bundle-Version: 1.0.31&#xA;Bundle-Vendor: Rodrigo B. de Oliveira&#xA;Bundle-SymbolicName: monolipse.nunit;singleton:=true&#xA;Manifest-Version: 1.0&#xA;Bundle-ClassPath: monolipse.nunit.jar&#xA;Eclipse-LazyStart: true
+          </instruction>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='monolipse.core' version='1.0.32'>
+      <update id='monolipse.core' range='[0.0.0,1.0.32)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Boo Core Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Rodrigo B. de Oliveira'/>
+      </properties>
+      <provides size='27'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.core' version='1.0.32'/>
+        <provided namespace='osgi.bundle' name='monolipse.core' version='1.0.32'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.alias' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.basic' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.collections' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.enums' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.extended' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.javabean' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.reflection' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.core' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.core.util' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.io' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.io.path' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.io.xml' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.io.xml.xppdom' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.mapper' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.compiler' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.foundation' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.internal' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.interpreter' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.launching' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.launching.internal' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.runtime' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='3'>
+        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.resources' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.core' range='0.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='monolipse.core' version='1.0.32'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Export-Package: com.thoughtworks.xstream,com.thoughtworks.xstream.alias,com.thoughtworks.xstream.converters,com.thoughtworks.xstream.converters.basic,com.thoughtworks.xstream.converters.collections,com.thoughtworks.xstream.converters.enums,com.thoughtworks.xstream.converters.extended,com.thoughtworks.xstream.converters.javabean,com.thoughtworks.xstream.converters.reflection,com.thoughtworks.xstream.core,com.thoughtworks.xstream.core.util,com.thoughtworks.xstream.io,com.thoughtworks.xstream.io.path,com.thoughtworks.xstream.io.xml,com.thoughtworks.xstream.io.xml.xppdom,com.thoughtworks.xstream.mapper,monolipse.core,monolipse.core.compiler,monolipse.core.foundation,monolipse.core.internal;x-internal:=true,monolipse.core.interpreter,monolipse.core.launching,monolipse.core.launching.internal;x-internal:=true,monolipse.core.runtime&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.core.runtime,org.eclipse.core.resources,org.eclipse.debug.core&#xA;Bundle-Activator: monolipse.core.BooCore&#xA;Bundle-Name: Boo Core Plug-in&#xA;Bundle-Version: 1.0.32&#xA;Bundle-Vendor: Rodrigo B. de Oliveira&#xA;Bundle-SymbolicName: monolipse.core;singleton:=true&#xA;Manifest-Version: 1.0&#xA;Bundle-ClassPath: lib/xstream/xstream-1.1.2.jar,monolipse.core.jar&#xA;Eclipse-LazyStart: true
+          </instruction>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='monolipse.feature.feature.group' version='1.0.4' singleton='false'>
+      <update id='monolipse.feature.feature.group' range='[0.0.0,1.0.4)' severity='0'/>
+      <properties size='4'>
+        <property name='org.eclipse.equinox.p2.name' value='Mono Development Tools for Eclipse'/>
+        <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
+        <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
+        <property name='org.eclipse.equinox.p2.type.group' value='true'/>
+      </properties>
+      <provides size='1'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.feature.feature.group' version='1.0.4'/>
+      </provides>
+      <requires size='4'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.core' range='[1.0.34,1.0.34]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.ui' range='[1.0.32,1.0.32]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.nunit' range='[1.0.31,1.0.31]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.feature.feature.jar' range='[1.0.4,1.0.4]'>
+          <filter>
+            (org.eclipse.update.install.features=true)
+          </filter>
+        </required>
+      </requires>
+      <touchpoint id='null' version='0.0.0'/>
+      <licenses size='1'>
+        <license url='http://www.example.com/license'>
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright url='http://www.example.com/copyright'>
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id='monolipse.nunit' version='1.0.28'>
+      <update id='monolipse.nunit' range='[0.0.0,1.0.28)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Nunit for Boo Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Rodrigo B. de Oliveira'/>
+      </properties>
+      <provides size='3'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.nunit' version='1.0.28'/>
+        <provided namespace='osgi.bundle' name='monolipse.nunit' version='1.0.28'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='10'>
+        <required namespace='osgi.bundle' name='org.eclipse.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='monolipse.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='monolipse.core' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.core' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.resources' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.ide' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jface.text' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.workbench.texteditor' range='0.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='monolipse.nunit' version='1.0.28'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='manifest'>
+            Bundle-Vendor: Rodrigo B. de Oliveira&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Activator: monolipse.nunit.NUnitPlugin&#xA;Bundle-Localization: plugin&#xA;Bundle-Name: Nunit for Boo Plug-in&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,monolipse.ui,monolipse.core,org.eclipse.debug.core,org.eclipse.debug.ui,org.eclipse.core.resources,org.eclipse.ui.ide,org.eclipse.jface.text,org.eclipse.ui.workbench.texteditor&#xA;Bundle-ClassPath: booclipse.nunit.jar&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: monolipse.nunit;singleton:=true&#xA;Bundle-Version: 1.0.28&#xA;Eclipse-LazyStart: true
+          </instruction>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='a.jre' version='1.6.0' singleton='false'>
+      <provides size='117'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='a.jre' version='1.6.0'/>
+        <provided namespace='java.package' name='javax.accessibility' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.activity' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.crypto' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.crypto.interfaces' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.crypto.spec' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio.event' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio.metadata' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio.plugins.bmp' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio.plugins.jpeg' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio.spi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio.stream' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.loading' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.modelmbean' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.monitor' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.openmbean' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.relation' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.remote' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.remote.rmi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.timer' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.naming' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.naming.directory' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.naming.event' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.naming.ldap' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.naming.spi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.net' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.net.ssl' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.print' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.print.attribute' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.print.attribute.standard' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.print.event' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.rmi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.rmi.CORBA' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.rmi.ssl' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.auth' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.auth.callback' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.auth.kerberos' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.auth.login' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.auth.spi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.auth.x500' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.cert' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.sasl' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sound.midi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sound.midi.spi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sound.sampled' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sound.sampled.spi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sql' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sql.rowset' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sql.rowset.serial' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sql.rowset.spi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.border' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.colorchooser' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.event' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.filechooser' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.plaf' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.plaf.basic' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.plaf.metal' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.plaf.multi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.plaf.synth' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.table' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.text' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.text.html' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.text.html.parser' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.text.rtf' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.tree' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.undo' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.transaction' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.transaction.xa' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.datatype' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.namespace' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.parsers' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.transform' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.transform.dom' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.transform.sax' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.transform.stream' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.validation' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.xpath' version='0.0.0'/>
+        <provided namespace='java.package' name='org.ietf.jgss' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA_2_3' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA_2_3.portable' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA.DynAnyPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA.ORBPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA.portable' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA.TypeCodePackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CosNaming' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CosNaming.NamingContextExtPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CosNaming.NamingContextPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.Dynamic' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.DynamicAny' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.DynamicAny.DynAnyFactoryPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.DynamicAny.DynAnyPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.IOP' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.IOP.CodecFactoryPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.IOP.CodecPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.Messaging' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableInterceptor' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableInterceptor.ORBInitInfoPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableServer' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableServer.CurrentPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableServer.POAManagerPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableServer.POAPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableServer.portable' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableServer.ServantLocatorPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.SendingContext' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.stub.java.rmi' version='0.0.0'/>
+        <provided namespace='java.package' name='org.w3c.dom' version='0.0.0'/>
+        <provided namespace='java.package' name='org.w3c.dom.bootstrap' version='0.0.0'/>
+        <provided namespace='java.package' name='org.w3c.dom.events' version='0.0.0'/>
+        <provided namespace='java.package' name='org.w3c.dom.ls' version='0.0.0'/>
+        <provided namespace='java.package' name='org.xml.sax' version='0.0.0'/>
+        <provided namespace='java.package' name='org.xml.sax.ext' version='0.0.0'/>
+        <provided namespace='java.package' name='org.xml.sax.helpers' version='0.0.0'/>
+      </provides>
+      <touchpoint id='org.eclipse.equinox.p2.native' version='1.0.0'/>
+    </unit>
+    <unit id='monolipse.core' version='1.0.34'>
+      <update id='monolipse.core' range='[0.0.0,1.0.34)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Boo Core Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Rodrigo B. de Oliveira'/>
+      </properties>
+      <provides size='27'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.core' version='1.0.34'/>
+        <provided namespace='osgi.bundle' name='monolipse.core' version='1.0.34'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.alias' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.basic' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.collections' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.enums' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.extended' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.javabean' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.reflection' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.core' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.core.util' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.io' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.io.path' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.io.xml' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.io.xml.xppdom' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.mapper' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.compiler' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.foundation' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.internal' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.interpreter' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.launching' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.launching.internal' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.runtime' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='6'>
+        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.resources' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.core' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jdt.core' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jdt.launching' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jdt.debug' range='0.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='monolipse.core' version='1.0.34'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Export-Package: com.thoughtworks.xstream,com.thoughtworks.xstream.alias,com.thoughtworks.xstream.converters,com.thoughtworks.xstream.converters.basic,com.thoughtworks.xstream.converters.collections,com.thoughtworks.xstream.converters.enums,com.thoughtworks.xstream.converters.extended,com.thoughtworks.xstream.converters.javabean,com.thoughtworks.xstream.converters.reflection,com.thoughtworks.xstream.core,com.thoughtworks.xstream.core.util,com.thoughtworks.xstream.io,com.thoughtworks.xstream.io.path,com.thoughtworks.xstream.io.xml,com.thoughtworks.xstream.io.xml.xppdom,com.thoughtworks.xstream.mapper,monolipse.core,monolipse.core.compiler,monolipse.core.foundation,monolipse.core.internal;x-internal:=true,monolipse.core.interpreter,monolipse.core.launching,monolipse.core.launching.internal;x-internal:=true,monolipse.core.runtime&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.core.runtime,org.eclipse.core.resources,org.eclipse.debug.core,org.eclipse.jdt.core,org.eclipse.jdt.launching;visibility:=reexport,org.eclipse.jdt.debug;visibility:=reexport&#xA;Bundle-Activator: monolipse.core.BooCore&#xA;Bundle-Name: Boo Core Plug-in&#xA;Bundle-Version: 1.0.34&#xA;Bundle-Vendor: Rodrigo B. de Oliveira&#xA;Bundle-SymbolicName: monolipse.core;singleton:=true&#xA;Manifest-Version: 1.0&#xA;Bundle-ClassPath: lib/xstream/xstream-1.1.2.jar,monolipse.core.jar&#xA;Eclipse-LazyStart: true
+          </instruction>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='monolipse.feature.feature.group' version='1.0.3' singleton='false'>
+      <update id='monolipse.feature.feature.group' range='[0.0.0,1.0.3)' severity='0'/>
+      <properties size='4'>
+        <property name='org.eclipse.equinox.p2.name' value='Mono Development Tools for Eclipse'/>
+        <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
+        <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
+        <property name='org.eclipse.equinox.p2.type.group' value='true'/>
+      </properties>
+      <provides size='1'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.feature.feature.group' version='1.0.3'/>
+      </provides>
+      <requires size='4'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.core' range='[1.0.34,1.0.34]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.ui' range='[1.0.31,1.0.31]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.nunit' range='[1.0.31,1.0.31]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.feature.feature.jar' range='[1.0.3,1.0.3]'>
+          <filter>
+            (org.eclipse.update.install.features=true)
+          </filter>
+        </required>
+      </requires>
+      <touchpoint id='null' version='0.0.0'/>
+      <licenses size='1'>
+        <license url='http://www.example.com/license'>
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright url='http://www.example.com/copyright'>
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id='monolipse.feature.feature.jar' version='1.0.4'>
+      <update id='monolipse.feature.feature.jar' range='[0.0.0,1.0.4)' severity='0'/>
+      <properties size='3'>
+        <property name='org.eclipse.equinox.p2.name' value='Mono Development Tools for Eclipse'/>
+        <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
+        <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
+      </properties>
+      <provides size='3'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.feature.feature.jar' version='1.0.4'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' version='1.0.0'/>
+        <provided namespace='org.eclipse.update.feature' name='monolipse.feature' version='1.0.4'/>
+      </provides>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <artifacts size='1'>
+        <artifact classifier='org.eclipse.update.feature' id='monolipse.feature' version='1.0.4'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+      <licenses size='1'>
+        <license url='http://www.example.com/license'>
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright url='http://www.example.com/copyright'>
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id='monolipse.nunit' version='1.0.27'>
+      <update id='monolipse.nunit' range='[0.0.0,1.0.27)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Nunit for Boo Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Rodrigo B. de Oliveira'/>
+      </properties>
+      <provides size='3'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.nunit' version='1.0.27'/>
+        <provided namespace='osgi.bundle' name='monolipse.nunit' version='1.0.27'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='10'>
+        <required namespace='osgi.bundle' name='org.eclipse.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='monolipse.core' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='monolipse.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.core' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.resources' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.ide' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jface.text' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.workbench.texteditor' range='0.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='monolipse.nunit' version='1.0.27'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='manifest'>
+            Bundle-Vendor: Rodrigo B. de Oliveira&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Activator: monolipse.nunit.NUnitPlugin&#xA;Bundle-Localization: plugin&#xA;Bundle-Name: Nunit for Boo Plug-in&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,monolipse.core,monolipse.ui,org.eclipse.debug.core,org.eclipse.debug.ui,org.eclipse.core.resources,org.eclipse.ui.ide,org.eclipse.jface.text,org.eclipse.ui.workbench.texteditor&#xA;Bundle-ClassPath: booclipse.nunit.jar&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: monolipse.nunit;singleton:=true&#xA;Bundle-Version: 1.0.27&#xA;Eclipse-LazyStart: true
+          </instruction>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='tooling.source.default' version='1.0.0' singleton='false'>
+      <hostRequirements size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='source' range='0.0.0' optional='true' multiple='true' greedy='false'/>
+      </hostRequirements>
+      <properties size='1'>
+        <property name='org.eclipse.equinox.p2.type.fragment' value='true'/>
+      </properties>
+      <provides size='2'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='tooling.source.default' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.flavor' name='tooling' version='1.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='source' range='0.0.0' optional='true' multiple='true' greedy='false'/>
+      </requires>
+      <touchpoint id='null' version='0.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='uninstall'>
+            removeSourceBundle(bundle:${artifact})
+          </instruction>
+          <instruction key='install'>
+            addSourceBundle(bundle:${artifact})
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='monolipse.core' version='1.0.31'>
+      <update id='monolipse.core' range='[0.0.0,1.0.31)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Boo Core Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Rodrigo B. de Oliveira'/>
+      </properties>
+      <provides size='27'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.core' version='1.0.31'/>
+        <provided namespace='osgi.bundle' name='monolipse.core' version='1.0.31'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.alias' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.basic' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.collections' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.enums' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.extended' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.javabean' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.converters.reflection' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.core' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.core.util' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.io' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.io.path' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.io.xml' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.io.xml.xppdom' version='0.0.0'/>
+        <provided namespace='java.package' name='com.thoughtworks.xstream.mapper' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.compiler' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.foundation' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.internal' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.interpreter' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.launching' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.launching.internal' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.core.runtime' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='3'>
+        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.resources' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.core' range='0.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='monolipse.core' version='1.0.31'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Export-Package: com.thoughtworks.xstream,com.thoughtworks.xstream.alias,com.thoughtworks.xstream.converters,com.thoughtworks.xstream.converters.basic,com.thoughtworks.xstream.converters.collections,com.thoughtworks.xstream.converters.enums,com.thoughtworks.xstream.converters.extended,com.thoughtworks.xstream.converters.javabean,com.thoughtworks.xstream.converters.reflection,com.thoughtworks.xstream.core,com.thoughtworks.xstream.core.util,com.thoughtworks.xstream.io,com.thoughtworks.xstream.io.path,com.thoughtworks.xstream.io.xml,com.thoughtworks.xstream.io.xml.xppdom,com.thoughtworks.xstream.mapper,monolipse.core,monolipse.core.compiler,monolipse.core.foundation,monolipse.core.internal;x-internal:=true,monolipse.core.interpreter,monolipse.core.launching,monolipse.core.launching.internal;x-internal:=true,monolipse.core.runtime&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.core.runtime,org.eclipse.core.resources,org.eclipse.debug.core&#xA;Bundle-Activator: monolipse.core.BooCore&#xA;Bundle-Name: Boo Core Plug-in&#xA;Bundle-Version: 1.0.31&#xA;Bundle-Vendor: Rodrigo B. de Oliveira&#xA;Bundle-SymbolicName: monolipse.core;singleton:=true&#xA;Manifest-Version: 1.0&#xA;Bundle-ClassPath: lib/xstream/xstream-1.1.2.jar,monolipse.core.jar&#xA;Eclipse-LazyStart: true
+          </instruction>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='monolipse.feature.feature.group' version='1.0.2' singleton='false'>
+      <update id='monolipse.feature.feature.group' range='[0.0.0,1.0.2)' severity='0'/>
+      <properties size='4'>
+        <property name='org.eclipse.equinox.p2.name' value='Mono Development Tools for Eclipse'/>
+        <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
+        <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
+        <property name='org.eclipse.equinox.p2.type.group' value='true'/>
+      </properties>
+      <provides size='1'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.feature.feature.group' version='1.0.2'/>
+      </provides>
+      <requires size='4'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.core' range='[1.0.33,1.0.33]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.ui' range='[1.0.30,1.0.30]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.nunit' range='[1.0.30,1.0.30]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.feature.feature.jar' range='[1.0.2,1.0.2]'>
+          <filter>
+            (org.eclipse.update.install.features=true)
+          </filter>
+        </required>
+      </requires>
+      <touchpoint id='null' version='0.0.0'/>
+      <licenses size='1'>
+        <license url='http://www.example.com/license'>
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright url='http://www.example.com/copyright'>
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id='monolipse.ui' version='1.0.32'>
+      <update id='monolipse.ui' range='[0.0.0,1.0.32)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Boo Development Tools'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Rodrigo B. de Oliveira'/>
+      </properties>
+      <provides size='10'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.ui' version='1.0.32'/>
+        <provided namespace='osgi.bundle' name='monolipse.ui' version='1.0.32'/>
+        <provided namespace='java.package' name='monolipse.ui' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.editors' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.launching' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.perspectives' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.resources' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.views' version='0.0.0'/>
+        <provided namespace='java.package' name='monolipse.ui.wizards' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='15'>
+        <required namespace='osgi.bundle' name='org.eclipse.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jface.text' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.editors' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.core.resources' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.ide' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jdt.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.workbench.texteditor' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.core' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.debug.ui' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='monolipse.core' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.console' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.ui.views' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jdt.debug' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='org.eclipse.jdt.debug.ui' range='0.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='monolipse.ui' version='1.0.32'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Export-Package: monolipse.ui,monolipse.ui.editors,monolipse.ui.launching,monolipse.ui.perspectives,monolipse.ui.resources,monolipse.ui.views,monolipse.ui.wizards&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.jface.text,org.eclipse.ui.editors,org.eclipse.core.resources,org.eclipse.ui.ide,org.eclipse.jdt.ui,org.eclipse.ui.workbench.texteditor,org.eclipse.debug.core,org.eclipse.debug.ui,monolipse.core,org.eclipse.ui.console,org.eclipse.ui.views,org.eclipse.jdt.debug,org.eclipse.jdt.debug.ui&#xA;Bundle-Activator: monolipse.ui.BooUI&#xA;Bundle-Name: Boo Development Tools&#xA;Bundle-Version: 1.0.32&#xA;Bundle-Vendor: Rodrigo B. de Oliveira&#xA;Bundle-SymbolicName: monolipse.ui;singleton:=true&#xA;Manifest-Version: 1.0&#xA;Bundle-ClassPath: monolipse.ui.jar&#xA;Eclipse-LazyStart: true
+          </instruction>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='monolipse.feature.feature.group' version='1.0.5' singleton='false'>
+      <update id='monolipse.feature.feature.group' range='[0.0.0,1.0.5)' severity='0'/>
+      <properties size='4'>
+        <property name='org.eclipse.equinox.p2.name' value='Boo Development Tools for Eclipse'/>
+        <property name='org.eclipse.equinox.p2.description' value='Boo Development Tools for Eclipse.'/>
+        <property name='org.eclipse.equinox.p2.description.url' value='http://boo.codehaus.org/'/>
+        <property name='org.eclipse.equinox.p2.type.group' value='true'/>
+      </properties>
+      <provides size='1'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.feature.feature.group' version='1.0.5'/>
+      </provides>
+      <requires size='4'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.core' range='[1.0.34,1.0.34]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.ui' range='[1.0.32,1.0.32]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.nunit' range='[1.0.31,1.0.31]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='monolipse.feature.feature.jar' range='[1.0.5,1.0.5]'>
+          <filter>
+            (org.eclipse.update.install.features=true)
+          </filter>
+        </required>
+      </requires>
+      <touchpoint id='null' version='0.0.0'/>
+      <licenses size='1'>
+        <license url='http://www.example.com/license'>
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright url='http://www.example.com/copyright'>
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id='monolipse.feature.feature.jar' version='1.0.5'>
+      <update id='monolipse.feature.feature.jar' range='[0.0.0,1.0.5)' severity='0'/>
+      <properties size='3'>
+        <property name='org.eclipse.equinox.p2.name' value='Boo Development Tools for Eclipse'/>
+        <property name='org.eclipse.equinox.p2.description' value='Boo Development Tools for Eclipse.'/>
+        <property name='org.eclipse.equinox.p2.description.url' value='http://boo.codehaus.org/'/>
+      </properties>
+      <provides size='3'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='monolipse.feature.feature.jar' version='1.0.5'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' version='1.0.0'/>
+        <provided namespace='org.eclipse.update.feature' name='monolipse.feature' version='1.0.5'/>
+      </provides>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <artifacts size='1'>
+        <artifact classifier='org.eclipse.update.feature' id='monolipse.feature' version='1.0.5'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+      <licenses size='1'>
+        <license url='http://www.example.com/license'>
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright url='http://www.example.com/copyright'>
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+  </units>
+</repository>
