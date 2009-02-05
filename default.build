@@ -2,6 +2,8 @@
 <project name="monolipse" default="all">
 	
 	<property name="target.dir" value="./plugins" />
+	<property name="updatesite.dir" value="./update-site/plugins" />
+	<property name="feature.version" value="1.1.0" />
 	<property name="boo.dir" value="../boo/bin" />
 	
 	<target name="all" depends="monolipse.core, monolipse.nunit, monolipse.ui">
@@ -54,13 +56,18 @@
 		Project.Properties["bundle.version"] = bundleVersion()
 		</boo>
 	
-		<property name="plugin.dir" value="${target.dir}/${plugin}_${bundle.version}" />
+		<property name="plugin.fullname" value="${plugin}_${bundle.version}" />
+		<property name="plugin.dir" value="${target.dir}/${plugin.fullname}" />
 		
 		<copy todir="${plugin.dir}" overwrite="true">
 			<fileset basedir="${plugin}">
 				<include name="bin/*.exe" />
 				<include name="bin/*.dll" />
 				<include name="bin/*.mdb" />
+				
+				<exclude name="bin/*.Tests.dll" />
+				<exclude name="bin/*.Tests.mdb" />
+
 				<include name="lib/**/**" />
 				<include name="icons/**" />
 				<include name="META-INF/**" />
@@ -73,15 +80,20 @@
 				<include name="**/*.class" />
 			</fileset>
 		</zip>
+		
+		<zip zipfile="${updatesite.dir}/${plugin}_${feature.version}.jar">
+			<fileset basedir="${plugin.dir}">
+				<include name="**/*.*" />
+			</fileset>
+		</zip>
 	</target>
 	
 	<target name="monolipse.nunit" depends="monolipse.core, monolipse.ui">
 	
 		<copy todir="monolipse.nunit/lib" overwrite="true">
 			<fileset basedir="monolipse.core/bin">
-				<include name="*.dll" />
-				<include name="*.exe" />
-				<include name="*.mdb" />
+				<include name="monolipse.core.dll" />
+				<include name="monolipse.core.dll.mdb" />
 			</fileset>
 		</copy>
 		
@@ -117,14 +129,23 @@
 			</fileset>
 		</copy>
 	</target>
-
-	<target name="clean">
+	
+	<target name="clean-plugin">
 		<delete>
-			<fileset basedir=".">
-				<include name="**/monolipse.*.dll" />
-				<include name="**/monolipse.*.exe" />
+			<fileset basedir="${plugin}/bin">
+				<include name="**/*" />
+				<exclude name="**/*.class" />
 			</fileset>
 		</delete>
+	</target>
+
+	<target name="clean">
+		<property name="plugin" value="monolipse.core" />
+		<call target="clean-plugin" />
+		<property name="plugin" value="monolipse.ui" />
+		<call target="clean-plugin" />
+		<property name="plugin" value="monolipse.nunit" />
+		<call target="clean-plugin" />
 	</target>
 	
 	<target name="init">
