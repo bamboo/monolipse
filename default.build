@@ -146,6 +146,7 @@
 		<call target="clean-plugin" />
 		<property name="plugin" value="monolipse.nunit" />
 		<call target="clean-plugin" />
+		<delete dir="plugins" />
 	</target>
 	
 	<target name="init">
