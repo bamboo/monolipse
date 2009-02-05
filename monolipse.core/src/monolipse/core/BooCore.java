@@ -127,7 +127,14 @@ public class BooCore extends Plugin {
 	}
 
 	private static String getMonoHome() {
-		return System.getProperty("MONO_HOME", "/opt/local");
+		return System.getProperty("MONO_HOME", defaultMonoPathForCurrentPlatform());
+	}
+
+	private static String defaultMonoPathForCurrentPlatform() {
+		final String operatingSystem = System.getProperty("os.name");
+		if ("Mac OS X".equalsIgnoreCase(operatingSystem))
+			return "/Library/Frameworks/Mono.framework/Home";
+		return "/usr/local";
 	}
 
 	public static IMonoLauncher createLauncherWithRuntimeLocation(String compiler) throws IOException {
