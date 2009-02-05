@@ -3,5 +3,8 @@
    <description url="https://monolipse.svn.sourceforge.net/svnroot/monolipse/trunk/update-site/">
       Boo Development Tools Update Site
    </description>
-   <feature url="features/monolipse.feature_1.1.0.jar" id="monolipse.feature" version="1.1.0"/>
+   <feature url="features/monolipse.feature_1.2.0.jar" id="monolipse.feature" version="1.2.0">
+      <category name="boo"/>
+   </feature>
+   <category-def name="boo" label="Boo Programming Language"/>
 </site>
