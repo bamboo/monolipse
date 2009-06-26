@@ -2,7 +2,7 @@ namespace monolipse.nunit.server
 
 import System
 import System.IO
-import NUnit.Core
+import NUnit.Core from nunit.core.interfaces
 import monolipse.core
 
 class TestListener(MarshalByRefObject, EventListener):
@@ -18,21 +18,24 @@ class TestListener(MarshalByRefObject, EventListener):
 		Console.Error.WriteLine("RunFinished")
 		Console.Error.WriteLine(_error)
 		
-	def RunFinished(r as (TestResult)):
+	def RunFinished(r as TestResult):
 		pass
 	
-	def RunStarted(t as (Test)):
+	def RunStarted(name as string, testCount as int):
 		pass
 
 	def SuiteFinished(r as TestSuiteResult):
 		pass
 		
-	def SuiteStarted(s as TestSuite):
+	def SuiteStarted(s as TestName):
 		pass
 		
-	def TestStarted(t as TestCase):
-		Send("TEST-STARTED", t.FullName)
+	def TestStarted(name as TestName):
+		Send("TEST-STARTED", name.FullName)
 		_error = null
+		
+	def TestOutput(output as TestOutput):
+		Console.WriteLine(output)
 
 	def TestFinished(r as TestCaseResult):
 		unless r.IsFailure /*or r.SetupFailure*/: return
@@ -40,7 +43,7 @@ class TestListener(MarshalByRefObject, EventListener):
 		Console.Error.WriteLine(r.Message)
 		Console.Error.WriteLine(r.StackTrace)
 		writer = StringWriter()
-		writer.WriteLine(r.Test.FullName)
+		writer.WriteLine(r.Test.TestName.FullName)
 		writer.WriteLine(r.Message)
 		writer.WriteLine(r.StackTrace)
 		Send("TEST-FAILED", writer.ToString())

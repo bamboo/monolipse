@@ -17,13 +17,16 @@
 			</fileset>
 		</copy>
 	
-		<booc target="library" output="monolipse.core/bin/monolipse.core.dll">
+		<booc
+			target="library"
+			output="monolipse.core/bin/monolipse.core.dll">
 			<sources basedir="monolipse.core/boo/monolipse.core">
 				<include name="*.boo" />
 			</sources>
 		</booc>
 		
-		<booc target="exe" output="monolipse.core/bin/monolipse.server.exe">
+		<booc target="exe"
+			output="monolipse.core/bin/monolipse.server.exe">
 			<sources basedir="monolipse.core/boo/monolipse.server">
 				<include name="*.boo" />
 			</sources>
@@ -109,6 +112,8 @@
 			</sources>
 			<references basedir="monolipse.nunit/bin">
 				<include name="monolipse.core.dll" />
+				<include name="nunit.core.interfaces" />
+				<include name="nunit.core" />
 			</references>
 		</booc>
 	

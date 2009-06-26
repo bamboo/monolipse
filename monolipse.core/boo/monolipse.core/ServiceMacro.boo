@@ -12,11 +12,11 @@ macro service:
 					$(service.Body)
 		|]
 		
-macro onMessage:
+macro service.onMessage:
 	case [| onMessage $name |]:
 		yield [| onMessage($name, { message as Message | $(onMessage.Body) }) |]
 
-macro onMessageWithResponse:
+macro service.onMessageWithResponse:
 	case [| onMessageWithResponse $name |]:
 		yield [|
 			onMessage $name:

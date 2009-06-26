@@ -3,6 +3,7 @@ namespace monolipse.server
 import Boo.Lang.Interpreter.Help
 import Boo.Lang.Compiler.Ast
 import Boo.Lang.Compiler.TypeSystem
+import Boo.Lang.Compiler.TypeSystem.Reflection
 import Boo.Lang.PatternMatching
 
 def getEntityType(entity as IEntity):

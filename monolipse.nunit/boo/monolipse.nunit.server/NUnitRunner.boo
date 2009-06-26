@@ -2,6 +2,7 @@
 
 import System
 import NUnit.Util from nunit.util
+import NUnit.Core
 import monolipse.core
 
 service NUnitRunner:
@@ -13,13 +14,12 @@ service NUnitRunner:
 			assemblyName = arguments[0]
 			testCases = arguments[1:]
 			domain = TestDomain()
-			test = domain.Load(assemblyName)
-			if len(testCases) > 0:
-				send "TESTS-STARTED", len(testCases) 
-				domain.Run(TestListener(client), testCases)
-			else:
-				send "TESTS-STARTED", test.CountTestCases()
-				test.Run(TestListener(client))
+			assert domain.Load(TestPackage(assemblyName, [assemblyName]))
+			
+			testFilter = null
+			
+			send "TESTS-STARTED", domain.CountTestCases(testFilter) 
+			domain.Run(TestListener(client), testFilter)
 		except x:
 			Console.Error.WriteLine(x)
 		ensure:
