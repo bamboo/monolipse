@@ -14,7 +14,7 @@ public class NewBooAssemblySourceWizardPage extends WizardPage {
 
 	public NewBooAssemblySourceWizardPage() {
 		super("General");
-		setDescription("Type the name of the new assembly source");
+		setDescription("Type the name of the new source folder");
 	}
 
 	public void createControl(Composite parent) {

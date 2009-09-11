@@ -39,7 +39,7 @@ public class NewAssemblySourceWizard extends Wizard implements INewWizard {
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		setWindowTitle("Boo Assembly Source");
+		setWindowTitle("Boo Source Folder");
 		_selection = (IContainer)selection.getFirstElement();
 	}
 	
