@@ -4,18 +4,18 @@ import java.lang.reflect.Array;
 
 public class ArrayUtilities {
 
-	public static Object[] append(Object[] sourceArray, Object newElement) {
+	public static <T> T[] append(T[] sourceArray, T newElement) {
 		return append(sourceArray.getClass().getComponentType(), sourceArray, newElement);
 	}
 
-	public static Object[] append(Class componentType, Object[] sourceArray, Object newElement) {
-		Object[] newArray = copySourceArray(componentType, sourceArray, true);
+	public static <T> T[] append(Class<?> componentType, T[] sourceArray, T newElement) {
+		T[] newArray = copySourceArray(componentType, sourceArray, true);
 		newArray[newArray.length-1] = newElement;
 		return newArray;
 	}
 
-	private static Object[] copySourceArray(Class componentType, Object[] sourceArray, boolean append) {
-		Object[] newArray = (Object[])Array.newInstance(componentType, sourceArray.length + 1);
+	private static <T> T[] copySourceArray(Class<?> componentType, T[] sourceArray, boolean append) {
+		T[] newArray = (T[])Array.newInstance(componentType, sourceArray.length + 1);
 		System.arraycopy(sourceArray, 0, newArray, append ? 0 : 1, sourceArray.length);
 		return newArray;
 	}

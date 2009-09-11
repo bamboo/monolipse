@@ -4,8 +4,9 @@ import java.io.IOException;
 import java.util.*;
 
 import monolipse.core.BooCore;
+import monolipse.core.foundation.Projects;
 
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
 import org.eclipse.debug.core.*;
 import org.eclipse.jdt.core.*;
@@ -74,8 +75,10 @@ public class BoojayLauncher {
 			return classPath;
 		}
 
-		private static IJavaProject javaProjectFor(IFile file) {
-			return JavaCore.create(file.getProject());
+		private static IJavaProject javaProjectFor(IFile file) throws CoreException {
+			final IProject project = file.getProject();
+			Projects.ensureHasJavaNature(project);
+			return JavaCore.create(project);
 		}
 
 		private static Path boojayLangJarPath() throws IOException {
