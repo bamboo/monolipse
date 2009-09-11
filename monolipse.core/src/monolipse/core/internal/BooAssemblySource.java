@@ -336,7 +336,9 @@ public class BooAssemblySource implements IAssemblySource {
 	}
 
 	public static IAssemblySource getContainer(IResource resource) throws CoreException {
-		IContainer parent = resource.getParent();
+		IContainer parent = resource instanceof IContainer
+						? (IContainer)resource
+						: resource.getParent();
 		while (null != parent && IResource.FOLDER == parent.getType()) {
 			BooAssemblySource source = get((IFolder)parent);
 			if (null != source) return source;

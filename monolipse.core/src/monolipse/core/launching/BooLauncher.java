@@ -1,20 +1,12 @@
 package monolipse.core.launching;
 
-import monolipse.core.IAssemblySource;
-import monolipse.core.IBooLaunchConfigurationConstants;
-import monolipse.core.IBooLaunchConfigurationTypes;
+import monolipse.core.*;
 import monolipse.core.foundation.WorkspaceUtilities;
 import monolipse.core.internal.BooAssemblySource;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchConfigurationType;
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.core.*;
 
 
 public class BooLauncher {
@@ -77,11 +69,23 @@ public class BooLauncher {
 			ILaunchConfigurationType configType, String pathAttributeName,
 			IResource resource) throws CoreException {
 		String path = WorkspaceUtilities.getPortablePath(resource);
-		ILaunchConfigurationWorkingCopy wc = configType.newInstance(null,
+		ILaunchConfigurationWorkingCopy wc = configType.newInstance(
+				null,
 				generateUniqueLaunchConfigurationName(path));
 		wc.setAttribute(pathAttributeName, path);
 		wc.setAttribute(DebugPlugin.ATTR_CAPTURE_OUTPUT, true);
+		
+		workaroundEclipse33BugThatWontSaveTheConfigurationUnlessDirectoryTreeExists(resource);
+		
 		return wc.doSave();
+	}
+
+	private static void workaroundEclipse33BugThatWontSaveTheConfigurationUnlessDirectoryTreeExists(
+			IResource resource) {
+		final java.io.File file = new java.io.File(resource.getWorkspace().getRoot().getLocation().toOSString()
+				+ "/.metadata/.plugins/org.eclipse.debug.core/.launches"
+				+ resource.getFullPath().removeLastSegments(1));
+		file.mkdirs();
 	}
 
 	private static String generateUniqueLaunchConfigurationName(String path) {
