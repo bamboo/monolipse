@@ -31,7 +31,8 @@ public class CompilerServices extends AbstractBooServiceClient {
 	}
 
 	private void assertBooLanguage(AssemblySourceLanguage language) {
-		if (language != AssemblySourceLanguage.BOO && language != AssemblySourceLanguage.BOOJAY)
+		if (language != AssemblySourceLanguage.BOO
+			&& language != AssemblySourceLanguage.BOOJAY)
 			throw new IllegalArgumentException();
 	}
 	
