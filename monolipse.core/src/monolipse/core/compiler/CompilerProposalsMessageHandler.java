@@ -44,11 +44,16 @@ public class CompilerProposalsMessageHandler implements IProcessMessageHandler {
 			String line;
 			while (null != (line = reader.readLine())) {
 				String[] parts = line.split(":");
-				if (parts.length != 3) {
+				switch (parts.length) {
+				case 3:
+					resultingProposals.add(new CompilerProposal(parts[0], parts[1], parts[2]));
+					break;
+				case 2:
+					resultingProposals.add(new CompilerProposal(parts[0], parts[1], parts[1]));
+					break;
+				default:
 					BooCore.logInfo("Invalid proposal: " + line);
-					continue;
 				}
-				resultingProposals.add(new CompilerProposal(parts[0], parts[1], parts[2]));
 			}
 		} catch (IOException unexpected) {
 			BooCore.logException(unexpected);

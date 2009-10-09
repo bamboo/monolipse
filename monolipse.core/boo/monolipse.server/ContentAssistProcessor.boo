@@ -54,7 +54,7 @@ class ContentAssistProcessor(ProcessMethodBodiesWithDuckTyping):
 		return true if member is null or member.IsPublic
 		
 		declaringType = member.DeclaringType
-		return true if	declaringType is self.CurrentType
+		return true if declaringType is self.CurrentType
 		return true if member.IsInternal and member isa IInternalEntity
 		return true if member.IsProtected and self.CurrentType.IsSubclassOf(declaringType)
 		return false			

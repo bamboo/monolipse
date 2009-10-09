@@ -112,8 +112,6 @@
 			</sources>
 			<references basedir="monolipse.nunit/bin">
 				<include name="monolipse.core.dll" />
-				<include name="nunit.core.interfaces" />
-				<include name="nunit.core" />
 			</references>
 		</booc>
 	

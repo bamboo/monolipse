@@ -1,5 +1,6 @@
 ﻿package monolipse.ui.tests;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.*;
 
@@ -34,8 +35,28 @@ public class InteractiveInterpreterTestCase extends TestCase {
 		assertEquals("Hello", lines.get(0).toString().trim());
 	}
 	
-	public void testGetCompletionProposals() throws Exception {
-		
+	public void testCompletionProposalsForVariable() throws Exception {
+		assertCompletionProposals("class Foo:\n\tdef foo():\n\t\tpass\nf = Foo()", "f.", new String[] {
+			"constructor",
+			"foo",
+			"Equals",
+			"Equals", // static version
+			"GetHashCode",
+			"GetType",
+			"ToString",
+			"ReferenceEquals", // static method
+		});
+	}
+	
+	public void testCompletionProposalsForNamespace() throws Exception {
+		assertCompletionProposals("namespace Bar\n\tclass Baz:\n\tpass", "Bar.", new String[] {
+			"Baz",
+		});
+	}
+
+	private void assertCompletionProposals(final String code,
+			final String insertPoint, String... expected) throws IOException,
+			InterruptedException, TimeoutException {
 		final Exchanger<Boolean> exchanger = new Exchanger<Boolean>();
 		_interpreter.addListener(new IInterpreterListener() {
 			public void evalFinished(String result)  {
@@ -46,19 +67,10 @@ public class InteractiveInterpreterTestCase extends TestCase {
 				}
 			}
 		});
-		_interpreter.eval("class Foo:\n\tdef foo():\n\t\tpass\nf = Foo()");
+		_interpreter.eval(code);
 		exchanger.exchange(true, 3, TimeUnit.SECONDS);
 		
-		CompilerProposal[] proposals = _interpreter.getCompletionProposals("f.__codecomplete__");
-		String[] expected = new String[] {
-				"foo",
-				"Equals",
-				"Equals", // static version
-				"GetHashCode",
-				"GetType",
-				"ToString",
-				"ReferenceEquals", // static method
-		};
+		CompilerProposal[] proposals = _interpreter.getCompletionProposals(insertPoint + "__codecomplete__");
 		assertEquals(expected.length, proposals.length);
 		for (int i=0; i<expected.length; ++i) {
 			assertEquals(expected[i], proposals[i].getName());
