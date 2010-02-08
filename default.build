@@ -10,15 +10,14 @@
 		
 	Example:
 		<project name="monolipse properties">
-			<property name="boo.dir" value="c:/boo/bin" />
 			<property name="eclipse.dir" value="c:/eclipse" />
 			<property name="javac" value="c:/jdk-1.6.0/bin/javac.exe" />
 		</project>
 	-->
-	<property name="boo.dir" value="../boo/bin" />
 	<property name="javac" value="javac" />
 	<property name="eclipse.dir" value="../../java/eclipse" />
 	
+	<property name="boo.dir" value="monolipse.core/lib/boojay" />
 	<property name="target.dir" value="./plugins" />
 	<property name="updatesite.dir" value="./update-site/plugins" />
 	<property name="feature.version" value="1.2.0" />
@@ -38,6 +37,7 @@
 		<copy todir="monolipse.core/bin">
 			<fileset basedir="monolipse.core/lib/boojay">
 				<include name="*.dll" />
+				<include name="*.exe" />
 			</fileset>
 		</copy>
 	
@@ -57,6 +57,7 @@
 			<references basedir="monolipse.core/bin">
 				<include name="monolipse.core.dll" />
 				<include name="Boojay.Compilation.dll" />
+				<include name="IKVM.OpenJDK.ClassLibrary.dll" />
 			</references>
 		</booc>
 	
@@ -227,6 +228,8 @@
 	
 	<target name="monolipse.nunit" depends="monolipse.core, monolipse.ui">
 	
+		<property name="nunit.dir" value="monolipse.nunit/lib/NUnit-2.4.8/bin" />	
+	
 		<copy todir="monolipse.nunit/lib" overwrite="true">
 			<fileset basedir="monolipse.core/bin">
 				<include name="monolipse.core.dll" />
@@ -244,8 +247,11 @@
 			<sources basedir="monolipse.nunit/boo/monolipse.nunit.server">
 				<include name="*.boo" />
 			</sources>
-			<references basedir="monolipse.nunit/bin">
-				<include name="monolipse.core.dll" />
+			<references basedir=".">
+				<include name="monolipse.nunit/bin/monolipse.core.dll" />
+				<include name="${nunit.dir}/nunit.core.dll" />
+				<include name="${nunit.dir}/nunit.core.interfaces.dll" />
+				<include name="${nunit.dir}/nunit.util.dll" />
 			</references>
 		</booc>
 	
