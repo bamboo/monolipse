@@ -1,17 +1,34 @@
 <?xml version="1.0"?>
 <project name="monolipse" default="all">
+	<!--
+	The following properties should be configured in a separate
+	build.properties file to better match your system:
 	
-	<property name="target.dir" value="./plugins" />
-	<property name="updatesite.dir" value="./update-site/plugins" />
-	<property name="feature.version" value="1.2.0" />
+		* boo.dir: path to the boo binaries (bin or build folder in a boo checkout, for instance)
+		* eclipse.dir: path to the eclipse installation folder
+		* javac: name of the java compiler executable, no need to configure if already in PATH
+		
+	Example:
+		<project name="monolipse properties">
+			<property name="boo.dir" value="c:/boo/bin" />
+			<property name="eclipse.dir" value="c:/eclipse" />
+			<property name="javac" value="c:/jdk-1.6.0/bin/javac.exe" />
+		</project>
+	-->
 	<property name="boo.dir" value="../boo/bin" />
 	<property name="javac" value="javac" />
 	<property name="eclipse.dir" value="../../java/eclipse" />
 	
+	<property name="target.dir" value="./plugins" />
+	<property name="updatesite.dir" value="./update-site/plugins" />
+	<property name="feature.version" value="1.2.0" />
+	
+	<include buildfile="build.properties" if="${file::exists('build.properties')}" />
+
 	<target name="all" depends="monolipse.core, monolipse.nunit, monolipse.ui">
 	</target>
 	
-	<target name="install">
+	<target name="install" description="deploys the plugins to the eclipse plugins folder">
 		<property name="target.dir" value="${eclipse.dir}/plugins" />
 		<call target="all" />
 	</target>
@@ -52,25 +69,17 @@
 		<boo>
 		import System.IO
 		
-		def bundleVersion(manifest as string):
-			matchResult = /Bundle-Version:\s*((\d|\.)+)\s+/.Match(manifest)
+		def bundleVersion():
+			matchResult = /Bundle-Version:\s*((\d|\.)+)\s+/.Match(readManifest())
 			return matchResult.Groups[1].ToString()
 			
-		def bundleRequired(manifest as string):
-			matchResult = @/Require-Bundle:\s*((.|\n)*)Eclipse-LazyStart/.Match(manifest)
-			bundleString = matchResult.Groups[1].ToString()
-			bundles = s for s in /\n,;/.Split(bundleString) if len(s.Trim()) > 0
-			return join(bundles, ",")
-		
 		def readManifest():
 			return File.ReadAllText("${plugin()}/META-INF/MANIFEST.MF")
 			
 		def plugin():
 			return Project.Properties["plugin"]
 			
-		manifest = readManifest()
-		Project.Properties["bundle.version"] = bundleVersion(manifest)
-		#Project.Properties["bundle.required"] = bundleRequired(manifest)
+		Project.Properties["bundle.version"] = bundleVersion()
 		</boo>
 	</target>
 	
@@ -119,7 +128,6 @@
 		<include name="**/org.eclipse.ui.ide_*.jar" />
 		<include name="**/org.eclipse.debug.ui_*jar" />
 		<include name="**/org.eclipse.core.commands_*.jar" />
-		
 	</fileset>
 	
 	<target name="compile-plugin" depends="extract-bundle-properties">
@@ -167,12 +175,6 @@
 		
 		<mkdir dir="${plugin}/bin" />
 		
-		<!--	
-		<echo>
-	compiling ${plugin} java source files: ${sources}
-	classpath: ${classpath}
-		</echo>
-		-->
 		<exec program="${javac}">
 			<arg value="-d" />
 			<arg file="${plugin}/bin" />
@@ -285,6 +287,14 @@
 	</target>
 	
 	<target name="init">
+		<fail unless="${directory::exists(boo.dir)}">
+		Boo library directory '${boo.dir}' not found.
+		Please set the boo.dir property in your build.properties file.
+		</fail>
+		<fail unless="${directory::exists(eclipse.dir)}">
+		Eclipse directory '${eclipse.dir}' not found.
+		Please set the eclipse.dir property in your build properties file.
+		</fail>
 		<loadtasks assembly="${boo.dir}/Boo.NAnt.Tasks.dll" />
 	</target>
 
