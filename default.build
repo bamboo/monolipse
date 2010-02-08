@@ -5,8 +5,15 @@
 	<property name="updatesite.dir" value="./update-site/plugins" />
 	<property name="feature.version" value="1.2.0" />
 	<property name="boo.dir" value="../boo/bin" />
+	<property name="javac" value="javac" />
+	<property name="eclipse.dir" value="../../java/eclipse" />
 	
 	<target name="all" depends="monolipse.core, monolipse.nunit, monolipse.ui">
+	</target>
+	
+	<target name="install">
+		<property name="target.dir" value="${eclipse.dir}/plugins" />
+		<call target="all" />
 	</target>
 	
 	<target name="monolipse.core" depends="init">
@@ -41,14 +48,19 @@
 		
 	</target>
 	
-	<target name="package-plugin">
-	
+	<target name="extract-bundle-properties">
 		<boo>
 		import System.IO
 		
-		def bundleVersion():
-			matchResult = /Bundle-Version:\s*((\d|\.)+)\s+/.Match(readManifest())
+		def bundleVersion(manifest as string):
+			matchResult = /Bundle-Version:\s*((\d|\.)+)\s+/.Match(manifest)
 			return matchResult.Groups[1].ToString()
+			
+		def bundleRequired(manifest as string):
+			matchResult = @/Require-Bundle:\s*((.|\n)*)Eclipse-LazyStart/.Match(manifest)
+			bundleString = matchResult.Groups[1].ToString()
+			bundles = s for s in /\n,;/.Split(bundleString) if len(s.Trim()) > 0
+			return join(bundles, ",")
 		
 		def readManifest():
 			return File.ReadAllText("${plugin()}/META-INF/MANIFEST.MF")
@@ -56,8 +68,128 @@
 		def plugin():
 			return Project.Properties["plugin"]
 			
-		Project.Properties["bundle.version"] = bundleVersion()
+		manifest = readManifest()
+		Project.Properties["bundle.version"] = bundleVersion(manifest)
+		#Project.Properties["bundle.required"] = bundleRequired(manifest)
 		</boo>
+	</target>
+	
+	<fileset id="common.classpath" basedir="${eclipse.dir}/plugins">
+		<include name="**/org.eclipse.osgi_*.jar" />
+		<include name="**/org.eclipse.equinox.common_*jar" />
+		<include name="**/org.eclipse.equinox.registry_*jar" />
+		<include name="**/org.eclipse.equinox.preferences_*jar" />
+		<include name="**/org.eclipse.core.jobs_*.jar" />
+		<include name="**/org.eclipse.core.runtime_*.jar" />
+		<include name="**/org.eclipse.core.resources_*.jar" />
+		<include name="**/org.eclipse.debug.core_*.jar" />
+		<include name="**/jdimodel*jar" />
+		<include name="**/org.eclipse.jdt.core_*jar" />
+		<include name="**/org.eclipse.jdt.launching_*jar" />
+		<include name="**/org.eclipse.jdt.compiler*jar" />
+	</fileset>
+	
+	<fileset id="monolipse.ui.classpath" basedir="${eclipse.dir}/plugins">
+		<include name="**/org.eclipse.jface_*jar" />
+		<include name="**/org.eclipse.ui.workbench_*.jar" />
+		<include name="**/org.eclipse.swt*.jar" />
+		<include name="**/org.eclipse.ui.editors_*.jar" />
+		<include name="**/org.eclipse.text_*.jar" />
+		<include name="**/org.eclipse.jface.text_*jar" />
+		<include name="**/org.eclipse.ui.workbench.texteditor_*.jar" />
+		<include name="**/org.eclipse.ui.ide_*.jar" />
+		<include name="**/org.eclipse.debug.ui_*jar" />
+		<include name="**/org.eclipse.core.commands_*.jar" />
+		
+		<include name="**/org.eclipse.ui_*jar" />
+		<include name="**/org.eclipse.ui.views_*jar" />
+		<include name="**/org.eclipse.ui.console_*jar" />
+		<include name="**/org.eclipse.debug.ui_*jar" />
+		<include name="**/org.eclipse.jdt.ui_*.jar" />
+	</fileset>
+	
+	<fileset id="monolipse.nunit.classpath" basedir="${eclipse.dir}/plugins">
+		<include name="**/org.eclipse.jface_*jar" />
+		<include name="**/org.eclipse.ui.workbench_*.jar" />
+		<include name="**/org.eclipse.swt*.jar" />
+		<include name="**/org.eclipse.ui.editors_*.jar" />
+		<include name="**/org.eclipse.text_*.jar" />
+		<include name="**/org.eclipse.jface.text_*jar" />
+		<include name="**/org.eclipse.ui.workbench.texteditor_*.jar" />
+		<include name="**/org.eclipse.ui.ide_*.jar" />
+		<include name="**/org.eclipse.debug.ui_*jar" />
+		<include name="**/org.eclipse.core.commands_*.jar" />
+		
+	</fileset>
+	
+	<target name="compile-plugin" depends="extract-bundle-properties">
+		
+		<property name="plugin.src.dir" value="${plugin}/src" />
+		
+		<fileset id="plugin.source.files" basedir="${plugin.src.dir}">
+			<include name="**/*.java" />
+		</fileset>
+		
+		<boo>
+			<references basedir="${boo.dir}">
+				<include name="Boo.Lang.PatternMatching.dll" />
+			</references>
+			<code>
+			import Boo.Lang.PatternMatching
+			
+			def fileset(id as string) as NAnt.Core.Types.FileSet:
+				return Project.DataTypeReferences[id]
+				
+			def classPath():
+				commonClasspath = fileset("common.classpath")
+				yieldAll commonClasspath.FileNames
+				
+				pluginClasspath = fileset("${plugin()}.classpath")
+				if pluginClasspath is not null:
+					yieldAll pluginClasspath.FileNames
+					
+				match plugin():
+					case "monolipse.core":
+						yield "monolipse.core/lib/xstream/xstream-1.1.2.jar"
+					case "monolipse.ui":
+						yield "monolipse.core/bin"
+					case "monolipse.nunit":
+						yield "monolipse.core/bin"
+						yield "monolipse.ui/bin"
+				
+			def plugin():
+				return Project.Properties["plugin"]
+				
+			Project.Properties["sources"] = join(fileset("plugin.source.files").FileNames)
+			Project.Properties["classpath"] = join(classPath(), ":")
+			</code>
+		</boo>
+		
+		<mkdir dir="${plugin}/bin" />
+		
+		<!--	
+		<echo>
+	compiling ${plugin} java source files: ${sources}
+	classpath: ${classpath}
+		</echo>
+		-->
+		<exec program="${javac}">
+			<arg value="-d" />
+			<arg file="${plugin}/bin" />
+			
+			<arg value="-g" />
+			
+			<arg value="-sourcepath" />
+			<arg value="${plugin.src.dir}" />
+			
+			<arg value="-classpath" />
+			<arg path="${classpath}" />
+			
+			<arg line="${sources}" />
+		</exec>
+	</target>
+	
+	<target name="package-plugin" depends="compile-plugin">
 	
 		<property name="plugin.fullname" value="${plugin}_${bundle.version}" />
 		<property name="plugin.dir" value="${target.dir}/${plugin.fullname}" />
