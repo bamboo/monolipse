@@ -7,7 +7,6 @@ import monolipse.core.IMonoLauncher;
 import monolipse.core.IMonoRuntime;
 import monolipse.core.IRemembrance;
 
-
 public class DotNetRuntimeImpl implements IMonoRuntime {
 
 	public IMonoLauncher createLauncher(String executablePath) throws IOException {
@@ -15,22 +14,23 @@ public class DotNetRuntimeImpl implements IMonoRuntime {
 	}
 
 	public String getLocation() {
-		// TODO Auto-generated method stub
-		return null;
+		return "c:/WINDOWS/Microsoft.NET/Framework/v3.5";
 	}
 
 	public IAssemblyReference[] listGlobalAssemblyCache() throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException();
 	}
 
 	public IAssemblyReference getGlobalAssemblyCacheReference(String name, String version, String culture, String token) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException();
 	}
 
 	public IRemembrance getRemembrance() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public boolean isDotnet() {
+		return true;
 	}
 }

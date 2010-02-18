@@ -5,6 +5,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import monolipse.core.AssemblySourceLanguage;
+import monolipse.core.BooCore;
+import monolipse.core.IMonoLauncher;
 
 
 public class CSharpCompilerLauncher extends CompilerLauncher {
@@ -17,7 +19,19 @@ public class CSharpCompilerLauncher extends CompilerLauncher {
 		.compile("(.+)\\((\\d+),\\d+\\):\\s(error|warning) (\\w+\\d+):\\s(.+)");
 
 	CSharpCompilerLauncher(AssemblySourceLanguage language) throws IOException {
-		super(language.equals(AssemblySourceLanguage.CSHARP_1_1) ? MCS_EXECUTABLE : GMCS_EXECUTABLE);
+		super(compilerLauncherFor(language));
+	}
+
+	private static IMonoLauncher compilerLauncherFor(AssemblySourceLanguage language) throws IOException {
+		if (BooCore.getRuntime().isDotnet())
+			return BooCore.createLauncherWithRuntimeLocation("csc.exe");
+		return BooCore.createLauncherWithRuntimeLocation(monoExecutableFor(language));
+	}
+
+	private static String monoExecutableFor(AssemblySourceLanguage language) {
+		return language.equals(AssemblySourceLanguage.CSHARP_1_1)
+			? MCS_EXECUTABLE
+			: GMCS_EXECUTABLE;
 	}
 
 	protected CompilerError parseCompilerError(String line) {		

@@ -1,13 +1,23 @@
 package monolipse.core.runtime;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
-import monolipse.core.*;
+import monolipse.core.AssemblySourceLanguage;
+import monolipse.core.BooCore;
+import monolipse.core.IAssemblyReference;
+import monolipse.core.IAssemblySource;
+import monolipse.core.IMonoCompilerLauncher;
+import monolipse.core.IMonoLauncher;
 import monolipse.core.foundation.WorkspaceUtilities;
 
-import org.eclipse.core.resources.*;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 
 public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 	
@@ -32,7 +42,7 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 	private ResponseFile _responseFile;
 	
 	protected CompilerLauncher(String compiler) throws IOException {
-		this(BooCore.createLauncherWithRuntimeLocation(compiler));
+		this(BooCore.createLauncher(compiler));
 	}
 
 	protected CompilerLauncher(final IMonoLauncher launcher) throws IOException {

@@ -11,4 +11,6 @@ public interface IMonoRuntime extends IMemorable {
 	IAssemblyReference[] listGlobalAssemblyCache() throws IOException;
 
 	IAssemblyReference getGlobalAssemblyCacheReference(String name, String version, String culture, String token);
+
+	boolean isDotnet();
 }

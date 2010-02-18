@@ -32,10 +32,10 @@ public class MonoRuntimeImpl implements IMonoRuntime {
 
 	public static String getOSDependentRuntimeExecutable(String runtimeLocation)
 			throws IOException {
-		String path = IOUtilities.combinePath(runtimeLocation,
-				MonoRuntimeImpl.RUNTIME_EXECUTABLE);
-		return Platform.OS_WIN32.equals(Platform.getOS()) ? path + ".exe"
-				: path;
+		String path = IOUtilities.combinePath(runtimeLocation, MonoRuntimeImpl.RUNTIME_EXECUTABLE);
+		return Platform.OS_WIN32.equals(Platform.getOS())
+			? path + ".exe"
+			: path;
 	}
 
 	private static IAssemblyReference[] toArray(Collection references) {
@@ -127,5 +127,10 @@ public class MonoRuntimeImpl implements IMonoRuntime {
 			initializeGlobalAssemblyCache();
 		}
 		return toArray(_cachedGacReferences.values());
+	}
+
+	@Override
+	public boolean isDotnet() {
+		return false;
 	}
 }

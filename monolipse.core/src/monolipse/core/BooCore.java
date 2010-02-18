@@ -9,8 +9,6 @@ import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
 import org.osgi.framework.BundleContext;
 
-
-
 /**
  * The main plugin class to be used in the desktop.
  */
@@ -120,25 +118,17 @@ public class BooCore extends Plugin {
 	static IMonoRuntime _runtime;
 	
 	public static synchronized IMonoRuntime getRuntime() {
-		if (null == _runtime) {			
-			_runtime = MonoRuntime.newInstance(getMonoHome());
-		}
+		if (null == _runtime)	
+			_runtime = MonoRuntimeFactory.createDefaultRuntime();
 		return _runtime;
-	}
-
-	private static String getMonoHome() {
-		return System.getProperty("MONO_HOME", defaultMonoPathForCurrentPlatform());
-	}
-
-	private static String defaultMonoPathForCurrentPlatform() {
-		final String operatingSystem = System.getProperty("os.name");
-		if ("Mac OS X".equalsIgnoreCase(operatingSystem))
-			return "/Library/Frameworks/Mono.framework/Home";
-		return "/usr/local";
-	}
+	}	
 
 	public static IMonoLauncher createLauncherWithRuntimeLocation(String compiler) throws IOException {
-		return getRuntime().createLauncher(IOUtilities.combinePath(runtimeLocation(), compiler));
+		return createLauncher(IOUtilities.combinePath(runtimeLocation(), compiler));
+	}
+
+	public static IMonoLauncher createLauncher(String path) throws IOException {
+		return getRuntime().createLauncher(path);
 	}
 
 	private static String runtimeLocation() {
