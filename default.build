@@ -234,6 +234,7 @@
 			<fileset basedir="monolipse.core/bin">
 				<include name="monolipse.core.dll" />
 				<include name="monolipse.core.dll.mdb" />
+				<include name="Boo.Lang.dll" />
 			</fileset>
 		</copy>
 		
@@ -242,7 +243,16 @@
 				<include name="**/**" />
 			</fileset>
 		</copy>
-	
+		
+		<copy todir="monolipse.nunit/bin">
+			<fileset basedir="${nunit.dir}">
+				<include name="nunit.core.dll" />
+				<include name="nunit.core.interfaces.dll" />
+				<include name="nunit.util.dll" />
+				
+			</fileset>
+		</copy>
+		
 		<booc target="exe" output="monolipse.nunit/bin/monolipse.nunit.server.exe">
 			<sources basedir="monolipse.nunit/boo/monolipse.nunit.server">
 				<include name="*.boo" />

@@ -19,6 +19,7 @@
 package monolipse.core.internal;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Map;
 
 import monolipse.core.AssemblyReferenceVisitor;
@@ -261,7 +262,7 @@ public class BooBuilder extends IncrementalProjectBuilder {
 				if (!(resource instanceof IFile)) return true;
 				IFile file = (IFile)resource;
 				if ("config".equals(file.getFileExtension())) {
-					copyFileToFolder(file, outputFolder, monitor);
+					IO.copyFileToFolder(file, outputFolder, monitor);
 				}
 				return true;
 			}
@@ -271,41 +272,17 @@ public class BooBuilder extends IncrementalProjectBuilder {
 	private void copyLocalReferences(final IAssemblySource source, final IFolder folder, final IProgressMonitor monitor) throws CoreException {
 		source.visitReferences(new AssemblyReferenceVisitor() {
 			public boolean visit(ILocalAssemblyReference reference) throws CoreException {
-				copyLocalReference(reference, folder, monitor);
+				IO.copyFileToFolder(reference.getFile(), folder, monitor);
 				return true;
 			}
 			
 			public boolean visit(IAssemblySourceReference reference) throws CoreException {
-				if (project(source) != project(reference.getAssemblySource())) {
-					copyFileToFolder(reference.getAssemblySource().getOutputFile(), folder, monitor);
-				}
+				if (reference.getAssemblySource().getOutputFolder().equals(folder))
+					return true;
+				IO.copyFileToFolder(reference.getAssemblySource().getOutputFile(), folder, monitor);
 				return true;
 			}
 		});
-	}
-	
-
-	private IProject project(final IAssemblySource source) {
-		return source.getFolder().getProject();
-	}
-
-	private void copyLocalReference(ILocalAssemblyReference reference, IFolder folder, IProgressMonitor monitor) throws CoreException {
-		copyFileToFolder(reference.getFile(), folder, monitor);
-	}
-
-	private void copyFileToFolder(IFile sourceFile, IFolder folder, IProgressMonitor monitor) throws CoreException {
-		String name = sourceFile.getName();
-		IFile targetFile = folder.getFile(name);
-		if (targetFile.exists()) {
-			if (!isNewer(sourceFile, targetFile)) return;
-			targetFile.delete(true, monitor);
-		}
-		sourceFile.copy(targetFile.getFullPath(), true, monitor);
-		targetFile.setDerived(true);
-	}
-
-	boolean isNewer(IFile sourceFile, IFile targetFile) {
-		return sourceFile.getModificationStamp() > targetFile.getModificationStamp();
 	}
 
 	private CompilerError[] launchCompiler(IAssemblySource source, IFile[] files) throws IOException, CoreException {
@@ -317,17 +294,20 @@ public class BooBuilder extends IncrementalProjectBuilder {
 	
 	int reportErrors(IAssemblySource source, CompilerError[] errors) throws IOException {
 		
-		for (int i=0; i<errors.length; ++i) {
-			CompilerError error = errors[i];
-			if (error.path == null) {
+		int errorCount = 0;
+		for (CompilerError error : errors) {
+			
+			boolean isError = error.severity == CompilerError.ERROR;
+			if (error.path == null)
 				addErrorMarker(source, error.message);
-			} else {
-				addMarker(error.path, error.message, error.line, error.severity == CompilerError.ERROR
+			else
+				addMarker(error.path, error.message, error.line, isError
 							? IMarker.SEVERITY_ERROR
 							: IMarker.SEVERITY_WARNING);
-			}
+			
+			if (isError) ++errorCount;
 		}
-		return errors.length;
+		return errorCount;
 	}
 
 	private void addErrorMarker(IAssemblySource source, String message) {

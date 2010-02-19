@@ -348,9 +348,8 @@ public class BooAssemblySource implements IAssemblySource {
 	}
 
 	public boolean visitReferences(IAssemblyReferenceVisitor visitor) throws CoreException {
-		for (int i=0; i<_references.length; ++i) {
-			if (!_references[i].accept(visitor)) return false;
-		}
+		for (IAssemblyReference r : _references)
+			if (!r.accept(visitor)) return false;
 		return true;
 	}
 	

@@ -21,9 +21,8 @@ class RelativeAssemblyResolver:
 			_cache[asm.GetName().Name] = asm
 		return asm
 	
-	def AssemblyResolve(sender, args as ResolveEventArgs) as Assembly:		
+	def AssemblyResolve(sender, args as ResolveEventArgs) as Assembly:
 		simpleName = GetSimpleName(args.Name)
-		
 		asm as Assembly = _cache[simpleName]
 		if asm is null:
 			basePath = Path.Combine(_basePath, simpleName)
@@ -31,6 +30,8 @@ class RelativeAssemblyResolver:
 			if asm is null:
 				asm = ProbeFile(basePath + ".exe")
 			_cache[simpleName] = asm
+			
+		print "AssemblyResolve(${args.Name}) ->", asm
 		return asm
 		
 	private def GetSimpleName(name as string):

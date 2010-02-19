@@ -9,11 +9,16 @@ import monolipse.core
 class NUnitProxy(System.MarshalByRefObject):
 	def Run(assemblyName as string, client as ProcessMessengerClient):
 		CoreExtensions.Host.InitializeService();
-		AppDomain.CurrentDomain.AssemblyResolve += RelativeAssemblyResolver(Path.GetDirectoryName(assemblyName)).AssemblyResolve
+		SetUpAssemblyResolverFor(assemblyName)
 		pkg = NUnitInterfaces.TestPackage(Path.GetFileName(assemblyName), [assemblyName])
 		suite = TestSuiteBuilder().Build(pkg)
 		client.Send(Message(Name: "TESTS-STARTED", Payload: suite.TestCount.ToString())) 
 		suite.Run(TestListener(client))
+		
+def SetUpAssemblyResolverFor(assemblyName as string):
+	path = Path.GetDirectoryName(Path.GetFullPath(assemblyName))
+	print "assembly path:", path
+	AppDomain.CurrentDomain.AssemblyResolve += RelativeAssemblyResolver(path).AssemblyResolve
 
 service NUnitRunner:
 	

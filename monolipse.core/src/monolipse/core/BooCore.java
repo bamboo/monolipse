@@ -1,6 +1,7 @@
 package monolipse.core;
 
 import java.io.*;
+import java.text.MessageFormat;
 
 import monolipse.core.foundation.*;
 import monolipse.core.internal.*;
@@ -73,6 +74,10 @@ public class BooCore extends Plugin {
 		if (null == plugin) return;
 		System.out.println(message);
 		plugin.getLog().log(new Status(Status.INFO, ID_PLUGIN, -1, message, null));
+	}
+	
+	public static void logInfo(String format, Object... args) {
+		logInfo(MessageFormat.format(format, args));
 	}
 	
 	private void registerPreferenceListeners() {

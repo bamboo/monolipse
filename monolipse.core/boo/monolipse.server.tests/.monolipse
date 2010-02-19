@@ -8,6 +8,9 @@
     <monolipse.core.internal.AssemblySourceReference-Remembrance>
       <path>/monolipse.core/boo/monolipse.core</path>
     </monolipse.core.internal.AssemblySourceReference-Remembrance>
+    <monolipse.core.internal.LocalAssemblyReference-Remembrance>
+      <path>/monolipse.nunit/lib/NUnit-2.4.8/bin/nunit.framework.dll</path>
+    </monolipse.core.internal.LocalAssemblyReference-Remembrance>
   </references>
   <outputFolder>/monolipse.core/bin</outputFolder>
   <additionalOptions></additionalOptions>
