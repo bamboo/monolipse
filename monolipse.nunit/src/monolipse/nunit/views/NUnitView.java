@@ -3,6 +3,7 @@ package monolipse.nunit.views;
 import java.util.ArrayList;
 
 import monolipse.core.IAssemblySource;
+import monolipse.core.foundation.Strings;
 import monolipse.nunit.*;
 import monolipse.nunit.launching.NUnitLauncher;
 import monolipse.ui.*;
@@ -132,6 +133,7 @@ public class NUnitView extends ViewPart {
 		if (_failures.isEmpty())
 			return;
 		try {
+			NUnitPlugin.logInfo(Strings.commaSeparatedList(failedTestNames()));
 			NUnitLauncher.launch(_failures.get(0).getAssemblySource(), "run", failedTestNames());
 		} catch (CoreException x) {
 			NUnitPlugin.logException(x);

@@ -20,6 +20,7 @@ public class NUnitLauncher {
 
 	public static void launch(IAssemblySource assemblySource, String modeRunOrDebug, java.util.List<String> testNames)
 		throws CoreException {
+		
 		final ILaunchConfigurationWorkingCopy copy = configurationFor(assemblySource).copy(testNames.get(0) + "...");
 		copy.setAttribute(NUnitLaunchConfigurationConstants.ATTR_TEST_NAMES, testNames);
 		DebugUITools.launch(copy, modeRunOrDebug);

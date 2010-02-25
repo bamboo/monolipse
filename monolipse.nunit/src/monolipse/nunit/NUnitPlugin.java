@@ -18,7 +18,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-
 /**
  * The main plugin class to be used in the desktop.
  */
@@ -86,23 +85,24 @@ public class NUnitPlugin extends AbstractUIPlugin {
 		getDefault().getLog().log(
 				new Status(Status.INFO, ID_PLUGIN, -1, message, null));
 	}
-	
+
 	public void addTestListener(ITestRunListener listener) {
 		getListenerList().add(listener);
-	}	
+	}
 
 	public void removeTestListener(ITestRunListener listener) {
-		getListenerList().add(listener);
+		getListenerList().remove(listener);
 	}
-	
+
 	static abstract class AbstractSafeRunnable implements ISafeRunnable {
 		public void handleException(Throwable exception) {
 		}
 	}
-	
-	public synchronized void fireTestsStarted(final IAssemblySource source, final int count) {
+
+	public synchronized void fireTestsStarted(final IAssemblySource source,
+			final int count) {
 		Object[] listeners = getListenerList().getListeners();
-		for (int i = 0; i<listeners.length; ++i) {
+		for (int i = 0; i < listeners.length; ++i) {
 			final ITestRunListener each = (ITestRunListener) listeners[i];
 			ISafeRunnable run = new AbstractSafeRunnable() {
 				public void run() {
@@ -115,7 +115,7 @@ public class NUnitPlugin extends AbstractUIPlugin {
 
 	public synchronized void fireTestsFinished(final IAssemblySource source) {
 		Object[] listeners = getListenerList().getListeners();
-		for (int i = 0; i<listeners.length; ++i) {
+		for (int i = 0; i < listeners.length; ++i) {
 			final ITestRunListener each = (ITestRunListener) listeners[i];
 			ISafeRunnable run = new AbstractSafeRunnable() {
 				public void run() {
@@ -126,9 +126,10 @@ public class NUnitPlugin extends AbstractUIPlugin {
 		}
 	}
 
-	public synchronized void fireTestStarted(final IAssemblySource source, final String fullName) {
+	public synchronized void fireTestStarted(final IAssemblySource source,
+			final String fullName) {
 		Object[] listeners = getListenerList().getListeners();
-		for (int i = 0; i<listeners.length; ++i) {
+		for (int i = 0; i < listeners.length; ++i) {
 			final ITestRunListener each = (ITestRunListener) listeners[i];
 			ISafeRunnable run = new AbstractSafeRunnable() {
 				public void run() {
@@ -140,9 +141,10 @@ public class NUnitPlugin extends AbstractUIPlugin {
 		}
 	}
 
-	public synchronized void fireTestFailed(final IAssemblySource source, final String fullName, final String trace) {
+	public synchronized void fireTestFailed(final IAssemblySource source,
+			final String fullName, final String trace) {
 		Object[] listeners = getListenerList().getListeners();
-		for (int i = 0; i<listeners.length; ++i) {
+		for (int i = 0; i < listeners.length; ++i) {
 			final ITestRunListener each = (ITestRunListener) listeners[i];
 			ISafeRunnable run = new AbstractSafeRunnable() {
 				public void run() {
@@ -167,10 +169,12 @@ public class NUnitPlugin extends AbstractUIPlugin {
 		IExtension[] extensions = extensionPoint.getExtensions();
 		ListenerList results = new ListenerList();
 		for (int i = 0; i < extensions.length; i++) {
-			IConfigurationElement[] elements = extensions[i].getConfigurationElements();
+			IConfigurationElement[] elements = extensions[i]
+					.getConfigurationElements();
 			for (int j = 0; j < elements.length; j++) {
 				try {
-					Object listener = elements[j].createExecutableExtension("class");
+					Object listener = elements[j]
+							.createExecutableExtension("class");
 					if (listener instanceof ITestRunListener) {
 						results.add(listener);
 					}
@@ -185,13 +189,14 @@ public class NUnitPlugin extends AbstractUIPlugin {
 	public void fireTestsAboutToStart(IAssemblySource _source) {
 		showNUnitView();
 	}
-	
+
 	private void showNUnitView() {
-		final IWorkbench workbench= PlatformUI.getWorkbench();
+		final IWorkbench workbench = PlatformUI.getWorkbench();
 		workbench.getDisplay().asyncExec(new Runnable() {
 			public void run() {
-				try {					
-				workbench.getActiveWorkbenchWindow().getActivePage().showView("monolipse.nunit.views.NUnitView");
+				try {
+					workbench.getActiveWorkbenchWindow().getActivePage()
+							.showView("monolipse.nunit.views.NUnitView");
 				} catch (Exception e) {
 					logException(e);
 				}
