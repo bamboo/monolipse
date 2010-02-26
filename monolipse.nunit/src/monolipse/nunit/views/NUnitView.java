@@ -1,5 +1,6 @@
 package monolipse.nunit.views;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import monolipse.core.IAssemblySource;
@@ -17,8 +18,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.part.ViewPart;
-
-
 
 public class NUnitView extends ViewPart {
 	
@@ -56,6 +55,7 @@ public class NUnitView extends ViewPart {
 	private final ArrayList<FailureInfo> _failures = new ArrayList();
 	private TableViewer _failureView;
 	private StackTraceViewer _traceView;
+	private TreeViewer _testsView;
 
 	public NUnitView() {
 	}
@@ -79,11 +79,11 @@ public class NUnitView extends ViewPart {
 		ViewForm left = new ViewForm(_sashForm, SWT.NONE);		
 		ViewForm right = new ViewForm(_sashForm, SWT.NONE);
 		
-		setFormLabel(left, "Failures");
+		setFormLabel(left, "Tests");
 		setFormLabel(right, "Failure Trace");
 		
-		createFailureView(left);
-		
+//		createFailureView(left);
+		createTestCasesView(left);
 		createTraceView(right);
 
 		_sashForm.setWeights(new int[]{50, 50});
@@ -92,14 +92,24 @@ public class NUnitView extends ViewPart {
 
 	private void createTraceView(ViewForm right) {
 		_traceView = new StackTraceViewer(right);
-		_traceView.setBackground(_failureView.getControl().getBackground());
+		_traceView.setBackground(_testsView.getControl().getBackground());
 		right.setContent(_traceView.getControl());
 	}
 
+	private void createTestCasesView(ViewForm left) {
+		_testsView = new TreeViewer(left, SWT.FLAT);
+		_testsView.setContentProvider(new TestsContentProvider());
+		_testsView.setLabelProvider(new TestsLabelProvider());
+		_testsView.setInput(_failures);
+		_testsView.expandAll();
+		
+		left.setContent(_testsView.getControl());
+	}
+	
 	private void createFailureView(ViewForm left) {
 		_failureView = new TableViewer(left, SWT.FLAT);
 		_failureView.setContentProvider(new FailureContentProvider());
-		_failureView.setLabelProvider(new FailureLabelProvider());
+		//_failureView.setLabelProvider(new FailureLabelProvider());
 		_failureView.setInput(_failures);
 		_failureView.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -201,7 +211,7 @@ public class NUnitView extends ViewPart {
 		}		
 	}
 	
-	class FailureLabelProvider implements ILabelProvider {
+	class TestsLabelProvider implements ILabelProvider {
 		
 		private final Image _errorIcon= BooUI.getImage(IBooUIConstants.ERROR);
 		//private final Image _failureIcon= BooUI.getImage(IBooUIConstants.WARNING);
@@ -287,7 +297,7 @@ public class NUnitView extends ViewPart {
 			_counterPanel.setFailureValue(_failures.size());
 			_counterPanel.setRunValue(_runs);
 			_counterPanel.setErrorValue(_errors);
-			_failureView.refresh();
+			_testsView.refresh();
 		}
 
 		private void updateProgressBar() {
@@ -298,6 +308,40 @@ public class NUnitView extends ViewPart {
 			return !_failures.isEmpty();
 		}
 		
+	}
+	
+	public class TestsContentProvider implements ITreeContentProvider
+	{
+	  public Object[] getChildren(Object element)
+	  {
+		  return new Object[0];
+	   // Object[] kids = ((File) element).listFiles();
+	   // return kids == null ? new Object[0] : kids;
+	  }
+
+	  public Object[] getElements(Object element)
+	  {
+		return _failures.toArray();
+//	    return getChildren(element);
+	  }
+
+	  public boolean hasChildren(Object element)
+	  {
+	    return getChildren(element).length > 0;
+	  }
+
+	  public Object getParent(Object element)
+	  {
+	    return ((File)element).getParent();
+	  }
+	  
+	  public void dispose()
+	  {
+	  }
+
+	  public void inputChanged(Viewer viewer, Object old_input, Object new_input)
+	  {
+	  }
 	}
 
 }
