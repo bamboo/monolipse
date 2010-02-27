@@ -21,23 +21,30 @@ import org.eclipse.ui.part.ViewPart;
 
 public class NUnitView extends ViewPart {
 	
-	static class FailureInfo {
+	static class TestInfo {
 		private final String _testName;
-		private final String _trace;
 		private final IAssemblySource _assemblySource;
 
-		public FailureInfo(IAssemblySource assemblySource, String testName, String trace) {
+		public TestInfo(IAssemblySource assemblySource, String testName) {
 			_assemblySource = assemblySource;
 			_testName = testName;
-			_trace = trace;
 		}
-		
+
 		public IAssemblySource getAssemblySource() {
 			return _assemblySource;
 		}
 		
 		public String getTestName() {
 			return _testName;
+		}
+	}
+	
+	static class FailureInfo extends TestInfo {
+		private final String _trace;
+
+		public FailureInfo(IAssemblySource assemblySource, String testName, String trace) {
+			super(assemblySource, testName);
+			_trace = trace;
 		}
 
 		public String getTrace() {
@@ -52,7 +59,7 @@ public class NUnitView extends ViewPart {
 	
 	private final TestListener _listener = new TestListener();
 	
-	private final ArrayList<FailureInfo> _failures = new ArrayList();
+	private final ArrayList<TestInfo> _testResults = new ArrayList<TestInfo>();
 	private TableViewer _failureView;
 	private StackTraceViewer _traceView;
 	private TreeViewer _testsView;
@@ -82,7 +89,6 @@ public class NUnitView extends ViewPart {
 		setFormLabel(left, "Tests");
 		setFormLabel(right, "Failure Trace");
 		
-//		createFailureView(left);
 		createTestCasesView(left);
 		createTraceView(right);
 
@@ -90,27 +96,27 @@ public class NUnitView extends ViewPart {
 		return _sashForm;
 	}
 
+	private void createTestCasesView(ViewForm left) {
+		_testsView = new TreeViewer(left, SWT.FLAT);
+		_testsView.setContentProvider(new TestsContentProvider());
+		_testsView.setLabelProvider(new TestsLabelProvider());
+		_testsView.setInput(_testResults);
+		_testsView.expandAll();
+		
+		left.setContent(_testsView.getControl());
+	}
+
 	private void createTraceView(ViewForm right) {
 		_traceView = new StackTraceViewer(right);
 		_traceView.setBackground(_testsView.getControl().getBackground());
 		right.setContent(_traceView.getControl());
 	}
-
-	private void createTestCasesView(ViewForm left) {
-		_testsView = new TreeViewer(left, SWT.FLAT);
-		_testsView.setContentProvider(new TestsContentProvider());
-		_testsView.setLabelProvider(new TestsLabelProvider());
-		_testsView.setInput(_failures);
-		_testsView.expandAll();
-		
-		left.setContent(_testsView.getControl());
-	}
 	
 	private void createFailureView(ViewForm left) {
 		_failureView = new TableViewer(left, SWT.FLAT);
-		_failureView.setContentProvider(new FailureContentProvider());
+//		_failureView.setContentProvider(new FailureContentProvider());
 		//_failureView.setLabelProvider(new FailureLabelProvider());
-		_failureView.setInput(_failures);
+		_failureView.setInput(_testResults);
 		_failureView.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				Object element = ((IStructuredSelection)event.getSelection()).getFirstElement();
@@ -140,11 +146,11 @@ public class NUnitView extends ViewPart {
 	}
 
 	protected void rerunLastFailures() {
-		if (_failures.isEmpty())
+		if (_testResults.isEmpty())
 			return;
 		try {
 			NUnitPlugin.logInfo(Strings.commaSeparatedList(failedTestNames()));
-			NUnitLauncher.launch(_failures.get(0).getAssemblySource(), "run", failedTestNames());
+			NUnitLauncher.launch(_testResults.get(0).getAssemblySource(), "run", failedTestNames());
 		} catch (CoreException x) {
 			NUnitPlugin.logException(x);
 		}
@@ -152,7 +158,7 @@ public class NUnitView extends ViewPart {
 
 	private ArrayList<String> failedTestNames() {
 		final ArrayList<String> failedTests = new ArrayList<String>();
-		for (FailureInfo failure : _failures)
+		for (TestInfo failure : _testResults)
 			failedTests.add(failure.getTestName());
 		return failedTests;
 	}
@@ -188,27 +194,14 @@ public class NUnitView extends ViewPart {
 	}
 	
 	private void selectFirstFailure() {
-		if (_failures.isEmpty())
+		if (_testResults.isEmpty())
 			return;
 		
-		_failureView.setSelection(new StructuredSelection(_failures.get(0)), true);
+		_failureView.setSelection(new StructuredSelection(_testResults.get(0)), true);
 	}
 
 	private void activateNUnitView() {
 		getSite().getPage().activate(NUnitView.this);
-	}
-
-	class FailureContentProvider implements IStructuredContentProvider {
-
-		public void dispose() {
-		}
-
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		}
-
-		public Object[] getElements(Object inputElement) {
-			return _failures.toArray();
-		}		
 	}
 	
 	class TestsLabelProvider implements ILabelProvider {
@@ -234,7 +227,7 @@ public class NUnitView extends ViewPart {
 		}
 
 		public String getText(Object element) {
-			return ((FailureInfo)element).getTestName();
+			return ((TestInfo)element).getTestName();
 		}
 		
 	}
@@ -247,7 +240,7 @@ public class NUnitView extends ViewPart {
 		
 		public void testsStarted(IAssemblySource source, final int testCount) {
 			updateUI(new Runnable() { public void run() {
-				_failures.clear();
+				_testResults.clear();
 				_runs = 0;
 				_errors = 0;
 				_counterPanel.setTotal(testCount);
@@ -275,7 +268,7 @@ public class NUnitView extends ViewPart {
 
 		public void testFailed(final IAssemblySource source, final String fullName, final String trace) {
 			updateUI(new Runnable() { public void run() {
-				_failures.add(new FailureInfo(source, fullName, trace));
+				_testResults.add(new FailureInfo(source, fullName, trace));
 				_progressBar.refresh(failuresOccurred());
 			}});
 		}
@@ -294,7 +287,7 @@ public class NUnitView extends ViewPart {
 		}
 
 		private void updateUI() {
-			_counterPanel.setFailureValue(_failures.size());
+			_counterPanel.setFailureValue(_testResults.size());
 			_counterPanel.setRunValue(_runs);
 			_counterPanel.setErrorValue(_errors);
 			_testsView.refresh();
@@ -305,7 +298,7 @@ public class NUnitView extends ViewPart {
 		}
 
 		private boolean failuresOccurred() {
-			return !_failures.isEmpty();
+			return !_testResults.isEmpty();
 		}
 		
 	}
@@ -321,7 +314,7 @@ public class NUnitView extends ViewPart {
 
 	  public Object[] getElements(Object element)
 	  {
-		return _failures.toArray();
+		return _testResults.toArray();
 //	    return getChildren(element);
 	  }
 
