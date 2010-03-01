@@ -29,7 +29,7 @@ public class DotNetRuntimeImpl implements IMonoRuntime {
 		throw new NotImplementedException();
 	}
 
-	@Override
+	//@Override
 	public boolean isDotnet() {
 		return true;
 	}
