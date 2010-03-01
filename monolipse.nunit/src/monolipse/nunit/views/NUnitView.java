@@ -1,10 +1,7 @@
 package monolipse.nunit.views;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import monolipse.core.IAssemblySource;
 import monolipse.core.foundation.Strings;
@@ -24,83 +21,48 @@ import org.eclipse.ui.part.ViewPart;
 
 public class NUnitView extends ViewPart {
 
-	static class ResultNode {
+	static class TestInfo {
 		private String _testName;
 		private IAssemblySource _assemblySource;
 		private String _trace;
 		private boolean _isFailure;
-		private HashMap<String, ResultNode> _children; 
 
-		public ResultNode() {
+		public TestInfo() {
 			this(null, "");
 		}
-		
-		public ResultNode(IAssemblySource assemblySource, String testName) {
+
+		public TestInfo(IAssemblySource assemblySource, String testName) {
 			this(assemblySource, testName, "", false);
 		}
 		
-		public ResultNode(IAssemblySource assemblySource, String testName, String trace) {
+		public TestInfo(IAssemblySource assemblySource, String testName, String trace) {
 			this(assemblySource, testName, trace, true);
 		}
 		
-		protected ResultNode(IAssemblySource assemblySource, String testName, String trace, boolean isFailure) {
+		protected TestInfo(IAssemblySource assemblySource, String testName, String trace, boolean isFailure) {
 			_assemblySource = assemblySource;
 			_testName = testName;
 			_trace = trace;
 			_isFailure = isFailure;
-			_children = new HashMap<String, ResultNode>();
 		}
 
 		public IAssemblySource getAssemblySource() {
-			if (_assemblySource == null){
-				if (_children.size() > 0) {
-					return _children.get(0).getAssemblySource();
-				}
-			}
 			return _assemblySource;
-		}
-
-		public String getTrace() {
-			return _trace;
 		}
 
 		public String getTestName() {
 			return _testName;
 		}
 		
-		public HashMap<String, ResultNode> getChildren() {
-			return _children;
+		public String getTrace() {
+			return _trace;
 		}
 
 		public boolean isFailure() {
 			return _isFailure;
 		}
-
-		public static ArrayList<String> getFailedTests() {
-			return new ArrayList<String>();
-		}
-
-		public void reset() {
-			_assemblySource = null;
-			_testName = "";
-			_trace = "";
-			_isFailure = false;
-			_children = new HashMap<String, ResultNode>();
-		}
-
-		public void add(ResultNode node) {
-			String[] names = splitTestName();
-			//ArrayList<ResultNode> target = _children;
-			
-			if (!_children.containsKey(names[0]))
-				_children.put(names[0], node);
-		}
-
-		public boolean isEmpty() {
-			return _children.size() == 0;
-		}
-
-		public String[] splitTestName() {
+		
+		public String[] splitName() {
 			String[] result = new String[3];
 			result[0] = result[1] = result[2] = "";
 			
@@ -130,6 +92,104 @@ public class NUnitView extends ViewPart {
 		}
 	}
 	
+	static class ResultNode {
+		private String _name;
+		private TestInfo _info;
+		private HashMap<String, ResultNode> _children;
+		private ResultNode _parent; 
+
+		public ResultNode(String name, ResultNode parent, TestInfo info) {
+			_name = name;
+			_parent = parent;
+			_info = info;
+			_children = new HashMap<String, ResultNode>();
+		}
+
+		public String getName() {
+			return _name;
+		}
+		
+		public ResultNode getParent() {
+			return _parent;
+		}
+
+		public TestInfo getInfo() {
+			return _info;
+		}
+
+		public HashMap<String, ResultNode> getChildren() {
+			return _children;
+		}
+
+		public void reset() {
+			_name = "";
+			_info = null;
+			_children = new HashMap<String, ResultNode>();
+		}
+
+		public IAssemblySource getAssemblySource() {
+			if (_children.size() > 0) {
+				return _children.values().toArray(new ResultNode[0])[0].getAssemblySource();
+			}
+			return null;
+		}
+
+		public ArrayList<ResultNode> getFailedNodes() {
+			return this.getFailedNodes(this);
+		}
+		
+		private ArrayList<ResultNode> getFailedNodes(ResultNode root) {
+			ArrayList<ResultNode> result = new ArrayList<ResultNode>();
+			HashMap<String, ResultNode> target = root.getChildren();
+			
+			for(ResultNode node: target.values()) {
+				if (node.hasFailures()) {
+					if (node.isEmpty())
+						result.add(node);
+					else
+						result.addAll(node.getFailedNodes());
+				}
+			}
+
+			return result;
+		}
+
+		public void add(TestInfo info) {
+			String[] names = info.splitName();
+			
+			ResultNode root = null;
+			HashMap<String, ResultNode> target = _children;
+			for(String name: names) {
+				ResultNode next = null;
+				if (!target.containsKey(name)) {
+					next = new ResultNode(name, root, info);
+					target.put(name, next);
+				}
+				else
+					next = target.get(name);
+				
+				root = next;
+				target = next.getChildren();
+			}
+		}
+
+		public boolean isEmpty() {
+			return _children.size() == 0;
+		}
+
+		public boolean hasFailures() {
+			if (_info != null && _info._isFailure) 
+				return true;
+			
+			for (ResultNode node: _children.values()) {
+				if (node.hasFailures()) 
+					return true;
+			}
+
+			return false;
+		}
+	}
+	
 	private NUnitProgressBar _progressBar;
 	private CounterPanel _counterPanel;
 	private SashForm _sashForm;
@@ -137,7 +197,7 @@ public class NUnitView extends ViewPart {
 
 	private final TestListener _listener = new TestListener();
 
-	private final ResultNode _testRoot = new ResultNode();
+	private final ResultNode _testRoot = new ResultNode("Root", null, null);
 	private TableViewer _failureView;
 	private StackTraceViewer _traceView;
 	private TreeViewer _testsView;
@@ -200,8 +260,8 @@ public class NUnitView extends ViewPart {
 								.getSelection()).getFirstElement();
 						if (null == element)
 							return;
-						_traceView.setStackTrace(((ResultNode) element)
-								.getTrace());
+//						_traceView.setStackTrace(((ResultNode) element)
+//								.getTrace());
 					}
 				});
 		final Table failureTableWidget = _failureView.getTable();
@@ -238,7 +298,15 @@ public class NUnitView extends ViewPart {
 	}
 
 	private ArrayList<String> failedTestNames() {
-		return ResultNode.getFailedTests();
+		ArrayList<String> result = new ArrayList<String>();
+		
+		for(ResultNode node: _testRoot.getFailedNodes()) {
+			if (node.hasFailures() && node.isEmpty()) {
+				result.add(node.getInfo().getTestName());
+			}
+		}
+		
+		return result;
 	}
 
 	private void setFormLabel(ViewForm form, final String labelText) {
@@ -271,11 +339,14 @@ public class NUnitView extends ViewPart {
 	}
 
 	private void selectFirstFailure() {
-//		if (_testRoot.getChildren().length == 0)
-//			return;
+		if (!_testRoot.hasFailures())
+			return;
 
-//		_failureView.setSelection(new StructuredSelection(_testResults.get(0)),
-//				true);
+		for (ResultNode node: _testRoot.getFailedNodes()) {
+			NUnitPlugin.logInfo("NODE: " + node.getInfo().getTestName());
+			// FIXME: for some reason this doesn't expand the item
+			_testsView.expandToLevel(node, AbstractTreeViewer.ALL_LEVELS);
+		}
 	}
 
 	private void activateNUnitView() {
@@ -288,7 +359,7 @@ public class NUnitView extends ViewPart {
 		private int _runs;
 		private int _failures;
 
-		private ResultNode _lastTest;
+		private TestInfo _lastTest;
 
 		public void testsStarted(IAssemblySource source, final int testCount) {
 			updateUI(new Runnable() {
@@ -325,7 +396,7 @@ public class NUnitView extends ViewPart {
 						_testRoot.add(_lastTest);
 					}
 
-					_lastTest = new ResultNode(source, fullName);
+					_lastTest = new TestInfo(source, fullName);
 					updateProgressBar();
 					++_runs;
 				}
@@ -336,7 +407,7 @@ public class NUnitView extends ViewPart {
 				final String fullName, final String trace) {
 			updateUI(new Runnable() {
 				public void run() {
-					_testRoot.add(new ResultNode(source, fullName, trace));
+					_testRoot.add(new TestInfo(source, fullName, trace));
 					_lastTest = null;
 					_progressBar.refresh(failuresOccurred());
 				}
@@ -376,9 +447,7 @@ public class NUnitView extends ViewPart {
 
 	public class TestsContentProvider implements ITreeContentProvider {
 		public Object[] getChildren(Object element) {
-			return new Object[0];
-			// Object[] kids = ((File) element).listFiles();
-			// return kids == null ? new Object[0] : kids;
+			return ((ResultNode)element).getChildren().values().toArray();
 		}
 
 		public Object[] getElements(Object element) {
@@ -390,7 +459,7 @@ public class NUnitView extends ViewPart {
 		}
 
 		public Object getParent(Object element) {
-			return ((File) element).getParent();
+			return ((ResultNode)element).getParent();
 		}
 
 		public void dispose() {
@@ -404,11 +473,7 @@ public class NUnitView extends ViewPart {
 	class TestsLabelProvider implements ILabelProvider {
 
 		private final Image _errorIcon = BooUI.getImage(IBooUIConstants.ERROR);
-		private final Image _successIcon = BooUI
-				.getImage(IBooUIConstants.SUCCESS);
-
-		// private final Image _failureIcon=
-		// BooUI.getImage(IBooUIConstants.WARNING);
+		private final Image _successIcon = BooUI.getImage(IBooUIConstants.SUCCESS);
 
 		public void addListener(ILabelProviderListener listener) {
 		}
@@ -424,11 +489,11 @@ public class NUnitView extends ViewPart {
 		}
 
 		public Image getImage(Object element) {
-			return ((ResultNode)element).isFailure() ? _errorIcon: _successIcon;
+			return ((ResultNode)element).hasFailures() ? _errorIcon: _successIcon;
 		}
 
 		public String getText(Object element) {
-			return ((ResultNode)element).getTestName();
+			return ((ResultNode)element).getName();
 		}
 	}
 }
