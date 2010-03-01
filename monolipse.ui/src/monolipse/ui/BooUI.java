@@ -82,7 +82,7 @@ public class BooUI extends AbstractUIPlugin {
 	protected void initializeImageRegistry(ImageRegistry registry) {
 		
 		declareRegistryImage(registry, IBooUIConstants.ASSEMBLY_REFERENCE, "icons/Reference.png");
-		declareRegistryImage(registry, IBooUIConstants.SUCCESS, "icons/WarningDecorator.gif");
+		declareRegistryImage(registry, IBooUIConstants.SUCCESS, "icons/SuccessDecorator.jpg");
 		declareRegistryImage(registry, IBooUIConstants.WARNING, "icons/WarningDecorator.gif");
 		declareRegistryImage(registry, IBooUIConstants.ERROR, "icons/ErrorDecorator.gif");
 		declareRegistryImage(registry, IBooUIConstants.ASSEMBLY_SOURCE_DECORATOR, "icons/AssemblySourceDecorator.gif");

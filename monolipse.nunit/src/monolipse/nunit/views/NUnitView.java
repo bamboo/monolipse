@@ -128,9 +128,16 @@ public class NUnitView extends ViewPart {
 		}
 
 		public IAssemblySource getAssemblySource() {
-			if (_children.size() > 0) {
-				return _children.values().toArray(new ResultNode[0])[0].getAssemblySource();
+			if (_info != null) {
+				return _info.getAssemblySource();
 			}
+
+			for(ResultNode node: _children.values()) {
+				if (node.getInfo() != null) {
+					return node.getInfo().getAssemblySource();
+				}
+			}
+			
 			return null;
 		}
 
@@ -198,7 +205,6 @@ public class NUnitView extends ViewPart {
 	private final TestListener _listener = new TestListener();
 
 	private final ResultNode _testRoot = new ResultNode("Root", null, null);
-	private TableViewer _failureView;
 	private StackTraceViewer _traceView;
 	private TreeViewer _testsView;
 
@@ -241,7 +247,30 @@ public class NUnitView extends ViewPart {
 		_testsView.setLabelProvider(new TestsLabelProvider());
 		_testsView.setInput(_testRoot);
 		_testsView.expandAll();
+		
+		_testsView.addDoubleClickListener(new IDoubleClickListener() {
+			public void doubleClick(DoubleClickEvent event) {
+				Object element = ((IStructuredSelection) event
+						.getSelection()).getFirstElement();
+				if (null == element)
+					return;
+				
+				rerunChildrenTests(((ResultNode) element));
+			}
+		});
+		
+		_testsView.addSelectionChangedListener(new ISelectionChangedListener() {
+					public void selectionChanged(SelectionChangedEvent event) {
+						Object element = ((IStructuredSelection) event
+								.getSelection()).getFirstElement();
+						if (null == element)
+							return;
+						_traceView.setStackTrace(((ResultNode) element).getInfo()
+								.getTrace());
+					}
+				});
 
+		_testsView.getControl().setMenu(createFailureMenu(_testsView.getControl()));
 		left.setContent(_testsView.getControl());
 	}
 
@@ -251,27 +280,8 @@ public class NUnitView extends ViewPart {
 		right.setContent(_traceView.getControl());
 	}
 
-	private void createFailureView(ViewForm left) {
-		_failureView = new TableViewer(left, SWT.FLAT);
-		_failureView
-				.addSelectionChangedListener(new ISelectionChangedListener() {
-					public void selectionChanged(SelectionChangedEvent event) {
-						Object element = ((IStructuredSelection) event
-								.getSelection()).getFirstElement();
-						if (null == element)
-							return;
-//						_traceView.setStackTrace(((ResultNode) element)
-//								.getTrace());
-					}
-				});
-		final Table failureTableWidget = _failureView.getTable();
-		failureTableWidget.setMenu(createFailureMenu(failureTableWidget));
-
-		left.setContent(_failureView.getControl());
-	}
-
-	private Menu createFailureMenu(final Table failureTableWidget) {
-		final Menu menu = new Menu(failureTableWidget);
+	private Menu createFailureMenu(final Control control) {
+		final Menu menu = new Menu(control);
 		final MenuItem rerunFailures = new MenuItem(menu, SWT.PUSH);
 		rerunFailures.setText("Rerun failed tests");
 		rerunFailures.addSelectionListener(new SelectionListener() {
@@ -286,8 +296,12 @@ public class NUnitView extends ViewPart {
 	}
 
 	protected void rerunLastFailures() {
-		if (_testRoot.isEmpty())
+		if (!_testRoot.hasFailures())
 			return;
+		if (_testRoot.getAssemblySource() == null) {
+			NUnitPlugin.logInfo("Cant get AssemblySource");
+			return;
+		}
 		try {
 			NUnitPlugin.logInfo(Strings.commaSeparatedList(failedTestNames()));
 			NUnitLauncher.launch(_testRoot.getAssemblySource(),
@@ -295,6 +309,36 @@ public class NUnitView extends ViewPart {
 		} catch (CoreException x) {
 			NUnitPlugin.logException(x);
 		}
+	}
+
+	protected void rerunChildrenTests(ResultNode resultNode) {
+		try {
+			ArrayList<String> childrenTestNames = childrenTestNames(resultNode);
+			if (childrenTestNames.size() == 0)
+				return;
+			
+			NUnitPlugin.logInfo(Strings.commaSeparatedList(childrenTestNames));
+			NUnitLauncher.launch(_testRoot.getAssemblySource(),
+					"run", childrenTestNames);
+		} catch (CoreException x) {
+			NUnitPlugin.logException(x);
+		}
+	}
+
+	private ArrayList<String> childrenTestNames(ResultNode root) {
+		ArrayList<String> result = new ArrayList<String>();
+		if (root.isEmpty()) {
+			result.add(root.getInfo().getTestName());
+			return result;
+		}
+
+		for (ResultNode node: root.getChildren().values()) {
+			if (node.isEmpty())
+				result.add(node.getInfo().getTestName());
+			else
+				result.addAll(childrenTestNames(node));	
+		}
+		return result;
 	}
 
 	private ArrayList<String> failedTestNames() {
@@ -343,10 +387,10 @@ public class NUnitView extends ViewPart {
 			return;
 
 		for (ResultNode node: _testRoot.getFailedNodes()) {
-			NUnitPlugin.logInfo("NODE: " + node.getInfo().getTestName());
-			// FIXME: for some reason this doesn't expand the item
 			_testsView.expandToLevel(node, AbstractTreeViewer.ALL_LEVELS);
 		}
+		
+		_testsView.setSelection(new StructuredSelection(_testRoot.getFailedNodes().get(0)));
 	}
 
 	private void activateNUnitView() {
@@ -408,6 +452,7 @@ public class NUnitView extends ViewPart {
 			updateUI(new Runnable() {
 				public void run() {
 					_testRoot.add(new TestInfo(source, fullName, trace));
+					_failures++;
 					_lastTest = null;
 					_progressBar.refresh(failuresOccurred());
 				}
@@ -472,7 +517,7 @@ public class NUnitView extends ViewPart {
 	
 	class TestsLabelProvider implements ILabelProvider {
 
-		private final Image _errorIcon = BooUI.getImage(IBooUIConstants.ERROR);
+		private final Image _warningIcon = BooUI.getImage(IBooUIConstants.WARNING);
 		private final Image _successIcon = BooUI.getImage(IBooUIConstants.SUCCESS);
 
 		public void addListener(ILabelProviderListener listener) {
@@ -489,7 +534,7 @@ public class NUnitView extends ViewPart {
 		}
 
 		public Image getImage(Object element) {
-			return ((ResultNode)element).hasFailures() ? _errorIcon: _successIcon;
+			return ((ResultNode)element).hasFailures() ? _warningIcon: _successIcon;
 		}
 
 		public String getText(Object element) {
