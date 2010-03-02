@@ -15,6 +15,7 @@ public interface IBooUIConstants {
 	String NAMESPACE = "namespace";
 	String FIELD = "field";
 	String METHOD = "method";
+	String PROTECTED_METHOD = "protected_method";
 	String PROPERTY = "property";
 	String EVENT = "event";
 	String CALLABLE = "callable";

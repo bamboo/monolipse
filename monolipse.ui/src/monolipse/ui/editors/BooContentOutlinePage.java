@@ -91,7 +91,7 @@ public class BooContentOutlinePage extends ContentOutlinePage {
 	
 	public static class OutlineLabelProvider extends LabelProvider {
 		
-		private final Map _imageMap = new HashMap();
+		private final Map<String, Image> _imageMap = new HashMap<String, Image>();
 		
 		public OutlineLabelProvider() {
 			setUpImageMap();
@@ -102,7 +102,9 @@ public class BooContentOutlinePage extends ContentOutlinePage {
 		}
 		
 		public Image getImage(Object element) {
-			return (Image) _imageMap.get(((OutlineNode)element).type());
+			OutlineNode node = (OutlineNode)element;
+			String nodeImageKey = node.visibility().isEmpty() ? node.type() : node.visibility() + "_" + node.type();
+			return _imageMap.containsKey(nodeImageKey) ? _imageMap.get(nodeImageKey) : _imageMap.get(node.type());
 		}
 		
 		void setUpImageMap() {

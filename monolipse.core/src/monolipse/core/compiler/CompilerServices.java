@@ -86,6 +86,8 @@ public class CompilerServices extends AbstractBooServiceClient {
 					node.type(parts[0]);
 					node.name(parts[1]);
 					node.line(Integer.parseInt(parts[2]));
+					if (parts.length > 3) 
+						node.visibility(parts[3]);
 				}
 			}
 		} catch (IOException e) {

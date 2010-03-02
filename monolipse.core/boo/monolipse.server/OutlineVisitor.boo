@@ -38,7 +38,7 @@ class OutlineVisitor(DepthFirstVisitor):
 	override def OnMethod(node as Method):
 		WriteMemberNode(node)
 		
-	override def OnField(node as Field):
+	override def OnField(node as Field):			
 		WriteMemberNode(node)
 		
 	override def OnConstructor(node as Constructor):
@@ -59,7 +59,7 @@ class OutlineVisitor(DepthFirstVisitor):
 		
 	def WriteMemberNode(node as TypeMember):
 		WriteBeginNode()
-		WriteNodeLine(node)
+		WriteNodeLine(node, GetVisibility(node))
 		WriteEndNode()
 		
 	def WriteTypeDefinition(node as TypeDefinition):
@@ -76,3 +76,15 @@ class OutlineVisitor(DepthFirstVisitor):
 		
 	def WriteNodeLine(node as Node):
 		_writer.WriteLine("${node.NodeType}:${describeNode(node)}:${node.LexicalInfo.Line}")
+		
+	def WriteNodeLine(node as Node, visibility as string):
+		_writer.WriteLine("${node.NodeType}:${describeNode(node)}:${node.LexicalInfo.Line}:${visibility}")
+
+	def GetVisibility(node as TypeMember):
+		if node.IsVisibilitySet:
+			return "Internal" if node.IsInternal
+			return "Protected" if node.IsProtected
+			return "Private" if node.IsPrivate
+		
+		return "Public"
+		

@@ -36,6 +36,8 @@ public class OutlineNode {
 
 	private int _line;
 
+	private String _visibility = "";
+
 	public OutlineNode() {
 	}	
 	
@@ -85,6 +87,14 @@ public class OutlineNode {
 	
 	public void line(int line) {
 		_line = line;
+	}
+
+	public void visibility(String visibilty) {
+		_visibility = visibilty;
+	}
+	
+	public String visibility() {
+		return _visibility;
 	}
 	
 	public interface Visitor {
