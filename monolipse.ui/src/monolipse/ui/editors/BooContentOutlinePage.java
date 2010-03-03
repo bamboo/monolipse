@@ -108,16 +108,41 @@ public class BooContentOutlinePage extends ContentOutlinePage {
 		}
 		
 		void setUpImageMap() {
-			mapImage(OutlineNode.CLASS, IBooUIConstants.CLASS);
-			mapImage(OutlineNode.METHOD, IBooUIConstants.METHOD);
+			mapImage(OutlineNode.INTERFACE, 		IBooUIConstants.INTERFACE);
+			mapImage(OutlineNode.PROTECTED_INTERFACE, IBooUIConstants.PROTECTED_INTERFACE);
+			mapImage(OutlineNode.PRIVATE_INTERFACE, IBooUIConstants.PRIVATE_INTERFACE);
+			mapImage(OutlineNode.INTERNAL_INTERFACE, IBooUIConstants.INTERNAL_INTERFACE);
+
+			mapImage(OutlineNode.CLASS, 			IBooUIConstants.CLASS);
+			mapImage(OutlineNode.PROTECTED_CLASS, 	IBooUIConstants.PROTECTED_CLASS);
+			mapImage(OutlineNode.PRIVATE_CLASS, 	IBooUIConstants.PRIVATE_CLASS);
+			mapImage(OutlineNode.INTERNAL_CLASS, 	IBooUIConstants.INTERNAL_CLASS);
+			
+			mapImage(OutlineNode.METHOD, 			IBooUIConstants.METHOD);
+			mapImage(OutlineNode.PROTECTED_METHOD, 	IBooUIConstants.PROTECTED_METHOD);
+			mapImage(OutlineNode.PRIVATE_METHOD, 	IBooUIConstants.PRIVATE_METHOD);
+			mapImage(OutlineNode.INTERNAL_METHOD, 	IBooUIConstants.INTERNAL_METHOD);
+			
+			mapImage(OutlineNode.PROPERTY, 			IBooUIConstants.PROPERTY);
+			mapImage(OutlineNode.PROTECTED_PROPERTY, IBooUIConstants.PROTECTED_PROPERTY);
+			mapImage(OutlineNode.PRIVATE_PROPERTY, 	IBooUIConstants.PRIVATE_PROPERTY);
+			mapImage(OutlineNode.INTERNAL_PROPERTY, IBooUIConstants.INTERNAL_PROPERTY);
+
+			mapImage(OutlineNode.FIELD, 			IBooUIConstants.FIELD);
+			mapImage(OutlineNode.PROTECTED_FIELD, 	IBooUIConstants.PROTECTED_FIELD);
+			mapImage(OutlineNode.PRIVATE_FIELD, 	IBooUIConstants.PRIVATE_FIELD);
+			mapImage(OutlineNode.INTERNAL_FIELD, 	IBooUIConstants.INTERNAL_FIELD);
+
+			mapImage(OutlineNode.ENUM, 				IBooUIConstants.ENUM);
+			mapImage(OutlineNode.PROTECTED_ENUM, 	IBooUIConstants.PROTECTED_ENUM);
+			mapImage(OutlineNode.PRIVATE_ENUM, 		IBooUIConstants.PRIVATE_ENUM);
+			mapImage(OutlineNode.INTERNAL_ENUM, 	IBooUIConstants.INTERNAL_ENUM);
+
 			mapImage(OutlineNode.CONSTRUCTOR, IBooUIConstants.METHOD);
-			mapImage(OutlineNode.FIELD, IBooUIConstants.FIELD);
 			mapImage(OutlineNode.PROPERTY, IBooUIConstants.PROPERTY);
 			mapImage(OutlineNode.EVENT, IBooUIConstants.EVENT);
-			mapImage(OutlineNode.INTERFACE, IBooUIConstants.INTERFACE);
 			mapImage(OutlineNode.CALLABLE, IBooUIConstants.CALLABLE);
 			mapImage(OutlineNode.STRUCT, IBooUIConstants.STRUCT);
-			mapImage(OutlineNode.ENUM, IBooUIConstants.ENUM);
 		}
 		
 		void mapImage(String entityType, String key) {

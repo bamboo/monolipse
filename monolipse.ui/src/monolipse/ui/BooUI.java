@@ -88,13 +88,38 @@ public class BooUI extends AbstractUIPlugin {
 		declareRegistryImage(registry, IBooUIConstants.ASSEMBLY_SOURCE_DECORATOR, "icons/AssemblySourceDecorator.gif");
 		declareRegistryImage(registry, IBooUIConstants.REFERENCES, "icons/OpenReferenceFolder.png");
 		declareRegistryImage(registry, IBooUIConstants.PROJECT, "icons/NewBooProject.png");
-		declareRegistryImage(registry, IBooUIConstants.CLASS, "icons/class.png");
-		declareRegistryImage(registry, IBooUIConstants.INTERFACE, "icons/interface.png");
-		declareRegistryImage(registry, IBooUIConstants.ENUM, "icons/enum.png");
 		declareRegistryImage(registry, IBooUIConstants.NAMESPACE, "icons/namespace.png");
-		declareRegistryImage(registry, IBooUIConstants.FIELD, "icons/field.png");
-		declareRegistryImage(registry, IBooUIConstants.METHOD, "icons/method.png");
-		declareRegistryImage(registry, IBooUIConstants.PROPERTY, "icons/property.png");
+
+		declareRegistryImage(registry, IBooUIConstants.INTERFACE, 			"icons/interface.png");
+		declareRegistryImage(registry, IBooUIConstants.PROTECTED_INTERFACE, "icons/ProtectedInterface.png");
+		declareRegistryImage(registry, IBooUIConstants.PRIVATE_INTERFACE, 	"icons/PrivateInterface.png");
+		declareRegistryImage(registry, IBooUIConstants.INTERNAL_INTERFACE, 	"icons/InternalInterface.png");
+
+		declareRegistryImage(registry, IBooUIConstants.CLASS, 				"icons/class.png");
+		declareRegistryImage(registry, IBooUIConstants.PROTECTED_CLASS, 	"icons/ProtectedClass.png");
+		declareRegistryImage(registry, IBooUIConstants.PRIVATE_CLASS, 		"icons/PrivateClass.png");
+		declareRegistryImage(registry, IBooUIConstants.INTERNAL_CLASS, 		"icons/InternalClass.png");
+
+		declareRegistryImage(registry, IBooUIConstants.METHOD, 				"icons/method.png");
+		declareRegistryImage(registry, IBooUIConstants.PROTECTED_METHOD, 	"icons/ProtectedMethod.png");
+		declareRegistryImage(registry, IBooUIConstants.PRIVATE_METHOD, 		"icons/PrivateMethod.png");
+		declareRegistryImage(registry, IBooUIConstants.INTERNAL_METHOD, 	"icons/InternalMethod.png");
+	
+		declareRegistryImage(registry, IBooUIConstants.PROPERTY, 			"icons/property.png");
+		declareRegistryImage(registry, IBooUIConstants.PROTECTED_PROPERTY, 	"icons/ProtectedProperty.png");
+		declareRegistryImage(registry, IBooUIConstants.PRIVATE_PROPERTY, 	"icons/PrivateProperty.png");
+		declareRegistryImage(registry, IBooUIConstants.INTERNAL_PROPERTY, 	"icons/InternalProperty.png");
+		
+		declareRegistryImage(registry, IBooUIConstants.FIELD, 				"icons/field.png");
+		declareRegistryImage(registry, IBooUIConstants.PROTECTED_FIELD, 	"icons/ProtectedField.png");
+		declareRegistryImage(registry, IBooUIConstants.PRIVATE_FIELD, 		"icons/PrivateField.png");
+		declareRegistryImage(registry, IBooUIConstants.INTERNAL_FIELD, 		"icons/InternalField.png");
+
+		declareRegistryImage(registry, IBooUIConstants.ENUM, 				"icons/enum.png");
+		declareRegistryImage(registry, IBooUIConstants.PROTECTED_ENUM, 		"icons/ProtectedEnum.png");
+		declareRegistryImage(registry, IBooUIConstants.PRIVATE_ENUM, 		"icons/PrivateEnum.png");
+		declareRegistryImage(registry, IBooUIConstants.INTERNAL_ENUM, 		"icons/InternalEnum.png");
+
 		declareRegistryImage(registry, IBooUIConstants.EVENT, "icons/event.png");
 		declareRegistryImage(registry, IBooUIConstants.CALLABLE, "icons/callable.png");
 		declareRegistryImage(registry, IBooUIConstants.STRUCT, "icons/struct.png");

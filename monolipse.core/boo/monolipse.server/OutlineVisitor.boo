@@ -85,6 +85,7 @@ class OutlineVisitor(DepthFirstVisitor):
 			return "Internal" if node.IsInternal
 			return "Protected" if node.IsProtected
 			return "Private" if node.IsPrivate
+			return "Public" if node.IsPublic
 		
-		return "Public"
+		return "Internal"
 		

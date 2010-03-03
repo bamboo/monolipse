@@ -6,23 +6,41 @@ public class OutlineNode {
 	
 	public static final OutlineNode[] NO_CHILDREN = new OutlineNode[0];
 	
-	public static final String CLASS = "ClassDefinition";
+	public static final String INTERFACE 			= "InterfaceDefinition";
+	public static final String PROTECTED_INTERFACE 	= "Protected_InterfaceDefinition";
+	public static final String PRIVATE_INTERFACE 	= "Private_InterfaceDefinition";
+	public static final String INTERNAL_INTERFACE 	= "Internal_InterfaceDefinition";
+
+	public static final String CLASS 				= "ClassDefinition";
+	public static final String PROTECTED_CLASS 		= "Protected_ClassDefinition";
+	public static final String PRIVATE_CLASS 		= "Private_ClassDefinition";
+	public static final String INTERNAL_CLASS 		= "Internal_ClassDefinition";
 	
-	public static final String METHOD = "Method";
+	public static final String METHOD 				= "Method";
+	public static final String PROTECTED_METHOD 	= "Protected_Method";
+	public static final String PRIVATE_METHOD 		= "Private_Method";
+	public static final String INTERNAL_METHOD 		= "Internal_Method";
+
+	public static final String PROPERTY 			= "Property";
+	public static final String PROTECTED_PROPERTY 	= "Protected_Property";
+	public static final String PRIVATE_PROPERTY 	= "Private_Property";
+	public static final String INTERNAL_PROPERTY 	= "Internal_Property";
+
+	public static final String FIELD 				= "Field";
+	public static final String PROTECTED_FIELD 		= "Protected_Field";
+	public static final String PRIVATE_FIELD 		= "Private_Field";
+	public static final String INTERNAL_FIELD 		= "Internal_Field";
+
+	public static final String ENUM 				= "EnumDefinition";
+	public static final String PROTECTED_ENUM 		= "ProtectedEnumDefinition";
+	public static final String PRIVATE_ENUM 		= "PrivateEnumDefinition";
+	public static final String INTERNAL_ENUM 		= "InternalEnumDefinition";
 
 	public static final String CONSTRUCTOR = "Constructor";
-
-	public static final String FIELD = "Field";
-
-	public static final String PROPERTY = "Property";
-
-	public static final String INTERFACE = "InterfaceDefinition";
 
 	public static final String CALLABLE = "CallableDefinition";
 
 	public static final String STRUCT = "StructDefinition";
-
-	public static final String ENUM = "EnumDefinition";
 
 	public static final String EVENT = "Event";
 
