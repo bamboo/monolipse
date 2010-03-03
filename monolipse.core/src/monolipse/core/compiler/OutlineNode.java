@@ -1,6 +1,9 @@
 package monolipse.core.compiler;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 
 public class OutlineNode {
 	
@@ -72,7 +75,64 @@ public class OutlineNode {
 	private void add(OutlineNode child) {
 		if (null == _children) _children = new ArrayList();
 		_children.add(child);
+		
+		Collections.sort (_children, new Comparator() {  
+            public int compare(Object o1, Object o2) {  
+            	OutlineNode p1 = (OutlineNode) o1;  
+            	OutlineNode p2 = (OutlineNode) o2;  
+                return sortNode(p1, p2);
+            }
+		});
 	}
+
+	private int sortNode(OutlineNode p1, OutlineNode p2) {
+		int index1 = getSortIndex(p1.type());
+		int index2 = getSortIndex(p2.type());
+				
+		return  index1 < index2 ? -1 : (index1 > index2 ? 1 : p1.name().compareTo(p2.name()));
+	}
+
+	private int getSortIndex(String type) {
+		HashMap<String, Integer> mapping = new HashMap<String, Integer>();
+		
+		mapping.put("InterfaceDefinition", 1);
+		mapping.put("Protected_InterfaceDefinition", 1);
+		mapping.put("Private_InterfaceDefinition", 1);
+		mapping.put("Internal_InterfaceDefinition", 1);
+
+		mapping.put("ClassDefinition", 2);
+		mapping.put("Protected_ClassDefinition", 2);
+		mapping.put("Private_ClassDefinition", 2);
+		mapping.put("Internal_ClassDefinition", 2);
+				
+		mapping.put("Event", 3);
+		mapping.put("CallableDefinition", 4);
+		mapping.put("StructDefinition", 5);
+
+		mapping.put("EnumDefinition", 6);
+		mapping.put("ProtectedEnumDefinition", 6);
+		mapping.put("PrivateEnumDefinition", 6);
+		mapping.put("InternalEnumDefinition", 6);
+		
+		mapping.put("Field", 7);
+		mapping.put("Protected_Field", 7);
+		mapping.put("Private_Field", 7);
+		mapping.put("Internal_Field", 7);
+
+		mapping.put("Property", 8);
+		mapping.put("Protected_Property", 8);
+		mapping.put("Private_Property", 8);
+		mapping.put("Internal_Property", 8);
+		
+		mapping.put("Constructor", 9);
+
+		mapping.put("Method", 10);
+		mapping.put("Protected_Method", 10);
+		mapping.put("Private_Method", 10);
+		mapping.put("Internal_Method", 10);
+
+		return (mapping.containsKey(type) ? mapping.get(type) : 100);
+	}  
 
 	public OutlineNode parent() {
 		return _parent;
