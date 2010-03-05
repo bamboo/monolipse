@@ -75,14 +75,6 @@ public class OutlineNode {
 	private void add(OutlineNode child) {
 		if (null == _children) _children = new ArrayList();
 		_children.add(child);
-		
-		Collections.sort (_children, new Comparator() {  
-            public int compare(Object o1, Object o2) {  
-            	OutlineNode p1 = (OutlineNode) o1;  
-            	OutlineNode p2 = (OutlineNode) o2;  
-                return sortNode(p1, p2);
-            }
-		});
 	}
 
 	private int sortNode(OutlineNode p1, OutlineNode p2) {
@@ -140,7 +132,17 @@ public class OutlineNode {
 
 	public OutlineNode[] children() {
 		if (null == _children) return NO_CHILDREN;
-		return (OutlineNode[]) _children.toArray(new OutlineNode[_children.size()]);
+		ArrayList<OutlineNode> result = (ArrayList<OutlineNode>) _children.clone();
+		
+		Collections.sort (result, new Comparator() {  
+            public int compare(Object o1, Object o2) {  
+            	OutlineNode p1 = (OutlineNode) o1;  
+            	OutlineNode p2 = (OutlineNode) o2;  
+                return sortNode(p1, p2);
+            }
+		});
+
+		return result.toArray(new OutlineNode[_children.size()]);
 	}
 
 	public String name() {
