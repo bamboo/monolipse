@@ -28,4 +28,7 @@ public class BoojayCompilerLauncher extends CompilerLauncher {
 	protected CompilerError parseCompilerError(String line) {
 		return _errorParser.parse(line);
 	}
+
+	public void addClasspath(String classpath) {	
+	}
 }

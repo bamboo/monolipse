@@ -24,8 +24,10 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 	public static CompilerLauncher createLauncher(AssemblySourceLanguage language) throws IOException {
 		if (language.equals(AssemblySourceLanguage.BOO))
 			return new BooCompilerLauncher();
-		if (language.equals(AssemblySourceLanguage.BOOJAY))
-			return new BoojayCompilerLauncher();
+		if (language.equals(AssemblySourceLanguage.BOOJAY)) {
+			BoojayCompilerLauncher launcher = new BoojayCompilerLauncher();
+			return launcher;
+		}
 		return new CSharpCompilerLauncher(language);
 	}
 	
@@ -115,7 +117,7 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 			add("-r:" + references[i].getCompilerReference());
 		}
 	}
-	
+		
 	public void addSourceFiles(IFile[] files) {
 		for (int i=0; i<files.length; ++i) {
 			add(WorkspaceUtilities.getLocation(files[i]));
