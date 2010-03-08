@@ -41,8 +41,8 @@ public interface IBooUIConstants {
 	String PRIVATE_ENUM 		= "private_enum";
 	String INTERNAL_ENUM 		= "internal_enum";
 
-	String EVENT = "event";
-	String CALLABLE = "callable";
-	String STRUCT = "struct";
+	String EVENT 				= "event";
+	String CALLABLE 			= "callable";
+	String STRUCT 				= "struct";
 
 }

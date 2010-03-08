@@ -239,7 +239,6 @@ public class BooBuilder extends IncrementalProjectBuilder {
 			
 			IFile file = source.getOutputFile();
 			WorkspaceUtilities.ensureDerivedParentExists(file);
-			
 			CompilerError[] errors = launchCompiler(source, files);
 			if (0 == reportErrors(source, errors)) {
 				file.getParent().refreshLocal(IResource.DEPTH_ONE, monitor);

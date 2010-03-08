@@ -18,16 +18,19 @@ import monolipse.core.foundation.WorkspaceUtilities;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jdt.core.IClasspathContainer;
+import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 
 public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 	
 	public static CompilerLauncher createLauncher(AssemblySourceLanguage language) throws IOException {
 		if (language.equals(AssemblySourceLanguage.BOO))
 			return new BooCompilerLauncher();
-		if (language.equals(AssemblySourceLanguage.BOOJAY)) {
-			BoojayCompilerLauncher launcher = new BoojayCompilerLauncher();
-			return launcher;
-		}
+		if (language.equals(AssemblySourceLanguage.BOOJAY)) 
+			return new BoojayCompilerLauncher();
 		return new CSharpCompilerLauncher(language);
 	}
 	
@@ -37,7 +40,35 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 		launcher.setOutputType(source.getOutputType());
 		launcher.addReferences(source.getReferences());
 		launcher.add(source.getAdditionalOptions().split("\\s+"));
+		
+		if (source.getLanguage().equals(AssemblySourceLanguage.BOOJAY)) {
+			BooCore.logInfo("Boojaying: " + source);
+			((BoojayCompilerLauncher)launcher).addClasspaths(getProjectClasspaths(source));
+		} 
 		return launcher;
+	}
+
+	private static String[] getProjectClasspaths(IAssemblySource source) {
+		ArrayList<String> result = new ArrayList<String>();
+		
+		IJavaProject javaProject = JavaCore.create(source.getFolder().getProject());
+		try {
+			IClasspathEntry[] classpaths = javaProject.getRawClasspath();
+			for (IClasspathEntry classpath: classpaths) {
+				if (classpath.getEntryKind() == IClasspathEntry.CPE_LIBRARY) {
+					result.add(classpath.getPath().toOSString());
+				}
+				if (classpath.getEntryKind() == IClasspathEntry.CPE_CONTAINER) {
+					IClasspathContainer container = JavaCore.getClasspathContainer(classpath.getPath(), javaProject);
+					for (IClasspathEntry e: container.getClasspathEntries())
+						result.add(e.getPath().toOSString());
+				}
+			}
+		} catch (JavaModelException e) {
+			BooCore.logException(e);
+		}
+
+		return result.toArray(new String[result.size()]);
 	}
 
 	private final IMonoLauncher _launcher;

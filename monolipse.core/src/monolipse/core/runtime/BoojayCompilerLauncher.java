@@ -29,6 +29,14 @@ public class BoojayCompilerLauncher extends CompilerLauncher {
 		return _errorParser.parse(line);
 	}
 
-	public void addClasspath(String classpath) {	
+	public void addClasspaths(String[] projectClasspaths) {
+		for(String classpath: projectClasspaths) {
+			addClasspath(classpath);
+		}
+	}
+
+	public void addClasspath(String classpath) {
+		BooCore.logInfo("-cp:" + classpath);
+		add("-cp:" + classpath);
 	}
 }
