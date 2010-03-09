@@ -75,6 +75,7 @@ class OutlineVisitor(DepthFirstVisitor):
 		_writer.WriteLine("END-NODE")
 		
 	def WriteNodeLine(node as Node):
+		//node.EndSourceLocation.Line
 		_writer.WriteLine("${node.NodeType}:${describeNode(node)}:${node.LexicalInfo.Line}")
 		
 	def WriteNodeLine(node as Node, visibility as string):

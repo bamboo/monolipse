@@ -54,16 +54,20 @@ public class BooSourceViewerConfiguration extends SourceViewerConfiguration {
 	private SingleQuotedStringScanner _sqsScanner;
 	private RegexScanner _regexScanner;
 	private ContentAssistant _assistant;
+	private BooEditor _editor;
 
-	public BooSourceViewerConfiguration(ISharedTextColors colors) {
+	public BooSourceViewerConfiguration(ISharedTextColors colors, BooEditor booEditor) {
 		this._colorManager = colors;
+		this._editor = booEditor;
 	}
 	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
 		return BooPartitionScanner.PARTITION_TYPES;
 	}
 	
 	public IReconciler getReconciler(ISourceViewer sourceViewer) {
-		return new MonoReconciler(new BooReconcilingStrategy(), false);
+		BooReconcilingStrategy strategy = new BooReconcilingStrategy();
+		strategy.setEditor(_editor);
+		return new MonoReconciler(strategy, false);
 	}
 	
 	public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
