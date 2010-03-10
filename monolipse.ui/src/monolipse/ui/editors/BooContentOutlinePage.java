@@ -223,7 +223,7 @@ public class BooContentOutlinePage extends ContentOutlinePage {
 			public void selectionChanged(SelectionChangedEvent event) {
 				Object selected = ((IStructuredSelection) event.getSelection()).getFirstElement();
 				if (null == selected) return;
-				int line = ((OutlineNode)selected).line()-1;
+				int line = ((OutlineNode)selected).startLine()-1;
 				gotoLine(line);
 			}
 		});
@@ -272,7 +272,7 @@ public class BooContentOutlinePage extends ContentOutlinePage {
 	}
 
 	private void goToNode(final OutlineNode node) {
-		int line = node.line()-1;
+		int line = node.startLine()-1;
 		gotoLine(line);
 	}
 }

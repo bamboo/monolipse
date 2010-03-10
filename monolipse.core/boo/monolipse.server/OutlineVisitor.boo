@@ -75,11 +75,10 @@ class OutlineVisitor(DepthFirstVisitor):
 		_writer.WriteLine("END-NODE")
 		
 	def WriteNodeLine(node as Node):
-		//node.EndSourceLocation.Line
-		_writer.WriteLine("${node.NodeType}:${describeNode(node)}:${node.LexicalInfo.Line}")
+		_writer.WriteLine("type=${node.NodeType}:name=${describeNode(node)}:startline=${node.LexicalInfo.Line}:endline=${node.EndSourceLocation.Line}")
 		
 	def WriteNodeLine(node as Node, visibility as string):
-		_writer.WriteLine("${node.NodeType}:${describeNode(node)}:${node.LexicalInfo.Line}:${visibility}")
+		_writer.WriteLine("type=${node.NodeType}:name=${describeNode(node)}:startline=${node.LexicalInfo.Line}:endline=${node.EndSourceLocation.Line}:visibility=${visibility}")
 
 	def GetVisibility(node as TypeMember):
 		if node.IsVisibilitySet:
@@ -87,6 +86,6 @@ class OutlineVisitor(DepthFirstVisitor):
 			return "Protected" if node.IsProtected
 			return "Private" if node.IsPrivate
 			return "Public" if node.IsPublic
-		
+			
 		return "Internal"
 		

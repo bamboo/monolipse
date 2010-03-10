@@ -83,11 +83,19 @@ public class CompilerServices extends AbstractBooServiceClient {
 					node = node.parent();
 				} else {
 					String[] parts = line.split(":");
-					node.type(parts[0]);
-					node.name(parts[1]);
-					node.line(Integer.parseInt(parts[2]));
-					if (parts.length > 3) 
-						node.visibility(parts[3]);
+					for (String attribute: parts) {
+						String[] values = attribute.split("=");
+						if (values[0].equals("type")) 
+							node.type(values[1]);
+						if (values[0].equals("name")) 
+							node.name(values[1]);
+						if (values[0].equals("startline")) 
+							node.startLine(Integer.parseInt(values[1]));
+						if (values[0].equals("endline")) 
+							node.endLine(Integer.parseInt(values[1]));
+						if (values[0].equals("visibility")) 
+							node.visibility(values[1]);
+					}
 				}
 			}
 		} catch (IOException e) {

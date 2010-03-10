@@ -55,9 +55,11 @@ public class OutlineNode {
 
 	private String _type;
 
-	private int _line;
+	private int _startline;
 
 	private String _visibility = "";
+
+	private int _endline;
 
 	public OutlineNode() {
 	}	
@@ -161,12 +163,20 @@ public class OutlineNode {
 		return _type;
 	}
 
-	public int line() {
-		return _line;
+	public int startLine() {
+		return _startline;
 	}
 	
-	public void line(int line) {
-		_line = line;
+	public void startLine(int line) {
+		_startline = line;
+	}
+	
+	public int endLine() {
+		return _endline;
+	}
+
+	public void endLine(int endline) {
+		_endline = endline;
 	}
 
 	public void visibility(String visibilty) {

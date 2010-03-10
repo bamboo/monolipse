@@ -52,7 +52,7 @@ public class CompilerServicesTestCase extends AbstractBooTestCase {
 			final int expectedLine) {
 		assertEquals(expectedName, node.name());
 		assertEquals(expectedType, node.type());
-		assertEquals(expectedLine, node.line());
+		assertEquals(expectedLine, node.startLine());
 	}
 	
 	private String loadResourceAsString(String resource) throws IOException {

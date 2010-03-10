@@ -31,7 +31,7 @@ public class BooEditorToggleBreakpointsTarget implements
 		}
 
 		public boolean visit(OutlineNode node) {
-			if (node.line() > line)
+			if (node.startLine() > line)
 				return false;
 			if (OutlineNode.CLASS.equals(node.type()))
 				type = node;

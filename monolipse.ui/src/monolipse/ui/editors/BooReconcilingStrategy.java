@@ -40,18 +40,21 @@ public class BooReconcilingStrategy implements IReconcilingStrategy, IReconcilin
 		_document = (BooDocument) document;
 	}
 
+	public void setEditor(BooEditor editor) {
+		_editor = editor;
+	}
+
 	public void reconcile(DirtyRegion dirtyRegion, IRegion subRegion) {
 	}
 
 	public void reconcile(IRegion partition) {
 		updateDocumentFolding(updateDocumentOutline());
 	}
-
-	ArrayList positions = new ArrayList();
 	
+	ArrayList positions = new ArrayList();
+
 	private void updateDocumentFolding(OutlineNode outline) {
-		positions.clear();
-        positions = calculatePositions(outline);
+        positions = calculatePositions(outline, positions);
  
         Display.getDefault().asyncExec(new Runnable() {
                 public void run() {
@@ -61,17 +64,16 @@ public class BooReconcilingStrategy implements IReconcilingStrategy, IReconcilin
         });
 	}
 
-	private ArrayList calculatePositions(OutlineNode outline) {
+	private ArrayList calculatePositions(OutlineNode outline, ArrayList positions) {
         getOutlinePositions(outline, positions);
 		return positions;
 	}
 
 	private void getOutlinePositions(OutlineNode root, ArrayList collection) {
-		BooUI.logInfo("POS: " + String.valueOf(root.line()));
-		BooUI.logInfo("TYPE: " + root.type());
 		if (shouldFoldBlock(root)) {
-			BooUI.logInfo("ADD: " + String.valueOf(root.line()));
-			collection.add(new Position(getPostionForLine(root.line()), 50));
+			int start = getPostionForLine(root.startLine());
+			int length = getPostionForLine(root.endLine() + 1) - start;			
+			collection.add(new Position(start, length));
 		}
 		for (OutlineNode child: root.children()) {
 			getOutlinePositions(child, collection);
@@ -122,9 +124,4 @@ public class BooReconcilingStrategy implements IReconcilingStrategy, IReconcilin
 	public void initialReconcile() {
 		updateDocumentFolding(updateDocumentOutline());
 	}
-
-	public void setEditor(BooEditor editor) {
-		_editor = editor;
-	}
-
 }
