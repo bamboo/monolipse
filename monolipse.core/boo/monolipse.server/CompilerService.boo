@@ -32,6 +32,9 @@ service CompilerService:
 		result = compileCodeWithBoojay(message.Payload, newExpandBoojayMacrosPipeline())
 		writeExpansionResultTo result, response
 		
+	onMessageWithResponse "GET-HOVER-INFORMATION":
+		response.Write("INFO")
+		
 def newExpandBoojayMacrosPipeline():
 	pipeline = Pipelines.ExpandMacros(BreakOnErrors: false)
 	BoojayPipelines.PatchBooPipeline(pipeline)

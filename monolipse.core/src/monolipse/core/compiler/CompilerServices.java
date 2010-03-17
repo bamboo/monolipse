@@ -107,4 +107,9 @@ public class CompilerServices extends AbstractBooServiceClient {
 	protected String getProposalsMessageId() {
 		return "GET-COMPILER-PROPOSALS";
 	}
+
+	public String getHoverInformation(String code, int offset, int length) {
+		String paramSeparator = "<<<-><-><->>>";
+		return rpc("GET-HOVER-INFORMATION", code + paramSeparator + String.valueOf(offset) + paramSeparator + String.valueOf(length));
+	}
 }

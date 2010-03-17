@@ -27,6 +27,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IInformationControl;
 import org.eclipse.jface.text.IInformationControlCreator;
 import org.eclipse.jface.text.ITextDoubleClickStrategy;
+import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
@@ -158,6 +159,10 @@ public class BooSourceViewerConfiguration extends SourceViewerConfiguration {
 		return new MarkerAnnotationHover();
 	}
 	
+	public ITextHover getTextHover(ISourceViewer sourceViewer, String contentType) {
+		return new BooSourceTextHover();
+	}
+	
 	public String[] getDefaultPrefixes(ISourceViewer sourceViewer, String contentType) {
 		if (IDocument.DEFAULT_CONTENT_TYPE == contentType
 			|| BooPartitionScanner.SINGLELINE_COMMENT_TYPE == contentType) {
@@ -188,6 +193,7 @@ public class BooSourceViewerConfiguration extends SourceViewerConfiguration {
 
 		return reconciler;
 	}
+	
 	private void configureReconciler(PresentationReconciler reconciler, String partitionType, ITokenScanner scanner) {
 		DefaultDamagerRepairer dr;
 		dr = new DefaultDamagerRepairer(scanner);
