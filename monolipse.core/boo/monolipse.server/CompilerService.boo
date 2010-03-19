@@ -33,8 +33,14 @@ service CompilerService:
 		writeExpansionResultTo result, response
 		
 	onMessageWithResponse "GET-HOVER-INFORMATION":
-		response.Write("INFO")
-		
+		typeInformation = retrieveHoverInformation(message.Payload)
+		response.Write(typeInformation)
+
+def retrieveHoverInformation(payload as string):
+	result = System.Text.RegularExpressions.Regex("<<<->" +  "<->" + "<->>>").Split(payload)
+	return "" unless result.Length == 3
+	return SelectionInformation.getHoverInformation(result[0], int.Parse(result[1]), int.Parse(result[2]))
+
 def newExpandBoojayMacrosPipeline():
 	pipeline = Pipelines.ExpandMacros(BreakOnErrors: false)
 	BoojayPipelines.PatchBooPipeline(pipeline)

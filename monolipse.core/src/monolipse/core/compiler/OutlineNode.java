@@ -89,6 +89,7 @@ public class OutlineNode {
 	private int getSortIndex(String type) {
 		HashMap<String, Integer> mapping = new HashMap<String, Integer>();
 		
+		mapping.put("ImportCollection", 0);
 		mapping.put("InterfaceDefinition", 1);
 		mapping.put("Protected_InterfaceDefinition", 1);
 		mapping.put("Private_InterfaceDefinition", 1);

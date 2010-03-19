@@ -36,7 +36,7 @@ public class BooSourceTextHover implements ITextHover {
 		Point selection = textViewer.getSelectedRange();
 		if (selection.x <= offset && offset < selection.x + selection.y)
 			return new Region(selection.x, selection.y);
-		return new Region(offset, 0);
+		return null;
 	}
 	
 	private String getHoverInformation(String code, int offset, int length) {

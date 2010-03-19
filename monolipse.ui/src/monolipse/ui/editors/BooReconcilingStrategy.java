@@ -86,7 +86,7 @@ public class BooReconcilingStrategy implements IReconcilingStrategy, IReconcilin
 		}
 		
 		String type = root.type();
-		return type.equals("Method") || type.equals("Constructor") || type.equals("ClassDefinition") || type.equals("InterfaceDefinition");
+		return type.equals("ImportCollection") || type.equals("Method") || type.equals("Constructor") || type.equals("ClassDefinition") || type.equals("InterfaceDefinition");
 	}
 
 	private int getPostionForLine(int line) {

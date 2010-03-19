@@ -1,6 +1,7 @@
 package monolipse.ui.editors.actions;
 
 import monolipse.core.compiler.CompilerServices;
+
 import monolipse.ui.editors.BooEditor;
 
 import org.eclipse.core.runtime.CoreException;

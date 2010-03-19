@@ -3,16 +3,45 @@ namespace monolipse.server
 import System.IO
 import Boo.Lang.Compiler.Ast
 
+import System.Collections.Generic
+
 class OutlineVisitor(DepthFirstVisitor):
 	
 	_writer as TextWriter
+	_imports = List[of Import]()
 	
 	def constructor(writer as TextWriter):
 		_writer = writer
 		
 	override def OnModule(node as Module):
+		ProcessImports(node)
 		VisitCollection(node.Members)
 		Visit(node.Globals)
+		
+	private def ProcessImports(node as Module):
+		VisitCollection(node.Imports)
+		WriteImportsCollection()
+
+	private def WriteImportsCollection():
+		WriteBeginNode()
+		_writer.WriteLine("type=ImportCollection:name=import declarations:startline=${startLine()}:endline=${startLine() + len(_imports)}")
+		for importNode in _imports:
+			WriteBeginNode()
+			WriteNodeLine(importNode)
+			WriteEndNode()
+			
+		WriteEndNode()
+	
+	private def startLine():
+		value = int.MaxValue
+		_imports.ForEach do (node):
+			if node.LexicalInfo.Line < value: 
+				value = node.LexicalInfo.Line
+				
+		return value
+				
+	override def OnImport(node as Import):
+		_imports.Add(node)
 		
 	override def OnMacroStatement(node as MacroStatement):
 		WriteBeginNode()
