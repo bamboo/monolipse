@@ -20,10 +20,13 @@ class ContentAssistProcessor(ProcessMethodBodiesWithDuckTyping):
 		compiler.Run()
 		return contentAssist.Members
 
-	[getter(Members)]
-	_members = array(IEntity, 0)
-
+	Members as (IEntity):
+		get:
+			_members.Sort(_members, {left, right | left.ToString().CompareTo(right.ToString())})
+			return _members
+			
 	_code as string
+	_members = array(IEntity, 0)
 	
 	def constructor(code as string):
 		_code = code
