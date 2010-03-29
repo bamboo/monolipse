@@ -21,7 +21,7 @@ public class BoojayCompilerLauncher extends CompilerLauncher {
 	
 	@Override
 	public void setOutput(IResource output) {
-		super.setOutput(output.getParent());
+		super.setOutput(output);
 	}
 
 	@Override

@@ -36,13 +36,23 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 	
 	public static CompilerLauncher createLauncher(IAssemblySource source) throws IOException {
 		CompilerLauncher launcher = createLauncher(source.getLanguage());
-		launcher.setOutput(source.getOutputFile());
+		
+		if (source.getLanguage().equals(AssemblySourceLanguage.BOOJAY)) {
+			String outputFilename = WorkspaceUtilities.getLocation(source.getOutputFile());
+			if (outputFilename.endsWith(".dll")) {
+				outputFilename = outputFilename.replace(".dll", ".jar");
+			}
+			launcher.setOutput(outputFilename);
+		}
+		else {
+			launcher.setOutput(source.getOutputFile());
+		}
+		
 		launcher.setOutputType(source.getOutputType());
 		launcher.addReferences(source.getReferences());
 		launcher.add(source.getAdditionalOptions().split("\\s+"));
 		
 		if (source.getLanguage().equals(AssemblySourceLanguage.BOOJAY)) {
-			BooCore.logInfo("Boojaying: " + source);
 			((BoojayCompilerLauncher)launcher).addClasspaths(getProjectClasspaths(source));
 		} 
 		return launcher;
@@ -143,6 +153,10 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 		add("-out:" + WorkspaceUtilities.getLocation(output));
 	}
 	
+	public void setOutput(String output) {
+		add("-out:" + output);
+	}
+
 	public void addReferences(IAssemblyReference[] references) {		
 		for (int i=0; i<references.length; ++i) {
 			add("-r:" + references[i].getCompilerReference());
