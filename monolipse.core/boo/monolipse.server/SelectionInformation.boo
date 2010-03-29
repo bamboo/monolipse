@@ -52,18 +52,21 @@ class SelectionInformation(ProcessMethodBodiesWithDuckTyping):
 	
 	override def OnBinaryExpression(node as BinaryExpression):
 		super(node)
-		return unless node.Operator == BinaryOperatorType.Assign
-		entity = TypeSystemServices.GetEntity(node.Left)
-		return if entity.Name[0] == "$"
-		
-		region = GetNodeRectangle(node.Left, entity.Name)
-		type = TryGetType(node.Left)
-		
-		if region.Contains(_line, _column):
-			if entity.EntityType == EntityType.Field:
-				_info = "${entity.FullName} as ${type}"
-			if entity.EntityType == EntityType.Local:
-				_info = "${entity.FullName} as ${type} - ${node.GetAncestor[of Method]()}"
+		try:
+			return unless node.Operator == BinaryOperatorType.Assign
+			entity = TypeSystemServices.GetEntity(node.Left)
+			return if entity.Name[0] == "$"
+			
+			region = GetNodeRectangle(node.Left, entity.Name)
+			type = TryGetType(node.Left)
+			
+			if region.Contains(_line, _column):
+				if entity.EntityType == EntityType.Field:
+					_info = "${entity.FullName} as ${type}"
+				if entity.EntityType == EntityType.Local:
+					_info = "${entity.FullName} as ${type} - ${node.GetAncestor[of Method]()}"
+		except e:
+			print e
 		
 	private def GetNodeRectangle(node as Expression, name as string):
 		endLine = (node.LexicalInfo.Line if node.EndSourceLocation.Line == -1 else node.EndSourceLocation.Line)
@@ -79,6 +82,43 @@ class SelectionInformation(ProcessMethodBodiesWithDuckTyping):
 			
 		return "?"
 		
+	override def OnReferenceExpression(node as ReferenceExpression):
+		super(node)
+		try:
+			return if node.Name[0] == "$"
+		
+			region = GetNodeRectangle(node, node.Name)
+			if region.Contains(_line, _column):
+				nodeInfo = GetNodeInfo(node)
+				_info = nodeInfo.ToString() if nodeInfo
+		except e:
+			print e
+			
+	protected def GetNodeInfo(node as ReferenceExpression):		
+		if node.ExpressionType is not null:
+			if node.ExpressionType.EntityType != EntityType.Error:
+				return cast(INamespace, node.ExpressionType)
+		return cast(INamespace, TypeSystemServices.GetOptionalEntity(node))
+	
+	protected def GetNodeInfo(node as MemberReferenceExpression):		
+		if node.ExpressionType is not null:
+			if node.ExpressionType.EntityType != EntityType.Error:
+				return cast(INamespace, node.ExpressionType)
+		return cast(INamespace, TypeSystemServices.GetOptionalEntity(node))
+
+	override def OnMemberReferenceExpression(node as MemberReferenceExpression):
+		super(node)
+		try:
+			entity = TypeSystemServices.GetEntity(node)
+			return if entity.Name[0] == "$"
+		
+			region = GetNodeRectangle(node, entity.Name)
+			if region.Contains(_line, _column):
+				nodeInfo = GetNodeInfo(node)
+				_info = nodeInfo.ToString() if nodeInfo
+		except e:
+			print e
+
 	protected static def configurePipeline(hunter):
 		pipeline = ResolveExpressions(BreakOnErrors: false)
 		pipeline.Replace(Boo.Lang.Compiler.Steps.ProcessMethodBodiesWithDuckTyping, hunter)
