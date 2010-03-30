@@ -58,6 +58,7 @@
 				<include name="monolipse.core.dll" />
 				<include name="Boojay.Compilation.dll" />
 				<include name="IKVM.OpenJDK.ClassLibrary.dll" />
+				<include name="Boo.Lang.Parser.dll" />
 			</references>
 		</booc>
 	
