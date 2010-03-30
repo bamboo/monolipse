@@ -8,6 +8,27 @@
     <monolipse.core.internal.LocalAssemblyReference-Remembrance>
       <path>/monolipse.core/lib/boojay/Boojay.Compilation.dll</path>
     </monolipse.core.internal.LocalAssemblyReference-Remembrance>
+    <monolipse.core.internal.LocalAssemblyReference-Remembrance>
+      <path>/monolipse.core/lib/boojay/Boo.Lang.PatternMatching.dll</path>
+    </monolipse.core.internal.LocalAssemblyReference-Remembrance>
+    <monolipse.core.internal.LocalAssemblyReference-Remembrance>
+      <path>/monolipse.core/lib/boojay/Boo.Lang.dll</path>
+    </monolipse.core.internal.LocalAssemblyReference-Remembrance>
+    <monolipse.core.internal.LocalAssemblyReference-Remembrance>
+      <path>/monolipse.core/lib/boojay/Boo.Lang.Interpreter.dll</path>
+    </monolipse.core.internal.LocalAssemblyReference-Remembrance>
+    <monolipse.core.internal.LocalAssemblyReference-Remembrance>
+      <path>/monolipse.core/lib/boojay/Boo.Lang.Compiler.dll</path>
+    </monolipse.core.internal.LocalAssemblyReference-Remembrance>
+    <monolipse.core.internal.LocalAssemblyReference-Remembrance>
+      <path>/monolipse.core/lib/boojay/Boo.Lang.Parser.dll</path>
+    </monolipse.core.internal.LocalAssemblyReference-Remembrance>
+    <monolipse.core.internal.LocalAssemblyReference-Remembrance>
+      <path>/monolipse.core/lib/boojay/Boo.Lang.Extensions.dll</path>
+    </monolipse.core.internal.LocalAssemblyReference-Remembrance>
+    <monolipse.core.internal.LocalAssemblyReference-Remembrance>
+      <path>/monolipse.core/lib/boojay/Boo.Lang.Useful.dll</path>
+    </monolipse.core.internal.LocalAssemblyReference-Remembrance>
   </references>
   <outputFolder>/monolipse.core/bin</outputFolder>
   <additionalOptions></additionalOptions>
