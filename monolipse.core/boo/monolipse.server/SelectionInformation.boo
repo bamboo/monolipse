@@ -3,9 +3,9 @@ namespace monolipse.server
 import Boo.Lang.Compiler
 import Boo.Lang.Compiler.Pipelines
 import Boo.Lang.Compiler.Ast
-import Boo.Lang.Compiler.IO
-import Boo.Lang.Compiler.Steps
 import Boo.Lang.Compiler.TypeSystem
+
+import Boo.Lang.PatternMatching
 
 class Rectangle:
 	_x1 as int
@@ -28,98 +28,105 @@ class Rectangle:
 	override def ToString():
 		return "${_x1}, ${_y1}, ${_x2}, ${_y2}"
 
-class SelectionInformation(ProcessMethodBodiesWithDuckTyping):
+class SelectionInformation(DepthFirstVisitor):
 	
 	static def getHoverInformation(source as string, line as int, column as int):
-		selector = SelectionInformation(source, line + 1, column + 1)
+		
+		originalCompileUnit = Boo.Lang.Parser.BooParser.ParseString("none", source)
+		
 		compiler = BooCompiler()		
-		compiler.Parameters.Pipeline = configurePipeline(selector)
-		compiler.Parameters.Input.Add(StringInput("none", source))
-		compiler.Run()
+		compiler.Parameters.Pipeline = ResolveExpressions(BreakOnErrors: false)
+		ctx = compiler.Run(originalCompileUnit.CloneNode())
+		
+		resolvedCompileUnit = ctx.CompileUnit
+		selector = SelectionInformation(NodeInformationProvider(resolvedCompileUnit), line + 1, column + 1)
+		ctx.Run: selector.VisitAllowingCancellation(originalCompileUnit)
 		return selector.Info
 		
 	[getter(Info)]
 	_info as string = ""
 
-	_code as string
+	_nodeInfoProvider as NodeInformationProvider
 	_line as int
 	_column as int
 	
-	def constructor(code as string, line as int, column as int):
-		_code = code
+	def constructor(nodeInfoProvider as NodeInformationProvider, line as int, column as int):
+		_nodeInfoProvider = nodeInfoProvider
 		_line = line
 		_column = column
-	
-	override def OnBinaryExpression(node as BinaryExpression):
-		super(node)
-		try:
-			return unless node.Operator == BinaryOperatorType.Assign
-			entity = TypeSystemServices.GetEntity(node.Left)
-			return if entity.Name[0] == "$"
-			
-			region = GetNodeRectangle(node.Left, entity.Name)
-			type = TryGetType(node.Left)
-			
-			if region.Contains(_line, _column):
-				if entity.EntityType == EntityType.Field:
-					_info = "${entity.FullName} as ${type}"
-				if entity.EntityType == EntityType.Local:
-					_info = "${entity.FullName} as ${type} - ${node.GetAncestor[of Method]()}"
-		except e:
-			print e
 		
-	private def GetNodeRectangle(node as Expression, name as string):
-		endLine = (node.LexicalInfo.Line if node.EndSourceLocation.Line == -1 else node.EndSourceLocation.Line)
-		return Rectangle(node.LexicalInfo.Line, node.LexicalInfo.Column, endLine, node.LexicalInfo.Column + len(name))
-
-	private def TryGetType(node as Expression):
-		try:
-			entity = TypeSystemServices.GetEntity(node)
-			typedEntity = entity as ITypedEntity
-			return typedEntity.Type if typedEntity
-		except e:
-			print e
-			
-		return "?"
+	override def LeaveMemberReferenceExpression(node as MemberReferenceExpression):
+		OnReferenceExpression(node)
 		
 	override def OnReferenceExpression(node as ReferenceExpression):
-		super(node)
-		try:
-			return if node.Name[0] == "$"
+		MatchNode(node, len(node.Name))
 		
-			region = GetNodeRectangle(node, node.Name)
-			if region.Contains(_line, _column):
-				nodeInfo = GetNodeInfo(node)
-				_info = nodeInfo.ToString() if nodeInfo
-		except e:
-			print e
-			
-	protected def GetNodeInfo(node as ReferenceExpression):		
-		if node.ExpressionType is not null:
-			if node.ExpressionType.EntityType != EntityType.Error:
-				return cast(INamespace, node.ExpressionType)
-		return cast(INamespace, TypeSystemServices.GetOptionalEntity(node))
+	override def OnSimpleTypeReference(node as SimpleTypeReference):
+		MatchNode(node, len(node.Name))
+		
+	def MatchNode(node as Node, length as int):
+		region = GetNodeRectangle(node, length)
+		if not region.Contains(_line, _column):
+			return
+		nodeInfo = _nodeInfoProvider.InfoFor(node)
+		if nodeInfo is null:
+			return
+		_info = nodeInfo
+		Cancel()
+		
+	private def GetNodeRectangle(node as Node, length as int):
+		endLine = (node.LexicalInfo.Line if node.EndSourceLocation.Line == -1 else node.EndSourceLocation.Line)
+		return Rectangle(node.LexicalInfo.Line, node.LexicalInfo.Column, endLine, node.LexicalInfo.Column + length)
+
+		
+class NodeInformationProvider(DepthFirstVisitor):
 	
-	protected def GetNodeInfo(node as MemberReferenceExpression):		
-		if node.ExpressionType is not null:
-			if node.ExpressionType.EntityType != EntityType.Error:
-				return cast(INamespace, node.ExpressionType)
-		return cast(INamespace, TypeSystemServices.GetOptionalEntity(node))
-
-	override def OnMemberReferenceExpression(node as MemberReferenceExpression):
-		super(node)
-		try:
-			entity = TypeSystemServices.GetEntity(node)
-			return if entity.Name[0] == "$"
+	_compileUnit as CompileUnit
+	
+	def constructor(resolvedCompileUnit as CompileUnit):
+		_compileUnit = resolvedCompileUnit
+	
+	def InfoFor(node as Node):
+		node = Resolve(node)
+		if node is null:
+			return "?"
+			
+		match TypeSystemServices.GetOptionalEntity(node):
+			case ILocalEntity(Name: name, Type: t):
+				return "${name} as ${t} - ${node.GetAncestor[of Method]().FullName}"
+			case m=IMethod():
+				return m.ToString()
+			case IField(FullName: name, Type: t) | IProperty(FullName: name, Type: t):
+				return "${name} as ${t}"
+			case IType(FullName: name):
+				return name
+			case ITypedEntity(Type: IType(FullName: name)):
+				return name
+			otherwise:
+				return "?"
+						
+	def Resolve(node as Node):
+		_found = null
+		_lookingFor = node.LexicalInfo
+		VisitAllowingCancellation(_compileUnit)
+		return _found
 		
-			region = GetNodeRectangle(node, entity.Name)
-			if region.Contains(_line, _column):
-				nodeInfo = GetNodeInfo(node)
-				_info = nodeInfo.ToString() if nodeInfo
-		except e:
-			print e
-
-	protected static def configurePipeline(hunter):
-		pipeline = ResolveExpressions(BreakOnErrors: false)
-		pipeline.Replace(Boo.Lang.Compiler.Steps.ProcessMethodBodiesWithDuckTyping, hunter)
-		return pipeline
+	_found as Node
+	_lookingFor as LexicalInfo
+	
+	override def OnReferenceExpression(node as ReferenceExpression):
+		MatchNode(node)
+		
+	override def LeaveMemberReferenceExpression(node as MemberReferenceExpression):
+		MatchNode(node)
+		
+	override def OnSimpleTypeReference(node as SimpleTypeReference):
+		MatchNode(node)
+		
+	private def MatchNode(node as Node):
+		if node.LexicalInfo is _lookingFor:
+			_found = node
+			Cancel()
+		
+						
+	
