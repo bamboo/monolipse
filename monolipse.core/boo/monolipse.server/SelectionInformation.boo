@@ -30,7 +30,6 @@ class Rectangle:
 		return "${_x1}, ${_y1}, ${_x2}, ${_y2}"
 
 class SelectionInformation(DepthFirstVisitor):
-	
 	static def getHoverInformation(source as string, line as int, column as int):
 		
 		originalCompileUnit = Boo.Lang.Parser.BooParser.ParseString("none", source)
@@ -79,7 +78,6 @@ class SelectionInformation(DepthFirstVisitor):
 		endLine = (node.LexicalInfo.Line if node.EndSourceLocation.Line == -1 else node.EndSourceLocation.Line)
 		return Rectangle(node.LexicalInfo.Line, node.LexicalInfo.Column, endLine, node.LexicalInfo.Column + length)
 
-		
 class NodeInformationProvider(DepthFirstVisitor):
 	
 	_compileUnit as CompileUnit
@@ -93,19 +91,26 @@ class NodeInformationProvider(DepthFirstVisitor):
 			return "?"
 			
 		match TypeSystemServices.GetOptionalEntity(node):
-			case ILocalEntity(Name: name, Type: t):
-				return "${name} as ${t} - ${node.GetAncestor[of Method]().FullName}"
+			case l=ILocalEntity(Name: name, Type: t):
+				return FormatHoverText("${name} as ${t} - ${node.GetAncestor[of Method]().FullName}", DocStringProvider(l))
 			case m=IMethod():
-				return "${m.ToString()} as ${m.ReturnType}"
-			case IField(FullName: name, Type: t) | IProperty(FullName: name, Type: t):
-				return "${name} as ${t}"
-			case IType(FullName: name):
-				return name
-			case ITypedEntity(Type: IType(FullName: name)):
-				return name
+				return FormatHoverText("${m.ToString()} as ${m.ReturnType}", DocStringProvider(m))
+			case f=IField(FullName: name, Type: t):
+				return FormatHoverText("${name} as ${t}",  DocStringProvider(f))
+			case p=IProperty(FullName: name, Type: t):
+				return FormatHoverText("${name} as ${t}",  DocStringProvider(p))
+			case t=IType(FullName: name):
+				return FormatHoverText(name, DocStringProvider(t))
+			case te=ITypedEntity(Type: IType(FullName: name)):
+				return FormatHoverText(name, DocStringProvider(te))
 			otherwise:
 				return "?"
-						
+	
+	def FormatHoverText(header as string, docProvider as DocStringProvider):
+		result = " ${header} " 
+		result += "<br/><br/> ${docProvider.Text} <br/> " if docProvider.HasDocString
+		return result
+		
 	def Resolve(node as Node):
 		_found = null
 		_lookingFor = node.LexicalInfo
@@ -129,3 +134,21 @@ class NodeInformationProvider(DepthFirstVisitor):
 			_found = node
 			Cancel()
 
+class DocStringProvider:
+	_entity as IEntity
+	"""This is the target entity from where we will try to retrieve de doc string."""
+	
+	Text:
+		get:
+			target = _entity as IInternalEntity
+			return (target.Node.Documentation if target else "")
+	
+	def constructor(entity as IEntity):
+		_entity = entity
+		
+	def HasDocString():
+		target = _entity as IInternalEntity
+		return false unless target
+		return string.IsNullOrEmpty(target.Node.Documentation)
+		
+	
