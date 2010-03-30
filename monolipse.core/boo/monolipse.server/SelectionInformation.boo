@@ -128,6 +128,4 @@ class NodeInformationProvider(DepthFirstVisitor):
 		if node.LexicalInfo is _lookingFor:
 			_found = node
 			Cancel()
-		
-						
-	
+
