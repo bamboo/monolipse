@@ -20,7 +20,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 
-
 public abstract class AbstractBooTestCase extends TestCase{
 	
 	protected SimpleProject _project;	
@@ -92,7 +91,8 @@ public abstract class AbstractBooTestCase extends TestCase{
 	}
 
 	protected void build() throws CoreException {
-		_project.getProject().build(IncrementalProjectBuilder.FULL_BUILD, null);
+		IProject project = _project.getProject();
+		project.build(IncrementalProjectBuilder.FULL_BUILD, null);
 	}
 
 }

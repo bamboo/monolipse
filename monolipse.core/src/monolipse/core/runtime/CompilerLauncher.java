@@ -1,28 +1,14 @@
 package monolipse.core.runtime;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
+import java.io.*;
+import java.nio.charset.*;
+import java.util.*;
 
-import monolipse.core.AssemblySourceLanguage;
-import monolipse.core.BooCore;
-import monolipse.core.IAssemblyReference;
-import monolipse.core.IAssemblySource;
-import monolipse.core.IMonoCompilerLauncher;
-import monolipse.core.IMonoLauncher;
-import monolipse.core.foundation.WorkspaceUtilities;
+import monolipse.core.*;
+import monolipse.core.foundation.*;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.jdt.core.IClasspathContainer;
-import org.eclipse.jdt.core.IClasspathEntry;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.core.resources.*;
+import org.eclipse.jdt.core.*;
 
 public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 	

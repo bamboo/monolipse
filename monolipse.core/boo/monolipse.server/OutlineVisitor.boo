@@ -23,6 +23,9 @@ class OutlineVisitor(DepthFirstVisitor):
 		WriteImportsCollection()
 
 	private def WriteImportsCollection():
+		if len(_imports) == 0:
+			return
+			
 		WriteBeginNode()
 		_writer.WriteLine("type=ImportCollection:name=import declarations:startline=${startLine()}:endline=${startLine() + len(_imports)}")
 		for importNode in _imports:

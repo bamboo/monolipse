@@ -1,7 +1,7 @@
 package monolipse.ui.tests;
 
-import monolipse.core.IAssemblySource;
-import monolipse.core.internal.BooBuilder;
+import monolipse.core.*;
+import monolipse.core.internal.*;
 
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
@@ -9,16 +9,19 @@ import org.eclipse.core.runtime.*;
 
 public class BoojayBuilderTestCase extends AbstractBooTestCase {
 
+	private static final String SRC_FOLDER = "src/BoojayTest";
+	
 	private IAssemblySource _assemblySource;
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		_assemblySource = _booProject.addAssemblySource(new Path("src/Java"));
+		_assemblySource = _booProject.addAssemblySource(new Path(SRC_FOLDER));
+		_assemblySource.setOutputFolder(_project.createFolder("bin"));
 	}
 
-	public void testBuild() throws Exception {
+	public void testBuildJarByDefault() throws Exception {
 		addResourceAndBuild("Boojay.boo");
-		assertOutputFile("BoojayModule.class");
+		assertOutputFile("BoojayTest.jar");
 	}
 	
 	public void testBuildErrorsCauseMarkers() throws Exception {
@@ -41,18 +44,22 @@ public class BoojayBuilderTestCase extends AbstractBooTestCase {
 		return file.findMarkers(BooBuilder.BOO_PROBLEM_MARKER_TYPE, true, IResource.DEPTH_ZERO);
 	}
 
-	private void assertOutputFile(final String expectedFile) {
-		final IFile classFile = outputFolder().getFile(new Path(expectedFile));
-		assertTrue(classFile.exists());
+	private void assertOutputFile(final String expectedFileName) throws CoreException {
+		assertEquals(expectedFileName, _assemblySource.getOutputFile().getName());
+		
+		IContainer outputFolder = outputFolder();
+		outputFolder.refreshLocal(IResource.DEPTH_ONE, null);
+		final IFile expectedFile = outputFolder.getFile(new Path(expectedFileName));
+		assertTrue(expectedFile.exists());
 	}
 	
 	private void addResourceAndBuild(final String resource) throws Exception,
 			CoreException {
-		copyResourceTo(resource, "src/Java");
+		copyResourceTo(resource, SRC_FOLDER);
 		build();
 	}
 
 	private IContainer outputFolder() {
-		return _assemblySource.getOutputFile().getParent();
+		return _assemblySource.getOutputFolder();
 	}
 }

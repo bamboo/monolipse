@@ -1,46 +1,59 @@
 namespace monolipse.server
 
-import Boo.Lang.Compiler
-import Boo.Lang.Compiler.Pipelines
 import Boo.Lang.Compiler.Ast
-import Boo.Lang.Compiler.IO
-import Boo.Lang.Compiler.Steps
 import Boo.Lang.Compiler.TypeSystem
+import Boo.Lang.Compiler.TypeSystem.Services
 
-class ContentAssistProcessor(ProcessMethodBodiesWithDuckTyping):
+class ContentAssistProcessor(DepthFirstVisitor):
 	
 	static final MemberAnchor = '__codecomplete__'
 	
-	static def getProposals(source as string):
+	static def ProposalsFor(source as string):
 		
-		contentAssist = ContentAssistProcessor(source)
-		compiler = BooCompiler()		
-		compiler.Parameters.Pipeline = configurePipeline(contentAssist)
-		compiler.Parameters.Input.Add(StringInput("none", source))
-		compiler.Run()
-		return contentAssist.Members
+		resolution = ExpressionResolution.ForCodeString(source)
+		processor = ContentAssistProcessor(resolution.NodeInformationProvider)
+		resolution.RunInResolvedCompilerContext: processor.VisitAllowingCancellation(resolution.OriginalCompileUnit)
+		return processor.Members
 
 	Members as (IEntity):
 		get:
 			_members.Sort(_members, {left, right | left.ToString().CompareTo(right.ToString())})
 			return _members
 			
-	_code as string
 	_members = array(IEntity, 0)
+	_nodeInformationProvider as NodeInformationProvider
+	_currentType as IType
 	
-	def constructor(code as string):
-		_code = code
-	
-	override protected def ProcessMemberReferenceExpression(node as MemberReferenceExpression):
-		if node.Name == MemberAnchor:
-			_members = FilterSuggestions(getCompletionNamespace(node))
-		else:
-			super(node)
+	def constructor(nif as NodeInformationProvider):
+		_nodeInformationProvider = nif
+		
+	override def OnClassDefinition(node as ClassDefinition):
+		OnTypeDefinition(node)
+		
+	override def OnInterfaceDefinition(node as InterfaceDefinition):
+		OnTypeDefinition(node)
+		
+	override def OnStructDefinition(node as StructDefinition):
+		OnTypeDefinition(node)
+		
+	def OnTypeDefinition(node as TypeDefinition):
+		oldType = _currentType
+		_currentType = _nodeInformationProvider.EntityFor(node)
+		Visit(node.Members)
+		Visit(node.Attributes)
+		_currentType = oldType
+		
+	override def LeaveMemberReferenceExpression(node as MemberReferenceExpression):
+		if node.Name != MemberAnchor:
+			return
+			
+		_members = FilterSuggestions(getCompletionNamespace(node))
+		Cancel()
 			
 	def FilterSuggestions(entity as IEntity):
 		ns = entity as INamespace
 		return array(IEntity, 0) if ns is null
-		return FilteredMembers(TypeSystemServices.GetAllMembers(ns))
+		return FilteredMembers(MemberCollector.CollectAllMembers(ns))
 		
 	def FilteredMembers(members as (IEntity)):
 		return array(
@@ -57,21 +70,11 @@ class ContentAssistProcessor(ProcessMethodBodiesWithDuckTyping):
 		return true if member is null or member.IsPublic
 		
 		declaringType = member.DeclaringType
-		return true if declaringType is self.CurrentType
+		return true if declaringType is _currentType
 		return true if member.IsInternal and member isa IInternalEntity
-		return true if member.IsProtected and self.CurrentType.IsSubclassOf(declaringType)
+		return true if member.IsProtected and _currentType is not null and _currentType.IsSubclassOf(declaringType)
 		return false			
 		
 	protected def getCompletionNamespace(expression as MemberReferenceExpression) as INamespace:		
-		target as Expression = expression.Target
-		
-		if target.ExpressionType is not null:
-			if target.ExpressionType.EntityType != EntityType.Error:
-				return cast(INamespace, target.ExpressionType)
-		return cast(INamespace, TypeSystemServices.GetOptionalEntity(target))
+		return _nodeInformationProvider.NamespaceAt(expression.Target)
 	
-	protected static def configurePipeline(hunter):
-		pipeline = ResolveExpressions(BreakOnErrors: false)
-		pipeline.Replace(Boo.Lang.Compiler.Steps.ProcessMethodBodiesWithDuckTyping, hunter)
-		return pipeline
-		

@@ -28,4 +28,9 @@ public class CompilerProposal {
 	public String getDescription() {
 		return _description;
 	}
+	
+	@Override
+	public String toString() {
+		return "CompilerProposal(" + _entityType + ", " + _name + ", " + _description + ")";
+	}
 }

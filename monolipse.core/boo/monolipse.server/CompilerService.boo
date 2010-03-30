@@ -13,7 +13,7 @@ service CompilerService:
 		module.Accept(OutlineVisitor(response))
 			
 	onMessageWithResponse "GET-COMPILER-PROPOSALS":
-		proposals = ContentAssistProcessor.getProposals(message.Payload)
+		proposals = ContentAssistProcessor.ProposalsFor(message.Payload)
 		writeTypeSystemEntitiesTo proposals, response
 			
 	onMessageWithResponse "EXPAND-BOO":
@@ -39,7 +39,7 @@ service CompilerService:
 def retrieveHoverInformation(payload as string):
 	result = System.Text.RegularExpressions.Regex("<<<->" +  "<->" + "<->>>").Split(payload)
 	return "" unless result.Length == 3
-	return SelectionInformation.getHoverInformation(result[0], int.Parse(result[1]), int.Parse(result[2]))
+	return SelectionInformation.HoverInformationFor(result[0], int.Parse(result[1]), int.Parse(result[2]))
 
 def newExpandBoojayMacrosPipeline():
 	pipeline = Pipelines.ExpandMacros(BreakOnErrors: false)

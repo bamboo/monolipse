@@ -1,36 +1,16 @@
 package monolipse.core.internal;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
-import monolipse.core.IAssemblyReference;
-import monolipse.core.IAssemblyReferenceVisitor;
-import monolipse.core.IAssemblySource;
-import monolipse.core.AssemblySourceLanguage;
-import monolipse.core.IAssemblySourceReference;
-import monolipse.core.IRemembrance;
-import monolipse.core.foundation.WorkspaceUtilities;
+import monolipse.core.*;
+import monolipse.core.foundation.*;
 
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceVisitor;
-import org.eclipse.core.resources.IWorkspaceRunnable;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.core.resources.*;
+import org.eclipse.core.runtime.*;
 
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.*;
+import com.thoughtworks.xstream.io.xml.*;
 
 
 public class BooAssemblySource implements IAssemblySource {
@@ -321,10 +301,9 @@ public class BooAssemblySource implements IAssemblySource {
 	}
 
 	private String getOutputAssemblyExtension() {
-		if (_language == AssemblySourceLanguage.BOOJAY)
+		if (getLanguage() == AssemblySourceLanguage.BOOJAY)
 			return ".jar";
-		else
-			return OutputType.LIBRARY.equals(getOutputType()) ? ".dll" : ".exe";
+		return OutputType.LIBRARY.equals(getOutputType()) ? ".dll" : ".exe";
 	}
 	
 	boolean isBooFile(IResource resource) {

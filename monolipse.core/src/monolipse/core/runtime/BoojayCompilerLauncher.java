@@ -1,10 +1,10 @@
 package monolipse.core.runtime;
 
-import java.io.IOException;
+import java.io.*;
 
-import org.eclipse.core.resources.IResource;
+import monolipse.core.*;
 
-import monolipse.core.BooCore;
+import org.eclipse.core.resources.*;
 
 public class BoojayCompilerLauncher extends CompilerLauncher {
 

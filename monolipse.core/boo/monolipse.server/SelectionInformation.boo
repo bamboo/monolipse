@@ -1,12 +1,6 @@
 namespace monolipse.server
 
-import Boo.Lang.Compiler
-import Boo.Lang.Compiler.Pipelines
 import Boo.Lang.Compiler.Ast
-import Boo.Lang.Compiler.TypeSystem
-
-import Boo.Lang.Parser
-import Boo.Lang.PatternMatching
 
 class Rectangle:
 	_x1 as int
@@ -28,19 +22,12 @@ class Rectangle:
 
 	override def ToString():
 		return "${_x1}, ${_y1}, ${_x2}, ${_y2}"
-
+		
 class SelectionInformation(DepthFirstVisitor):
-	static def getHoverInformation(source as string, line as int, column as int):
-		
-		originalCompileUnit = Boo.Lang.Parser.BooParser.ParseString("none", source)
-		
-		compiler = BooCompiler()		
-		compiler.Parameters.Pipeline = ResolveExpressions(BreakOnErrors: false)
-		ctx = compiler.Run(originalCompileUnit.CloneNode())
-		
-		resolvedCompileUnit = ctx.CompileUnit
-		selector = SelectionInformation(NodeInformationProvider(resolvedCompileUnit), line + 1, column + 1)
-		ctx.Run: selector.VisitAllowingCancellation(originalCompileUnit)
+	static def HoverInformationFor(source as string, line as int, column as int):
+		resolution = ExpressionResolution.ForCodeString(source)
+		selector = SelectionInformation(resolution.NodeInformationProvider, line + 1, column + 1)
+		resolution.RunInResolvedCompilerContext: selector.VisitAllowingCancellation(resolution.OriginalCompileUnit)
 		return selector.Info
 		
 	[getter(Info)]
@@ -68,7 +55,7 @@ class SelectionInformation(DepthFirstVisitor):
 		region = GetNodeRectangle(node, length)
 		if not region.Contains(_line, _column):
 			return
-		nodeInfo = _nodeInfoProvider.InfoFor(node)
+		nodeInfo = _nodeInfoProvider.TooltipFor(node)
 		if nodeInfo is null:
 			return
 		_info = nodeInfo
@@ -77,78 +64,3 @@ class SelectionInformation(DepthFirstVisitor):
 	private def GetNodeRectangle(node as Node, length as int):
 		endLine = (node.LexicalInfo.Line if node.EndSourceLocation.Line == -1 else node.EndSourceLocation.Line)
 		return Rectangle(node.LexicalInfo.Line, node.LexicalInfo.Column, endLine, node.LexicalInfo.Column + length)
-
-class NodeInformationProvider(DepthFirstVisitor):
-	
-	_compileUnit as CompileUnit
-	
-	def constructor(resolvedCompileUnit as CompileUnit):
-		_compileUnit = resolvedCompileUnit
-	
-	def InfoFor(node as Node):
-		node = Resolve(node)
-		if node is null:
-			return "?"
-			
-		match TypeSystemServices.GetOptionalEntity(node):
-			case l=ILocalEntity(Name: name, Type: t):
-				return FormatHoverText("${name} as ${t} - ${node.GetAncestor[of Method]().FullName}", DocStringProvider(l))
-			case m=IMethod():
-				return FormatHoverText("${m.ToString()} as ${m.ReturnType}", DocStringProvider(m))
-			case f=IField(FullName: name, Type: t):
-				return FormatHoverText("${name} as ${t}",  DocStringProvider(f))
-			case p=IProperty(FullName: name, Type: t):
-				return FormatHoverText("${name} as ${t}",  DocStringProvider(p))
-			case t=IType(FullName: name):
-				return FormatHoverText(name, DocStringProvider(t))
-			case te=ITypedEntity(Type: IType(FullName: name)):
-				return FormatHoverText(name, DocStringProvider(te))
-			otherwise:
-				return "?"
-	
-	def FormatHoverText(header as string, docProvider as DocStringProvider):
-		result = " ${header} " 
-		result += "<br/><br/> ${docProvider.Text} <br/> " if docProvider.HasDocString
-		return result
-		
-	def Resolve(node as Node):
-		_found = null
-		_lookingFor = node.LexicalInfo
-		VisitAllowingCancellation(_compileUnit)
-		return _found
-		
-	_found as Node
-	_lookingFor as LexicalInfo
-	
-	override def OnReferenceExpression(node as ReferenceExpression):
-		MatchNode(node)
-		
-	override def LeaveMemberReferenceExpression(node as MemberReferenceExpression):
-		MatchNode(node)
-		
-	override def OnSimpleTypeReference(node as SimpleTypeReference):
-		MatchNode(node)
-		
-	private def MatchNode(node as Node):
-		if node.LexicalInfo is _lookingFor:
-			_found = node
-			Cancel()
-
-class DocStringProvider:
-	_entity as IEntity
-	"""This is the target entity from where we will try to retrieve de doc string."""
-	
-	Text:
-		get:
-			target = _entity as IInternalEntity
-			return (target.Node.Documentation if target else "")
-	
-	def constructor(entity as IEntity):
-		_entity = entity
-		
-	def HasDocString():
-		target = _entity as IInternalEntity
-		return false unless target
-		return string.IsNullOrEmpty(target.Node.Documentation)
-		
-	

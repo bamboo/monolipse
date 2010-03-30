@@ -49,8 +49,8 @@ public class InteractiveInterpreterTestCase extends TestCase {
 	}
 	
 	public void testCompletionProposalsForNamespace() throws Exception {
-		assertCompletionProposals("namespace Bar\n\tclass Baz:\n\tpass", "Bar.", new String[] {
-			"Baz",
+		assertCompletionProposals("namespace Bar\nclass Baz:\n\tpass", "Bar.", new String[] {
+			"Baz", "Input1Module", "ParentInterpreter"
 		});
 	}
 
