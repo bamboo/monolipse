@@ -5,6 +5,7 @@ import Boo.Lang.Compiler.Pipelines
 import Boo.Lang.Compiler.Ast
 import Boo.Lang.Compiler.TypeSystem
 
+import Boo.Lang.Parser
 import Boo.Lang.PatternMatching
 
 class Rectangle:
@@ -95,7 +96,7 @@ class NodeInformationProvider(DepthFirstVisitor):
 			case ILocalEntity(Name: name, Type: t):
 				return "${name} as ${t} - ${node.GetAncestor[of Method]().FullName}"
 			case m=IMethod():
-				return m.ToString()
+				return "${m.ToString()} as ${m.ReturnType}"
 			case IField(FullName: name, Type: t) | IProperty(FullName: name, Type: t):
 				return "${name} as ${t}"
 			case IType(FullName: name):
