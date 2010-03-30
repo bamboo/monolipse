@@ -27,4 +27,8 @@ public class IO {
 		return sourceFile.getModificationStamp() > targetFile.getModificationStamp();
 	}
 
+	public static boolean existsFile(String file) {
+		return new java.io.File(file).exists();
+	}
+
 }
