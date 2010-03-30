@@ -32,6 +32,8 @@ class ExpressionResolution:
 
 
 class NodeInformationProvider(DepthFirstVisitor):
+""" Provides information about a node. 
+"""
 	
 	_compileUnit as CompileUnit
 	
@@ -46,6 +48,8 @@ class NodeInformationProvider(DepthFirstVisitor):
 		match TypeSystemServices.GetOptionalEntity(node):
 			case l=ILocalEntity(Name: name, Type: t):
 				return FormatHoverText("${name} as ${ToString(t)} - ${node.GetAncestor[of Method]().FullName}", DocStringFor(l))
+			case c=IConstructor():
+				return FormatHoverText("${c.ToString()}", DocStringFor(c, c.DeclaringType))
 			case m=IMethod():
 				return FormatHoverText("${m.ToString()} as ${ToString(m.ReturnType)}", DocStringFor(m))
 			case f=IField(FullName: name, Type: t):
@@ -63,13 +67,16 @@ class NodeInformationProvider(DepthFirstVisitor):
 	
 	def FormatHoverText(header as string, docstring as string):
 		result = " ${header} " 
-		result += "<br/><br/> ${docstring} <br/> " if not string.IsNullOrEmpty(docstring)
+		if not string.IsNullOrEmpty(docstring):
+			docstring = docstring.Replace("\n", "<br/>")
+			result += "<br/><br/> ${docstring} <br/> " 
 		return result
 		
-	def DocStringFor(entity as IEntity):
-		target = entity as IInternalEntity
-		if target is not null:
-			return target.Node.Documentation
+	def DocStringFor(*entities as (IEntity)):
+		for entity in entities:
+			target = entity as IInternalEntity
+			if (target is not null and not string.IsNullOrEmpty(target.Node.Documentation)):
+				return target.Node.Documentation
 		return ""
 				
 	def NamespaceAt(node as Node) as INamespace:
