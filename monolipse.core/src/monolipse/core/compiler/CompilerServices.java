@@ -50,11 +50,11 @@ public class CompilerServices extends AbstractBooServiceClient {
 					try {
 						returnValue.exchange(message.payload, 3, TimeUnit.SECONDS);
 					} catch (Exception e) {
-						BooCore.logException(e);
+						BooCore.logException(e); 
 					}
 				}
 			});
-			send(messageName, payload);
+			send(messageName, removeBOM(payload));
 			return returnValue.exchange(null, 3, TimeUnit.SECONDS);
 		} catch (Exception e) {
 			BooCore.logException(e);
@@ -62,6 +62,12 @@ public class CompilerServices extends AbstractBooServiceClient {
 			setMessageHandler(messageResponse, null);
 		}
 		return null;
+	}
+
+	private String removeBOM(String payload) {
+		if (payload.length() > 0 && payload.charAt(0) == 0xFEFF)
+			return payload.substring(1);
+		return payload;
 	}
 
 	public OutlineNode getOutline(String text) throws IOException {
