@@ -37,23 +37,13 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 	public static CompilerLauncher createLauncher(IAssemblySource source) throws IOException {
 		CompilerLauncher launcher = createLauncher(source.getLanguage());
 		
-		if (source.getLanguage().equals(AssemblySourceLanguage.BOOJAY)) {
-			String outputFilename = WorkspaceUtilities.getLocation(source.getOutputFile());
-			if (outputFilename.endsWith(".dll")) {
-				outputFilename = outputFilename.replace(".dll", ".jar");
-			}
-			launcher.setOutput(outputFilename);
-		}
-		else {
-			launcher.setOutput(source.getOutputFile());
-		}
-		
+		launcher.setOutput(source.getOutputFile());
 		launcher.setOutputType(source.getOutputType());
-		launcher.addReferences(source.getReferences());
 		launcher.add(source.getAdditionalOptions().split("\\s+"));
 		
+		launcher.addReferences(source.getReferences());
 		if (source.getLanguage().equals(AssemblySourceLanguage.BOOJAY)) {
-			((BoojayCompilerLauncher)launcher).addClasspaths(getProjectClasspaths(source));
+			launcher.addReferences(getProjectClasspaths(source));
 		} 
 		return launcher;
 	}
@@ -163,6 +153,12 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 		}
 	}
 		
+	public void addReferences(String[] references) {		
+		for (int i=0; i<references.length; ++i) {
+			add("-r:" + references[i]);
+		}
+	}
+
 	public void addSourceFiles(IFile[] files) {
 		for (int i=0; i<files.length; ++i) {
 			add(WorkspaceUtilities.getLocation(files[i]));

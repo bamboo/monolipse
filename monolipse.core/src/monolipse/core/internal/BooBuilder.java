@@ -53,26 +53,9 @@ public class BooBuilder extends IncrementalProjectBuilder {
 	public static final String BOO_PROBLEM_MARKER_TYPE = BooCore.ID_PLUGIN + ".booProblem";
 	
 	protected void startupOnInitialize() {
-//		BooCore.getDefault().getPluginPreferences().addPropertyChangeListener(new IPropertyChangeListener() {
-//			public void propertyChange(PropertyChangeEvent event) {
-//				if (BooCore.P_RUNTIME_LOCATION.equals(event.getProperty())) {
-//					scheduleProjectRebuild();
-//				}
-//			}
-//		});
 		super.startupOnInitialize();
 	}
-	
-//	private void scheduleProjectRebuild() {
-//		WorkspaceJob job = new WorkspaceJob("boo build") {
-//			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-//				getProject().build(IncrementalProjectBuilder.FULL_BUILD, monitor);
-//				return Status.OK_STATUS;
-//			}
-//		};
-//		job.schedule();
-//	}
-	
+		
 	private void addMarker(IResource resource, String message, int lineNumber,
 			int severity) {
 		try {

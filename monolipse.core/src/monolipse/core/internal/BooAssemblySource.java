@@ -321,7 +321,10 @@ public class BooAssemblySource implements IAssemblySource {
 	}
 
 	private String getOutputAssemblyExtension() {
-		return OutputType.LIBRARY.equals(getOutputType()) ? ".dll" : ".exe";
+		if (_language == AssemblySourceLanguage.BOOJAY)
+			return ".jar";
+		else
+			return OutputType.LIBRARY.equals(getOutputType()) ? ".dll" : ".exe";
 	}
 	
 	boolean isBooFile(IResource resource) {
