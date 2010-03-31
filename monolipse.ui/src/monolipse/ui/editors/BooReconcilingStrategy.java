@@ -71,9 +71,9 @@ public class BooReconcilingStrategy implements IReconcilingStrategy, IReconcilin
 
 	private void getOutlinePositions(OutlineNode root, ArrayList collection) {
 		if (shouldFoldBlock(root)) {
-			int start = getPostionForLine(root.startLine());
-			int length = getPostionForLine(root.endLine() + 1) - start;			
-			collection.add(new Position(start, length));
+			int start = getPositionForLine(root.startLine());
+			int length = getPositionForLine(root.endLine() + 1) - start;			
+			collection.add(new Position(start, Math.max(1, length)));
 		}
 		for (OutlineNode child: root.children()) {
 			getOutlinePositions(child, collection);
@@ -89,7 +89,7 @@ public class BooReconcilingStrategy implements IReconcilingStrategy, IReconcilin
 		return type.equals("ImportCollection") || type.equals("Method") || type.equals("Constructor") || type.equals("ClassDefinition") || type.equals("InterfaceDefinition");
 	}
 
-	private int getPostionForLine(int line) {
+	private int getPositionForLine(int line) {
 		if (null == _document) return 1;
 		
 		try {
