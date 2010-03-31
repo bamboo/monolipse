@@ -69,7 +69,10 @@
                <count value="1"/>
                <iterate>
                <and>
-	               <test property="org.eclipse.debug.ui.matchesPattern" value="*.boo"/>
+               		<or>
+	               		<test property="org.eclipse.debug.ui.matchesPattern" value="*.boo"/>
+	               		<adapt type="monolipse.core.IAssemblySource"/>
+	               	</or>
 	           </and>
                </iterate>
              </with>

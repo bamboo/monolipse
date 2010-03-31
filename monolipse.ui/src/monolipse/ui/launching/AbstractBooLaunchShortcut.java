@@ -1,10 +1,11 @@
 package monolipse.ui.launching;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.debug.ui.ILaunchShortcut;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
+import monolipse.core.*;
+import monolipse.core.foundation.*;
+
+import org.eclipse.core.resources.*;
+import org.eclipse.debug.ui.*;
+import org.eclipse.jface.viewers.*;
 import org.eclipse.ui.*;
 
 public abstract class AbstractBooLaunchShortcut implements ILaunchShortcut  {
@@ -15,10 +16,13 @@ public abstract class AbstractBooLaunchShortcut implements ILaunchShortcut  {
 		IStructuredSelection ss = (IStructuredSelection) selection;
 		if (ss.isEmpty()) return;
 		
-		IFile file = (IFile) Platform.getAdapterManager().getAdapter(ss.getFirstElement(), IFile.class);
-		if (null == file) return;
+		IFile file = Adapters.getAdapter(ss.getFirstElement(), IFile.class);
+		if (null != file)
+			launch(file, mode);
 		
-		launch(file, mode);
+		IAssemblySource source = Adapters.getAdapter(ss.getFirstElement(), IAssemblySource.class);
+		if (null != source)
+			launch(source, mode);
 		
 	}
 	
@@ -31,5 +35,12 @@ public abstract class AbstractBooLaunchShortcut implements ILaunchShortcut  {
 
 	
 	protected abstract void launch(IFile file, String mode);
+
+	/**
+	 * Can be overridden in subclasses to handle assembly source launching.
+	 */
+	protected void launch(IAssemblySource source, String mode) {
+	}
+
 
 }
