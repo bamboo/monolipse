@@ -1,7 +1,5 @@
 package monolipse.ui.views;
 
-
-
 import monolipse.core.interpreter.IInterpreterListener;
 import monolipse.core.interpreter.InteractiveInterpreter;
 import monolipse.ui.BooUI;
