@@ -1,24 +1,15 @@
 package monolipse.ui.editors;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.io.*;
+import java.util.*;
 
-import javax.swing.text.BadLocationException;
+import monolipse.core.compiler.*;
+import monolipse.ui.*;
 
-import monolipse.core.compiler.CompilerServices;
-import monolipse.core.compiler.OutlineNode;
-import monolipse.ui.BooUI;
-
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IRegion;
-import org.eclipse.jface.text.Position;
-import org.eclipse.jface.text.reconciler.DirtyRegion;
-import org.eclipse.jface.text.reconciler.IReconcilingStrategy;
-import org.eclipse.jface.text.reconciler.IReconcilingStrategyExtension;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.core.runtime.*;
+import org.eclipse.jface.text.*;
+import org.eclipse.jface.text.reconciler.*;
+import org.eclipse.swt.widgets.*;
 
 
 public class BooReconcilingStrategy implements IReconcilingStrategy, IReconcilingStrategyExtension {
