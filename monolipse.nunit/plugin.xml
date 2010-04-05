@@ -68,12 +68,10 @@
              <with variable="selection">
                <count value="1"/>
                <iterate>
-               <and>
-               		<or>
-	               		<test property="org.eclipse.debug.ui.matchesPattern" value="*.boo"/>
-	               		<adapt type="monolipse.core.IAssemblySource"/>
-	               	</or>
-	           </and>
+               <or>
+               		<test property="org.eclipse.debug.ui.matchesPattern" value="*.boo"/>
+               		<adapt type="monolipse.core.IAssemblySource"/>
+               	</or>
                </iterate>
              </with>
            </enablement>
