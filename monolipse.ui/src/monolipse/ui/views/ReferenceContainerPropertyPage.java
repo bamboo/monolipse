@@ -18,51 +18,27 @@
  */
 package monolipse.ui.views;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
+import java.io.*;
+import java.util.*;
 import java.util.List;
 
-import monolipse.core.BooCore;
-import monolipse.core.IAssemblyReference;
-import monolipse.core.IAssemblySource;
-import monolipse.core.IGlobalAssemblyCacheReference;
-import monolipse.core.foundation.WorkspaceUtilities;
-import monolipse.ui.BooUI;
-import monolipse.ui.IBooUIConstants;
+import monolipse.core.*;
+import monolipse.core.foundation.*;
+import monolipse.ui.*;
 
 import org.eclipse.core.resources.*;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.jface.preference.PreferencePage;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.ui.IWorkbenchPropertyPage;
-import org.eclipse.ui.model.WorkbenchContentProvider;
-import org.eclipse.ui.views.navigator.ResourcePatternFilter;
+import org.eclipse.core.runtime.*;
+import org.eclipse.jface.preference.*;
+import org.eclipse.jface.viewers.*;
+import org.eclipse.swt.*;
+import org.eclipse.swt.custom.*;
+import org.eclipse.swt.events.*;
+import org.eclipse.swt.graphics.*;
+import org.eclipse.swt.layout.*;
+import org.eclipse.swt.widgets.*;
+import org.eclipse.ui.*;
+import org.eclipse.ui.model.*;
+import org.eclipse.ui.views.navigator.*;
 
 
 public class ReferenceContainerPropertyPage extends PreferencePage
@@ -147,7 +123,7 @@ public class ReferenceContainerPropertyPage extends PreferencePage
 
 	private IAdaptable _element;
 	
-	private java.util.Set _references = new LinkedHashSet();
+	private java.util.Set<IAssemblyReference> _references = new LinkedHashSet<IAssemblyReference>();
 
 	private TableViewer _selectedViewer;
 
