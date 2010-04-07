@@ -104,7 +104,9 @@ public class BooContentOutlinePage extends ContentOutlinePage {
 		public Image getImage(Object element) {
 			OutlineNode node = (OutlineNode)element;
 			String nodeImageKey = node.visibility().isEmpty() ? node.type() : node.visibility() + "_" + node.type();
-			return _imageMap.containsKey(nodeImageKey) ? _imageMap.get(nodeImageKey) : _imageMap.get(node.type());
+			Image image = _imageMap.containsKey(nodeImageKey) ? _imageMap.get(nodeImageKey) : _imageMap.get(node.type());
+			if (image == null) BooUI.logInfo("Can't load image: " + nodeImageKey);
+			return image;
 		}
 		
 		void setUpImageMap() {
@@ -143,6 +145,10 @@ public class BooContentOutlinePage extends ContentOutlinePage {
 			mapImage(OutlineNode.EVENT, IBooUIConstants.EVENT);
 			mapImage(OutlineNode.CALLABLE, IBooUIConstants.CALLABLE);
 			mapImage(OutlineNode.STRUCT, IBooUIConstants.STRUCT);
+			
+			mapImage(OutlineNode.NAMESPACE, IBooUIConstants.NAMESPACE);
+			mapImage(OutlineNode.IMPORT, IBooUIConstants.IMPORT);
+			mapImage(OutlineNode.IMPORT_COLLECTION, IBooUIConstants.IMPORT_COLLECTION);
 		}
 		
 		void mapImage(String entityType, String key) {

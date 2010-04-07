@@ -268,6 +268,7 @@ public class ReferenceContainerPropertyPage extends PreferencePage
 			Object element = ((IStructuredSelection)event.getSelection()).getFirstElement();			
 			IAssemblyReference reference = getReference(element);
 			if (null == reference) return;
+			BooCore.logInfo("REF: " + reference.toString());
 			
 			_references.add(reference);
 			_selectedViewer.refresh(true);

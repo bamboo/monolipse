@@ -47,6 +47,11 @@ public class OutlineNode {
 
 	public static final String EVENT = "Event";
 
+	public static final String NAMESPACE = "Namespace";
+
+	public static final String IMPORT_COLLECTION = "ImportCollection";
+	public static final String IMPORT = "Import";
+
 	private String _name;
 
 	private ArrayList<OutlineNode> _children;
@@ -90,6 +95,8 @@ public class OutlineNode {
 		HashMap<String, Integer> mapping = new HashMap<String, Integer>();
 		
 		mapping.put("ImportCollection", 0);
+		mapping.put("Import", 0);
+		
 		mapping.put("InterfaceDefinition", 1);
 		mapping.put("Protected_InterfaceDefinition", 1);
 		mapping.put("Private_InterfaceDefinition", 1);

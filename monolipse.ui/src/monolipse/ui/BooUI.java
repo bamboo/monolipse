@@ -88,7 +88,10 @@ public class BooUI extends AbstractUIPlugin {
 		declareRegistryImage(registry, IBooUIConstants.ASSEMBLY_SOURCE_DECORATOR, "icons/AssemblySourceDecorator.gif");
 		declareRegistryImage(registry, IBooUIConstants.REFERENCES, "icons/OpenReferenceFolder.png");
 		declareRegistryImage(registry, IBooUIConstants.PROJECT, "icons/NewBooProject.png");
+		
 		declareRegistryImage(registry, IBooUIConstants.NAMESPACE, "icons/namespace.png");
+		declareRegistryImage(registry, IBooUIConstants.IMPORT_COLLECTION, "icons/ImportCollection.png");
+		declareRegistryImage(registry, IBooUIConstants.IMPORT, "icons/import.png");
 
 		declareRegistryImage(registry, IBooUIConstants.INTERFACE, 			"icons/interface.png");
 		declareRegistryImage(registry, IBooUIConstants.PROTECTED_INTERFACE, "icons/ProtectedInterface.png");

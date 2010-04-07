@@ -9,7 +9,10 @@ public interface IBooUIConstants {
 	String ASSEMBLY_SOURCE_DECORATOR = "assembly source";
 	String REFERENCES = "references";
 	String PROJECT = "project";
-	String NAMESPACE = "namespace";
+	
+	String NAMESPACE 	= "namespace";
+	String IMPORT 		= "import";
+	String IMPORT_COLLECTION = "import_collection";
 
 	String INTERFACE 			= "interface";
 	String PROTECTED_INTERFACE 	= "protected_interface";
