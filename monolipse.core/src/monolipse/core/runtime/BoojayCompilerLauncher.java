@@ -21,7 +21,12 @@ public class BoojayCompilerLauncher extends CompilerLauncher {
 	
 	@Override
 	public void setOutput(IResource output) {
-		super.setOutput(output);
+		IResource target = generateJar() ? output : output.getParent(); 
+		super.setOutput(target);
+	}
+	
+	private boolean generateJar() {
+		return false;
 	}
 
 	@Override
