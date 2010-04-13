@@ -118,4 +118,9 @@ public class CompilerServices extends AbstractBooServiceClient {
 		String paramSeparator = "<<<->" + "<->" + "<->>>";
 		return rpc("GET-HOVER-INFORMATION", code + paramSeparator + String.valueOf(offset) + paramSeparator + String.valueOf(length));
 	}
+
+	public Element getElementAt(String code, int offset, int length) {
+		String paramSeparator = "<<<->" + "<->" + "<->>>";
+		return Element.fromRpcResult(rpc("GET-ELEMENT-AT", code + paramSeparator + String.valueOf(offset) + paramSeparator + String.valueOf(length)));
+	}
 }

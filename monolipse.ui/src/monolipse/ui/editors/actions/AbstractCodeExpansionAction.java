@@ -7,13 +7,10 @@ import monolipse.ui.editors.input.StringInput;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.*;
 
-public abstract class AbstractCodeExpansionAction extends Action {
-
-	protected BooEditor _editor;
+public abstract class AbstractCodeExpansionAction extends CommonBooAction {
 
 	public AbstractCodeExpansionAction() {
 		super();
@@ -54,19 +51,6 @@ public abstract class AbstractCodeExpansionAction extends Action {
 			String booCode) throws PartInitException {
 		IStorageEditorInput input = new StringInput(booCode);
 		activePage.openEditor(input, BooEditor.ID_EDITOR);
-	}
-
-	private IWorkbenchPage getActivePage() {
-		IWorkbenchWindow window = _editor.getSite().getPage().getWorkbenchWindow();
-		return window.getActivePage();
-	}
-
-	protected String getEditorContents() {
-		return _editor.getDocumentProvider().getDocument(editorInput()).get();
-	}
-
-	protected IEditorInput editorInput() {
-		return _editor.getEditorInput();
 	}
 
 	protected AssemblySourceLanguage sourceLanguage() {

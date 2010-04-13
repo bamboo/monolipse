@@ -25,13 +25,25 @@ class Rectangle:
 		
 class SelectionInformation(DepthFirstVisitor):
 	static def HoverInformationFor(source as string, line as int, column as int):
+		print "HIF", line, column
 		resolution = ExpressionResolution.ForCodeString(source)
 		selector = SelectionInformation(resolution.NodeInformationProvider, line + 1, column + 1)
 		resolution.RunInResolvedCompilerContext: selector.VisitAllowingCancellation(resolution.OriginalCompileUnit)
 		return selector.Info
 		
+	static def ElementAt(source as string, line as int, column as int):
+		print "EA", line, column
+		resolution = ExpressionResolution.ForCodeString(source)
+		selector = SelectionInformation(resolution.NodeInformationProvider, line + 1, column + 1)
+		print "RIRCC"
+		resolution.RunInResolvedCompilerContext: selector.VisitAllowingCancellation(resolution.OriginalCompileUnit)
+		return selector.Element
+		
 	[getter(Info)]
 	_info as string = ""
+	
+	[getter(Element)]
+	_elementInfo as ElementInfo
 
 	_nodeInfoProvider as NodeInformationProvider
 	_line as int
@@ -55,10 +67,15 @@ class SelectionInformation(DepthFirstVisitor):
 		region = GetNodeRectangle(node, length)
 		if not region.Contains(_line, _column):
 			return
+			
 		nodeInfo = _nodeInfoProvider.TooltipFor(node)
-		if nodeInfo is null:
-			return
+		return unless nodeInfo
 		_info = nodeInfo
+		
+		element = _nodeInfoProvider.ElementFor(node)
+		return unless element
+		_elementInfo = element
+		
 		Cancel()
 		
 	private def GetNodeRectangle(node as Node, length as int):

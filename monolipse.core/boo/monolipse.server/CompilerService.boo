@@ -36,10 +36,20 @@ service CompilerService:
 		typeInformation = retrieveHoverInformation(message.Payload)
 		response.Write(typeInformation)
 
+	onMessageWithResponse "GET-ELEMENT-AT":
+		element = retrieveElementAt(message.Payload)
+		print "EL", element
+		response.Write((element if element else ""))
+
 def retrieveHoverInformation(payload as string):
 	result = System.Text.RegularExpressions.Regex("<<<->" +  "<->" + "<->>>").Split(payload)
 	return "" unless result.Length == 3
 	return SelectionInformation.HoverInformationFor(result[0], int.Parse(result[1]), int.Parse(result[2]))
+
+def retrieveElementAt(payload as string):
+	result = System.Text.RegularExpressions.Regex("<<<->" +  "<->" + "<->>>").Split(payload)
+	return null unless result.Length == 3
+	return SelectionInformation.ElementAt(result[0], int.Parse(result[1]), int.Parse(result[2]))
 
 def newExpandBoojayMacrosPipeline():
 	pipeline = Pipelines.ExpandMacros(BreakOnErrors: false)

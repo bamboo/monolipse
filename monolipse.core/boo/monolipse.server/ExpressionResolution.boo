@@ -30,16 +30,39 @@ class ExpressionResolution:
 	def RunInResolvedCompilerContext(action as System.Action of CompilerContext):
 		_ctx.Run(action)
 
-
 class NodeInformationProvider(DepthFirstVisitor):
 """ Provides information about a node. 
 """
-	
 	_compileUnit as CompileUnit
 	
 	def constructor(resolvedCompileUnit as CompileUnit):
 		_compileUnit = resolvedCompileUnit
 	
+	def ElementFor(node as Node):
+		node = Resolve(node)
+		if node is null:
+			return ElementInfo.Unknown
+	
+		match TypeSystemServices.GetOptionalEntity(node):
+			case l=ILocalEntity(Name: name, Type: t):
+				return ElementInfo(NodeType: "local", Name: name, ResolvedType: ToString(t), Info: node.GetAncestor[of Method]().FullName, Documentation: DocStringFor(l))
+			case c=IConstructor():
+				return ElementInfo(NodeType: "constructor", Name: c.Name, ResolvedType: c.ToString(), Documentation: DocStringFor(c, c.DeclaringType))
+			case m=IMethod():
+				return ElementInfo(NodeType: "method", Name: m.Name, ResolvedType: m.ToString(), Info: ToString(m.ReturnType), Documentation: DocStringFor(m))
+			case f=IField(FullName: name, Type: t):
+				return ElementInfo(NodeType: "field", Name: name, ResolvedType: ToString(t), Documentation: DocStringFor(f))
+			case p=IProperty(FullName: name, Type: t):
+				return ElementInfo(NodeType: "property", Name: name, ResolvedType: ToString(t), Documentation: DocStringFor(p))
+			case e=IEvent(FullName: name, Type: t):
+				return ElementInfo(NodeType: "event", Name: name, ResolvedType: ToString(t), Documentation: DocStringFor(e))
+			case t=IType():
+				return ElementInfo(NodeType: "itype", ResolvedType: ToString(t), Documentation: DocStringFor(t))
+			case te=ITypedEntity(Type: t):
+				return ElementInfo(NodeType: "itypedentity", ResolvedType: ToString(t), Documentation: DocStringFor(t))
+			otherwise:
+				return ElementInfo.Unknown
+
 	def TooltipFor(node as Node):
 		node = Resolve(node)
 		if node is null:

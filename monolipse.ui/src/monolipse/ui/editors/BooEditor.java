@@ -21,6 +21,8 @@ package monolipse.ui.editors;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.sound.sampled.Line;
+
 import monolipse.ui.BooUI;
 import monolipse.ui.editors.actions.*;
 
@@ -36,6 +38,7 @@ import org.eclipse.jface.text.source.projection.ProjectionSupport;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
@@ -133,7 +136,7 @@ public class BooEditor extends TextEditor {
 	protected void createActions() {
 		super.createActions();
 
-		ToggleCommentAction action = new ToggleCommentAction(BooUI.getResourceBundle(), "ToggleComment.", this);
+		ToggleCommentAction action = new ToggleCommentAction(BooUI.getResourceBundle(), "ToggleComment", this);
 		action.setAccelerator(Action.convertAccelerator("M1+/"));
 		setAction(ToggleCommentAction.ID, action);
 		setActionActivationCode(ToggleCommentAction.ID, '/', -1, SWT.MOD1);
@@ -146,6 +149,9 @@ public class BooEditor extends TextEditor {
 		Action ema = new ExpandMacrosAction(this);
 		setAction(ema.getId(), ema);
 		
+		Action gda = new GotoDefinitionAction(this);
+		setAction(gda.getId(), gda);
+
 		final InformationPresenter quickOutline = new InformationPresenter(quickOutlineCreator()) {
 			public IInformationProvider getInformationProvider(String contentType) {
 				return new BooOutlineInformationProvider();
@@ -183,6 +189,7 @@ public class BooEditor extends TextEditor {
 		IAction action = getAction(ToggleCommentAction.ID);
 		menu.appendToGroup(ITextEditorActionConstants.GROUP_EDIT, action);
 		menu.appendToGroup(ITextEditorActionConstants.MB_ADDITIONS, getAction(ExpandCodeAction.ID));
+		menu.appendToGroup(ITextEditorActionConstants.MB_ADDITIONS, getAction(GotoDefinitionAction.ID));
 	}
 
 	public Object getAdapter(Class required) {
@@ -204,5 +211,37 @@ public class BooEditor extends TextEditor {
 		return (BooDocument) getDocumentProvider().getDocument(getEditorInput());
 	}
 
+	public Point getSelectedRange() {
+		return getSourceViewer().getSelectedRange();
+	}
 
+	public Point getSelectedPosition() {
+		Point range = getSelectedRange();
+		
+		try {
+			int line = getSourceViewer().getDocument().getLineOfOffset(range.x);
+			int column = calculateColumn(getSourceViewer(), range.x, line);
+			return new Point(line, column);
+		} catch (BadLocationException e) {
+			BooUI.logException(e);
+		}
+		return null;
+	}
+	
+	private int calculateColumn(ITextViewer textViewer, int offset, int line)
+			throws BadLocationException {
+		int startOffset = textViewer.getDocument().getLineOffset(line);
+		int column = offset - startOffset;
+		String text = textViewer.getDocument().get(startOffset, column);
+		int textSize = 0;
+		int tabSize = 4; // FIX: get real document tab size
+		
+		for(char ch: text.toCharArray()) {
+			if (ch == '\t') {
+				textSize += tabSize;
+			}
+			else textSize++;
+		}
+		return textSize;
+	}
 }
