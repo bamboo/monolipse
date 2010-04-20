@@ -16,10 +16,22 @@ class ElementInfo:
 	_info as string
 		
 	[property(Documentation)] 
-	_documentation as string	
+	_documentation as string
+	
+	[property(File)]
+	_file as string
+	
+	[property(Line)]
+	_line as int
+	
+	[property(Column)]
+	_column as int
 
 	def ToString():
-		return "${NodeType}: ${Name} as ${ResolvedType} - ${Info}\n\n${Documentation}"
+		if File:
+			return "${NodeType}: ${Name} as ${ResolvedType} - ${Info}\n\n${Documentation} ( File ${File} : Line ${Line} : Column ${Column} )"
+		else:
+			return "${NodeType}: ${Name} as ${ResolvedType} - ${Info}\n\n${Documentation}"			
 
 class UnknownElementInfo(ElementInfo):
 	def ToString():

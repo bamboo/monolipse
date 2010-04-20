@@ -25,17 +25,14 @@ class Rectangle:
 		
 class SelectionInformation(DepthFirstVisitor):
 	static def HoverInformationFor(source as string, line as int, column as int):
-		print "HIF", line, column
 		resolution = ExpressionResolution.ForCodeString(source)
 		selector = SelectionInformation(resolution.NodeInformationProvider, line + 1, column + 1)
 		resolution.RunInResolvedCompilerContext: selector.VisitAllowingCancellation(resolution.OriginalCompileUnit)
 		return selector.Info
 		
 	static def ElementAt(source as string, line as int, column as int):
-		print "EA", line, column
 		resolution = ExpressionResolution.ForCodeString(source)
 		selector = SelectionInformation(resolution.NodeInformationProvider, line + 1, column + 1)
-		print "RIRCC"
 		resolution.RunInResolvedCompilerContext: selector.VisitAllowingCancellation(resolution.OriginalCompileUnit)
 		return selector.Element
 		

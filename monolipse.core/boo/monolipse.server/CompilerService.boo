@@ -38,8 +38,10 @@ service CompilerService:
 
 	onMessageWithResponse "GET-ELEMENT-AT":
 		element = retrieveElementAt(message.Payload)
-		print "EL", element
-		response.Write((element if element else ""))
+		if element and element.File:
+			response.Write("file=${element.File}:line=${element.Line}:column=${element.Column}")
+		else:
+			response.Write("")
 
 def retrieveHoverInformation(payload as string):
 	result = System.Text.RegularExpressions.Regex("<<<->" +  "<->" + "<->>>").Split(payload)

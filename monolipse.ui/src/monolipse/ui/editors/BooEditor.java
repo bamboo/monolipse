@@ -136,11 +136,11 @@ public class BooEditor extends TextEditor {
 	protected void createActions() {
 		super.createActions();
 
-		ToggleCommentAction action = new ToggleCommentAction(BooUI.getResourceBundle(), "ToggleComment", this);
-		action.setAccelerator(Action.convertAccelerator("M1+/"));
+		ToggleCommentAction action = new ToggleCommentAction(BooUI.getResourceBundle(), "Toggle Comment", this);
+		//action.setAccelerator(Action.convertAccelerator("M1+/"));
 		setAction(ToggleCommentAction.ID, action);
-		setActionActivationCode(ToggleCommentAction.ID, '/', -1, SWT.MOD1);
-		markAsStateDependentAction(ToggleCommentAction.ID, true);
+		//setActionActivationCode(ToggleCommentAction.ID, '/', -1, SWT.MOD1);
+		//markAsStateDependentAction(ToggleCommentAction.ID, true);
 		action.configure(getSourceViewer(), getSourceViewerConfiguration());
 		
 		Action eca = new ExpandCodeAction(this);
@@ -186,8 +186,7 @@ public class BooEditor extends TextEditor {
 
 	protected void editorContextMenuAboutToShow(IMenuManager menu) {
 		super.editorContextMenuAboutToShow(menu);
-		IAction action = getAction(ToggleCommentAction.ID);
-		menu.appendToGroup(ITextEditorActionConstants.GROUP_EDIT, action);
+//		menu.appendToGroup(ITextEditorActionConstants.MB_ADDITIONS, getAction(ToggleCommentAction.ID));
 		menu.appendToGroup(ITextEditorActionConstants.MB_ADDITIONS, getAction(ExpandCodeAction.ID));
 		menu.appendToGroup(ITextEditorActionConstants.MB_ADDITIONS, getAction(GotoDefinitionAction.ID));
 	}

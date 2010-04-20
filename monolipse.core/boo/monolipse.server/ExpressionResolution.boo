@@ -47,22 +47,31 @@ class NodeInformationProvider(DepthFirstVisitor):
 			case l=ILocalEntity(Name: name, Type: t):
 				return ElementInfo(NodeType: "local", Name: name, ResolvedType: ToString(t), Info: node.GetAncestor[of Method]().FullName, Documentation: DocStringFor(l))
 			case c=IConstructor():
-				return ElementInfo(NodeType: "constructor", Name: c.Name, ResolvedType: c.ToString(), Documentation: DocStringFor(c, c.DeclaringType))
+				return AddLexicalInfo(c, ElementInfo(NodeType: "constructor", Name: c.Name, ResolvedType: c.ToString(), Documentation: DocStringFor(c, c.DeclaringType)))
 			case m=IMethod():
-				return ElementInfo(NodeType: "method", Name: m.Name, ResolvedType: m.ToString(), Info: ToString(m.ReturnType), Documentation: DocStringFor(m))
+				return AddLexicalInfo(m, ElementInfo(NodeType: "method", Name: m.Name, ResolvedType: m.ToString(), Info: ToString(m.ReturnType), Documentation: DocStringFor(m)))
 			case f=IField(FullName: name, Type: t):
-				return ElementInfo(NodeType: "field", Name: name, ResolvedType: ToString(t), Documentation: DocStringFor(f))
+				return AddLexicalInfo(f, ElementInfo(NodeType: "field", Name: name, ResolvedType: ToString(t), Documentation: DocStringFor(f)))
 			case p=IProperty(FullName: name, Type: t):
-				return ElementInfo(NodeType: "property", Name: name, ResolvedType: ToString(t), Documentation: DocStringFor(p))
+				return AddLexicalInfo(p, ElementInfo(NodeType: "property", Name: name, ResolvedType: ToString(t), Documentation: DocStringFor(p)))
 			case e=IEvent(FullName: name, Type: t):
-				return ElementInfo(NodeType: "event", Name: name, ResolvedType: ToString(t), Documentation: DocStringFor(e))
+				return AddLexicalInfo(e, ElementInfo(NodeType: "event", Name: name, ResolvedType: ToString(t), Documentation: DocStringFor(e)))
 			case t=IType():
-				return ElementInfo(NodeType: "itype", ResolvedType: ToString(t), Documentation: DocStringFor(t))
+				return AddLexicalInfo(t, ElementInfo(NodeType: "itype", ResolvedType: ToString(t), Documentation: DocStringFor(t)))
 			case te=ITypedEntity(Type: t):
-				return ElementInfo(NodeType: "itypedentity", ResolvedType: ToString(t), Documentation: DocStringFor(t))
+				return AddLexicalInfo(te, ElementInfo(NodeType: "itypedentity", ResolvedType: ToString(te), Documentation: DocStringFor(te)))
 			otherwise:
 				return ElementInfo.Unknown
 
+	private def AddLexicalInfo(entity as IEntity, info as ElementInfo):
+		intern = (entity as IInternalEntity)
+		if intern:
+			info.File = intern.Node.LexicalInfo.FileName
+			info.Line = intern.Node.LexicalInfo.Line
+			info.Column = intern.Node.LexicalInfo.Column
+
+		return info
+		
 	def TooltipFor(node as Node):
 		node = Resolve(node)
 		if node is null:
