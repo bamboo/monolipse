@@ -114,7 +114,7 @@ public class BooEditor extends TextEditor {
 			annotations[i] = annotation;
 		}
 		
-		annotationModel.modifyAnnotations(oldAnnotations,newAnnotations,null);
+		annotationModel.replaceAnnotations(oldAnnotations, newAnnotations);
 		
 		oldAnnotations = annotations;
 	}
