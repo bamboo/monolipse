@@ -1,5 +1,6 @@
 namespace monolipse.server
 
+import Boo.Lang.Environments
 import Boo.Lang.Compiler
 import Boo.Lang.Compiler.Ast
 import Boo.Lang.Compiler.TypeSystem
@@ -27,8 +28,8 @@ class ExpressionResolution:
 	NodeInformationProvider:
 		get: return NodeInformationProvider(_ctx.CompileUnit)
 		
-	def RunInResolvedCompilerContext(action as System.Action of CompilerContext):
-		_ctx.Run(action)
+	def RunInResolvedCompilerContext(action as System.Action):
+		_ctx.Environment.Run(action)
 
 class NodeInformationProvider(DepthFirstVisitor):
 """ Provides information about a node. 
