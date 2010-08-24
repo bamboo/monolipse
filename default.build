@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 <project name="monolipse" default="all">
 	<!--
-	The following properties should be configured in a separate
+	The following properties can be configured in a separate
 	build.properties file to better match your system:
 	
-		* boo.dir: path to the boo binaries (bin or build folder in a boo checkout, for instance)
+		* boo.dir: path to the boo repository clone to be used
+		* boojay.dir: path to the boojay repository clone to be used
 		* eclipse.dir: path to the eclipse installation folder
 		* javac: name of the java compiler executable, no need to configure if already in PATH
 		
@@ -17,12 +18,16 @@
 	<property name="javac" value="javac" />
 	<property name="eclipse.dir" value="../../java/eclipse" />
 	
-	<property name="boo.dir" value="monolipse.core/lib/boojay" />
+	<property name="boo.dir" value="../boo" />
+	<property name="boojay.dir" value="../boojay" />
+	
 	<property name="target.dir" value="./plugins" />
 	<property name="updatesite.dir" value="./update-site/plugins" />
 	<property name="feature.version" value="1.2.0" />
 	
 	<include buildfile="build.properties" if="${file::exists('build.properties')}" />
+	
+	<property name="boo.lib.dir" value="${boo.dir}/build" />
 
 	<target name="all" depends="monolipse.core, monolipse.nunit, monolipse.ui">
 	</target>
@@ -141,7 +146,7 @@
 		</fileset>
 		
 		<boo>
-			<references basedir="${boo.dir}">
+			<references basedir="${boo.lib.dir}">
 				<include name="Boo.Lang.PatternMatching.dll" />
 			</references>
 			<code>
@@ -277,8 +282,10 @@
 	</target>
 
 	<target name="update-boojay">
+		<nant buildfile="${boo.dir}/default.build" />
+		<nant buildfile="${boojay.dir}/default.build" target="dist" />
 		<copy todir="monolipse.core/lib/boojay">
-			<fileset basedir="../boojay/dist">
+			<fileset basedir="${boojay.dir}/dist">
 				<include name="*.*" />
 			</fileset>
 		</copy>
@@ -303,16 +310,23 @@
 		<delete dir="plugins" />
 	</target>
 	
-	<target name="init">
+	<target name="check-dependencies">
 		<fail unless="${directory::exists(boo.dir)}">
-		Boo library directory '${boo.dir}' not found.
+		Boo clone not found in '${boo.dir}'.
+		Please set the boo.dir property in your build.properties file.
+		</fail>
+		<fail unless="${directory::exists(boojay.dir)}">
+		Boojay clone not found in '${boojay.dir}'.
 		Please set the boo.dir property in your build.properties file.
 		</fail>
 		<fail unless="${directory::exists(eclipse.dir)}">
 		Eclipse directory '${eclipse.dir}' not found.
 		Please set the eclipse.dir property in your build properties file.
 		</fail>
-		<loadtasks assembly="${boo.dir}/Boo.NAnt.Tasks.dll" />
+	</target>
+	
+	<target name="init" depends="check-dependencies, update-boojay">
+		<loadtasks assembly="${boo.lib.dir}/Boo.NAnt.Tasks.dll" />
 	</target>
 
 </project>
