@@ -1,6 +1,6 @@
 namespace monolipse.server
 
-import Boo.Lang.Interpreter.Help
+import Boo.Lang.Interpreter.Builtins
 import Boo.Lang.Compiler.Ast
 import Boo.Lang.Compiler.TypeSystem
 import Boo.Lang.Compiler.TypeSystem.Reflection
