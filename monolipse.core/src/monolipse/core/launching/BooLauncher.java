@@ -73,21 +73,10 @@ public class BooLauncher {
 				null,
 				generateUniqueLaunchConfigurationName(path));
 		wc.setAttribute(pathAttributeName, path);
-		wc.setAttribute(DebugPlugin.ATTR_CAPTURE_OUTPUT, true);
-		
-		workaroundEclipse33BugThatWontSaveTheConfigurationUnlessDirectoryTreeExists(resource);
-		
+		wc.setAttribute(DebugPlugin.ATTR_CAPTURE_OUTPUT, true);		
 		return wc.doSave();
 	}
-
-	private static void workaroundEclipse33BugThatWontSaveTheConfigurationUnlessDirectoryTreeExists(
-			IResource resource) {
-		final java.io.File file = new java.io.File(resource.getWorkspace().getRoot().getLocation().toOSString()
-				+ "/.metadata/.plugins/org.eclipse.debug.core/.launches"
-				+ resource.getFullPath().removeLastSegments(1));
-		file.mkdirs();
-	}
-
+	
 	private static String generateUniqueLaunchConfigurationName(String path) {
 		return DebugPlugin.getDefault().getLaunchManager().generateLaunchConfigurationName(path);
 	}
