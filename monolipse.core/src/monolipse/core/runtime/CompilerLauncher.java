@@ -153,13 +153,13 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 	
 	public CompilerError[] run() throws IOException {
 		Process p = launch();
-		ArrayList errors = new ArrayList();
+		ArrayList<CompilerError> errors = new ArrayList<CompilerError>();
 		parseCompilerOutput(p.getErrorStream(), errors);
 		parseCompilerOutput(p.getInputStream(), errors);
-		return (CompilerError[]) errors.toArray(new CompilerError[errors.size()]);
+		return errors.toArray(new CompilerError[errors.size()]);
 	}
 
-	private void parseCompilerOutput(InputStream stream, ArrayList errors) throws IOException {
+	private void parseCompilerOutput(InputStream stream, ArrayList<CompilerError> errors) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream, Charset.forName("utf-8")));		
 		String line = null;
 		while (null != (line = reader.readLine())) {

@@ -1,7 +1,7 @@
 package monolipse.core.compiler;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 
@@ -80,7 +80,7 @@ public class OutlineNode {
 	}
 	
 	private void add(OutlineNode child) {
-		if (null == _children) _children = new ArrayList();
+		if (null == _children) _children = new ArrayList<OutlineNode>();
 		_children.add(child);
 	}
 
@@ -142,17 +142,13 @@ public class OutlineNode {
 
 	public OutlineNode[] children() {
 		if (null == _children) return NO_CHILDREN;
-		ArrayList<OutlineNode> result = (ArrayList<OutlineNode>) _children.clone();
-		
-		Collections.sort (result, new Comparator() {  
-            public int compare(Object o1, Object o2) {  
-            	OutlineNode p1 = (OutlineNode) o1;  
-            	OutlineNode p2 = (OutlineNode) o2;  
-                return sortNode(p1, p2);
+		OutlineNode[] result = _children.toArray(new OutlineNode[_children.size()]);
+		Arrays.sort(result, new Comparator<OutlineNode>() {  
+            public int compare(OutlineNode o1, OutlineNode o2) {
+                return sortNode(o1, o2);
             }
 		});
-
-		return result.toArray(new OutlineNode[_children.size()]);
+		return result;
 	}
 
 	public String name() {

@@ -36,26 +36,26 @@ public class MarkerAnnotationHover implements IAnnotationHover {
 	 * @see IVerticalRulerHover#getHoverInfo(ISourceViewer, int)
 	 */
 	public String getHoverInfo(ISourceViewer sourceViewer, int lineNumber) {
-		List markers = getMarkerAnnotationsForLine(sourceViewer, lineNumber);
+		List<IMarker> markers = getMarkerAnnotationsForLine(sourceViewer, lineNumber);
 		if (markers != null) {
 			IMarker marker;
 			String message;
 			if (markers.size() == 1) {
 				// optimization
-				marker = (IMarker) markers.get(0);
+				marker = markers.get(0);
 				message = marker.getAttribute(IMarker.MESSAGE, "");
 				if (message != null && message.trim().length() > 0)
 					return formatSingleMessage(message);
 			} else {
-				List messages = new ArrayList();
+				List<String> messages = new ArrayList<String>();
 				for (int i = 0; i < markers.size(); ++i) {
-					marker = (IMarker) markers.get(i);
+					marker = markers.get(i);
 					message = marker.getAttribute(IMarker.MESSAGE, "");
 					if (message != null && message.trim().length() > 0)
 						messages.add(message.trim());
 				}
 				if (messages.size() == 1)
-					return formatSingleMessage((String) messages.get(0));
+					return formatSingleMessage(messages.get(0));
 				if (messages.size() > 1)
 					return formatMultipleMessages(messages);
 			}
@@ -86,24 +86,16 @@ public class MarkerAnnotationHover implements IAnnotationHover {
 	}
 
 	/**
-	 * Selects a set of markers from the two lists. By default, it just returns
-	 * the set of exact matches.
-	 */
-	protected List select(List exactMatch, List including) {
-		return exactMatch;
-	}
-
-	/**
 	 * Returns one marker which includes the ruler's line of activity.
 	 */
-	protected List getMarkerAnnotationsForLine(ISourceViewer viewer, int line) {
+	protected List<IMarker> getMarkerAnnotationsForLine(ISourceViewer viewer, int line) {
 		IDocument document = viewer.getDocument();
 		IAnnotationModel model = viewer.getAnnotationModel();
 		if (model == null)
 			return null;
 		//
-		List exact = new ArrayList();
-		Iterator e = model.getAnnotationIterator();
+		List<IMarker> exact = new ArrayList<IMarker>();
+		Iterator<?> e = model.getAnnotationIterator();
 		while (e.hasNext()) {
 			Object o = e.next();
 			if (o instanceof MarkerAnnotation) {
@@ -132,6 +124,7 @@ public class MarkerAnnotationHover implements IAnnotationHover {
 	/*
 	 * Formats a message as HTML text.
 	 */
+	@SuppressWarnings("restriction")
 	private String formatSingleMessage(String message) {
 		StringBuffer buffer = new StringBuffer();
 		HTMLPrinter.addPageProlog(buffer);
@@ -143,7 +136,8 @@ public class MarkerAnnotationHover implements IAnnotationHover {
 	/*
 	 * Formats several message as HTML text.
 	 */
-	private String formatMultipleMessages(List messages) {
+	@SuppressWarnings("restriction")
+	private String formatMultipleMessages(List<String> messages) {
 		StringBuffer buffer = new StringBuffer();
 		HTMLPrinter.addPageProlog(buffer);
 		HTMLPrinter.addParagraph(
@@ -153,9 +147,9 @@ public class MarkerAnnotationHover implements IAnnotationHover {
 					"Multiple markers at this line ({0}):",
 					new Object[] { new Integer(messages.size())})));
 		HTMLPrinter.startBulletList(buffer);
-		Iterator e = messages.iterator();
+		Iterator<String> e = messages.iterator();
 		while (e.hasNext())
-			HTMLPrinter.addBullet(buffer, HTMLPrinter.convertToHTMLContent((String) e.next()));
+			HTMLPrinter.addBullet(buffer, HTMLPrinter.convertToHTMLContent(e.next()));
 		HTMLPrinter.endBulletList(buffer);
 
 		HTMLPrinter.addPageEpilog(buffer);

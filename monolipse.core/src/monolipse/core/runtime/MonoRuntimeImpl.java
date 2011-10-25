@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.Platform;
 
 public class MonoRuntimeImpl implements IMonoRuntime {
 
-	private static final Map _cachedGacReferences = new TreeMap();
+	private static final Map<Object, IAssemblyReference> _cachedGacReferences = new TreeMap<Object, IAssemblyReference>();
 
 	private static boolean _gacInitialized = false;
 
@@ -38,8 +38,8 @@ public class MonoRuntimeImpl implements IMonoRuntime {
 			: path;
 	}
 
-	private static IAssemblyReference[] toArray(Collection references) {
-		return (IAssemblyReference[]) references
+	private static IAssemblyReference[] toArray(Collection<IAssemblyReference> references) {
+		return references
 				.toArray(new IAssemblyReference[references.size()]);
 	}
 
@@ -77,7 +77,7 @@ public class MonoRuntimeImpl implements IMonoRuntime {
 
 	private IAssemblyReference getCachedReference(String name, String version,
 			String culture, String token) {
-		return (IAssemblyReference) _cachedGacReferences.get(cacheKey(name,
+		return _cachedGacReferences.get(cacheKey(name,
 				version, culture, token));
 	}
 

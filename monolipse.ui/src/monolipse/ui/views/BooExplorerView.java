@@ -70,15 +70,15 @@ public class BooExplorerView extends ViewPart implements ISetSelectionTarget {
 		
 		public void resourceChanged(IResourceChangeEvent event) {
 			try {
-				final Set projects = new HashSet();
+				final Set<IProject> projects = new HashSet<IProject>();
 				event.getDelta().accept(new IResourceDeltaVisitor() {
 					public boolean visit(IResourceDelta delta) throws CoreException {
 						projects.add(delta.getResource().getProject());
 						return false;
 					}
 				});
-				for (Iterator i = projects.iterator(); i.hasNext();) {
-					final Object project = (Object) i.next();
+				for (Iterator<IProject> i = projects.iterator(); i.hasNext();) {
+					final Object project = i.next();
 					getDisplay().asyncExec(new Runnable() {
 						public void run() {
 							if (!isDisposed()) {

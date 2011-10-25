@@ -1,6 +1,5 @@
 package monolipse.ui.editors;
 
-import monolipse.core.BooCore;
 import monolipse.core.compiler.CompilerServices;
 import monolipse.ui.BooUI;
 

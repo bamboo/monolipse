@@ -7,6 +7,7 @@ import org.eclipse.debug.ui.actions.*;
 
 public class BreakpointAdapterFactory implements IAdapterFactory {
 
+	@SuppressWarnings("rawtypes")
 	public Object getAdapter(Object adaptableObject, Class adapterType) {
 		if (adaptableObject instanceof BooEditor && IToggleBreakpointsTarget.class.isAssignableFrom(adapterType))
 			return adapt((BooEditor)adaptableObject);
@@ -17,6 +18,7 @@ public class BreakpointAdapterFactory implements IAdapterFactory {
 		return new BooEditorToggleBreakpointsTarget(editor);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Class[] getAdapterList() {
 		return new Class[] { IToggleBreakpointsTarget.class, IToggleBreakpointsTargetExtension.class };
 	}

@@ -35,7 +35,7 @@ public class ProcessMessenger {
 	
 	private Socket _socket;
 	
-	private final Map _handlers = new HashMap();
+	private final Map<String, IProcessMessageHandler> _handlers = new HashMap<String, IProcessMessageHandler>();
 
 	private ILaunchConfiguration _configuration;
 	
@@ -220,7 +220,7 @@ public class ProcessMessenger {
 	}
 	
 	private synchronized void handle(final ProcessMessage message) {
-		final IProcessMessageHandler handler = (IProcessMessageHandler) _handlers.get(message.name); 
+		final IProcessMessageHandler handler = _handlers.get(message.name); 
 		if (null == handler) return;
 		SafeRunner.run(new ISafeRunnable() {
 			public void handleException(Throwable exception) {

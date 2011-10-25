@@ -101,7 +101,7 @@ public class BooProject implements IMonoProject {
 	 * @see monolipse.core.IBooProject#getAssemblySources()
 	 */
 	public IAssemblySource[] getAssemblySources() throws CoreException {
-		final List sources = new ArrayList();
+		final List<IAssemblySource> sources = new ArrayList<IAssemblySource>();
 		IResourceVisitor visitor = new IResourceVisitor() {
 			public boolean visit(IResource resource) throws CoreException {
 				if (resource instanceof IFolder) {
@@ -120,8 +120,8 @@ public class BooProject implements IMonoProject {
 	}
 
 	private IAssemblySource[] toBooAssemblySourceArray(
-			final Collection sources) {
-		return (IAssemblySource[]) sources
+			final Collection<IAssemblySource> sources) {
+		return sources
 				.toArray(new IAssemblySource[sources.size()]);
 	}
 
@@ -133,7 +133,7 @@ public class BooProject implements IMonoProject {
 	public IAssemblySource[] getAffectedAssemblySources(IResourceDelta delta)
 			throws CoreException {
 		final IAssemblySource[] sources = getAssemblySources();
-		final Set affected = new HashSet();
+		final Set<IAssemblySource> affected = new HashSet<IAssemblySource>();
 		delta.accept(new IResourceDeltaVisitor() {
 			public boolean visit(IResourceDelta delta) throws CoreException {
 				IResource resource = delta.getResource();
@@ -149,7 +149,7 @@ public class BooProject implements IMonoProject {
 				return true;
 			}
 
-			private void addDependents(final Set affected, final IAssemblySource[] sources, IAssemblySource changed) throws CoreException {
+			private void addDependents(final Set<IAssemblySource> affected, final IAssemblySource[] sources, IAssemblySource changed) throws CoreException {
 				for (int i=0; i<sources.length; ++i) {
 					IAssemblySource source = sources[i];
 					if (BooAssemblySource.references(source, changed)) {
@@ -171,17 +171,17 @@ public class BooProject implements IMonoProject {
 
 	static class TopoSorter {
 
-		private List _sources;
+		private List<IAssemblySource> _sources;
 
-		private List _sorted = new ArrayList();
+		private List<IAssemblySource> _sorted = new ArrayList<IAssemblySource>();
 
 		public TopoSorter(IAssemblySource[] sources) throws CoreException {
-			_sources = new ArrayList(Arrays.asList(sources));
+			_sources = new ArrayList<IAssemblySource>(Arrays.asList(sources));
 			sort();
 		}
 		
 		public IAssemblySource[] sorted() {
-			return (IAssemblySource[]) _sorted.toArray(new IAssemblySource[_sorted.size()]);
+			return _sorted.toArray(new IAssemblySource[_sorted.size()]);
 		}
 		
 		private void sort() throws CoreException {
@@ -197,10 +197,10 @@ public class BooProject implements IMonoProject {
 
 		private int nextLeaf() throws CoreException {
 			for (int i=0; i<_sources.size(); ++i) {
-				IAssemblySource source = (IAssemblySource) _sources.get(i);
+				IAssemblySource source = _sources.get(i);
 				boolean edge = false;
 				for (int j=0; j<_sources.size(); ++j) {
-					if (BooAssemblySource.references(source, (IAssemblySource) _sources.get(j))) {
+					if (BooAssemblySource.references(source, _sources.get(j))) {
 						edge = true;
 						break;
 					}

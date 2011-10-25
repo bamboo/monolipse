@@ -145,7 +145,7 @@ public class BooScanner extends RuleBasedScanner {
 	
 	static class BooWordRule implements IRule {
 
-		private Map _words = new HashMap();
+		private Map<String, IToken> _words = new HashMap<String, IToken>();
 		private StringBuffer _buffer = new StringBuffer();
 		private IToken _identifier;
 		private IToken _invocationTarget;
@@ -205,7 +205,7 @@ public class BooScanner extends RuleBasedScanner {
 				} while (c != ICharacterScanner.EOF && isWordPart((char) c));
 				scanner.unread();
 
-				IToken token = (IToken) _words.get(_buffer.toString());
+				IToken token = _words.get(_buffer.toString());
 				if (token != null && !followsADot(scanner, _buffer.length()))
 					return token;
 				return '(' == peekNextValidChar(scanner) ? _invocationTarget : _identifier;

@@ -195,8 +195,8 @@ public class ReferenceContainerPropertyPage extends PreferencePage
 		viewer.setInput(getAssemblySource());
 		table.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
-				if (e.keyCode == SWT.DEL) {
-					List selected = ((IStructuredSelection)_selectedViewer.getSelection()).toList();
+				if (e.keyCode == SWT.DEL) {					
+					List<?> selected = ((IStructuredSelection)_selectedViewer.getSelection()).toList();
 					_references.removeAll(selected);
 					_selectedViewer.refresh();
 				}

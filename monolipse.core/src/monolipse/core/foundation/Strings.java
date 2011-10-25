@@ -2,11 +2,11 @@ package monolipse.core.foundation;
 
 public class Strings {
 
-	public static String commaSeparatedList(Iterable items) {
+	public static String commaSeparatedList(Iterable<?> items) {
 		return join(items, ",");
 	}
 
-	public static String join(Iterable items, final String separator) {
+	public static String join(Iterable<?> items, final String separator) {
 		final StringBuilder builder = new StringBuilder();
 		for (Object item : items) {
 			if (builder.length() > 0) {

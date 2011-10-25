@@ -24,20 +24,18 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdapterFactory;
 
-
-
-
 public class BooProjectAdapterFactory implements IAdapterFactory {
 	
+	@SuppressWarnings("rawtypes")
 	public Class[] getAdapterList() {
 		return new Class[] { IMonoProject.class };
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public Object getAdapter(Object adaptableObject, Class adapterType) {
 		try {
 			return BooProject.get((IProject)adaptableObject);
-		}
-		catch (CoreException x) {
+		} catch (CoreException x) {
 			x.printStackTrace();
 		}
 		return null;

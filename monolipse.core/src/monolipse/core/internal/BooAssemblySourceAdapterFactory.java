@@ -29,10 +29,12 @@ import org.eclipse.core.runtime.IAdapterFactory;
 
 public class BooAssemblySourceAdapterFactory implements IAdapterFactory {
 	
+	@SuppressWarnings("rawtypes")
 	public Class[] getAdapterList() {
 		return new Class[] { IAssemblySource.class, IAssemblyReference.class };
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object getAdapter(Object adaptableObject, Class adapterType) {
 		final IFolder folder = (IFolder)adaptableObject;
 		if (!folder.exists()) return null;

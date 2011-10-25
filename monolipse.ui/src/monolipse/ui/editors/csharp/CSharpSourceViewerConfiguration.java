@@ -38,7 +38,6 @@ import org.eclipse.jface.text.source.IAnnotationHover;
 import org.eclipse.jface.text.source.ISharedTextColors;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 
 
@@ -109,7 +108,7 @@ public class CSharpSourceViewerConfiguration extends SourceViewerConfiguration {
 	public IInformationControlCreator getInformationControlCreator(ISourceViewer sourceViewer) {
 		return new IInformationControlCreator() {
 			public IInformationControl createInformationControl(Shell parent) {
-				return new DefaultInformationControl(parent, SWT.NONE, new org.eclipse.jface.internal.text.html.HTMLTextPresenter(true));
+				return new DefaultInformationControl(parent, true);
 			}
 		};
 	}

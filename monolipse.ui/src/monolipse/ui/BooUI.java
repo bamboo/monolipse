@@ -205,7 +205,7 @@ public class BooUI extends AbstractUIPlugin {
 			return null;
 		}
 
-		public Enumeration getKeys() {
+		public Enumeration<String> getKeys() {
 			return null;
 		}
 	};

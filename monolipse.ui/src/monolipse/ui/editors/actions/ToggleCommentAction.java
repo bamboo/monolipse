@@ -52,7 +52,7 @@ public final class ToggleCommentAction extends TextEditorAction {
 	/** The document partitioning */
 	private String fDocumentPartitioning;
 	/** The comment prefixes */
-	private Map fPrefixesMap;
+	private Map<String, String[]> fPrefixesMap;
 
 	/**
 	 * Creates and initializes the action for the given text editor. The action
@@ -133,7 +133,6 @@ public final class ToggleCommentAction extends TextEditorAction {
 			IRegion block= getTextBlockFromSelection(textSelection, document);
 			ITypedRegion[] regions= TextUtilities.computePartitioning(document, fDocumentPartitioning, block.getOffset(), block.getLength(), false);
 
-			int lineCount= 0;
 			int[] lines= new int[regions.length * 2]; // [startline, endline, startline, endline, ...]
 			for (int i= 0, j= 0; i < regions.length; i++, j+= 2) {
 				// start line of region
@@ -144,12 +143,11 @@ public final class ToggleCommentAction extends TextEditorAction {
 				if (length > 0)
 					offset--;
 				lines[j + 1]= (lines[j] == -1 ? -1 : document.getLineOfOffset(offset));
-				lineCount += lines[j + 1] - lines[j] + 1;
 			}
 
 			// Perform the check
 			for (int i= 0, j= 0; i < regions.length; i++, j += 2) {
-				String[] prefixes= (String[]) fPrefixesMap.get(regions[i].getType());
+				String[] prefixes= fPrefixesMap.get(regions[i].getType());
 				if (prefixes != null && prefixes.length > 0 && lines[j] >= 0 && lines[j + 1] >= 0)
 					if (!isBlockCommented(lines[j], lines[j + 1], prefixes, document))
 						return false;
@@ -293,7 +291,7 @@ public final class ToggleCommentAction extends TextEditorAction {
 		fPrefixesMap= null;
 
 		String[] types= configuration.getConfiguredContentTypes(sourceViewer);
-		Map prefixesMap= new HashMap(types.length);
+		Map<String, String[]> prefixesMap= new HashMap<String, String[]>(types.length);
 		for (int i= 0; i < types.length; i++) {
 			String type= types[i];
 			String[] prefixes= configuration.getDefaultPrefixes(sourceViewer, type);

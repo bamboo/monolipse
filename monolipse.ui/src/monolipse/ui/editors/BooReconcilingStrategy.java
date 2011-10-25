@@ -42,7 +42,7 @@ public class BooReconcilingStrategy implements IReconcilingStrategy, IReconcilin
 		updateDocumentFolding(updateDocumentOutline());
 	}
 	
-	ArrayList positions = new ArrayList();
+	ArrayList<Position> positions = new ArrayList<Position>();
 
 	private void updateDocumentFolding(OutlineNode outline) {
         positions = calculatePositions(outline, positions);
@@ -55,12 +55,12 @@ public class BooReconcilingStrategy implements IReconcilingStrategy, IReconcilin
         });
 	}
 
-	private ArrayList calculatePositions(OutlineNode outline, ArrayList positions) {
+	private ArrayList<Position> calculatePositions(OutlineNode outline, ArrayList<Position> positions) {
         getOutlinePositions(outline, positions);
 		return positions;
 	}
 
-	private void getOutlinePositions(OutlineNode root, ArrayList collection) {
+	private void getOutlinePositions(OutlineNode root, ArrayList<Position> collection) {
 		if (shouldFoldBlock(root)) {
 			int start = getPositionForLine(root.startLine());
 			int length = getPositionForLine(root.endLine() + 1) - start;			

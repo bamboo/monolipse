@@ -12,7 +12,7 @@ import monolipse.core.foundation.ArrayUtilities;
 
 final class MonoLauncherImpl implements IMonoLauncher {
 	
-	private List _cmd = new ArrayList();
+	private List<String> _cmd = new ArrayList<String>();
 	
 	private File _workingDir;
 
@@ -29,7 +29,7 @@ final class MonoLauncherImpl implements IMonoLauncher {
 	}
 	
 	public Process launch() throws IOException {
-		final String[] cmdLine = (String[]) _cmd.toArray(new String[_cmd.size()]);
+		final String[] cmdLine = _cmd.toArray(new String[_cmd.size()]);
 		String cmdLineText = ArrayUtilities.join(cmdLine);
 		BooCore.logInfo(cmdLineText);
 		return launch(cmdLine);

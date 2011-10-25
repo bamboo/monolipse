@@ -18,7 +18,7 @@ public class InteractiveInterpreterTestCase extends TestCase {
 	
 	public void testEval() throws Exception {
 		final Object mutex = new Object();
-		final ArrayList lines = new ArrayList();
+		final ArrayList<String> lines = new ArrayList<String>();
 		_interpreter.addListener(new IInterpreterListener() {
 			public void evalFinished(String result) {
 				synchronized (mutex) {

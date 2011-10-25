@@ -13,7 +13,6 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 
-
 public class NUnitLaunchConfigurationDelegate implements ILaunchConfigurationDelegate {
 
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
@@ -23,6 +22,7 @@ public class NUnitLaunchConfigurationDelegate implements ILaunchConfigurationDel
 		if (null == source)
 			return;
 		
+		@SuppressWarnings("unchecked")
 		final List<String> testNames = configuration.getAttribute(NUnitLaunchConfigurationConstants.ATTR_TEST_NAMES, Collections.emptyList());
 		try {
 			new TestRunner(source, testNames).run();

@@ -5,7 +5,6 @@ import monolipse.core.IAssemblySource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 
-
 public class ReferenceContainer implements IAdaptable {
 
 	private IAssemblySource _source;
@@ -14,6 +13,7 @@ public class ReferenceContainer implements IAdaptable {
 		_source = source;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Object getAdapter(Class adapter) {
 		if (IAssemblySource.class == adapter) return _source;
 		return null;

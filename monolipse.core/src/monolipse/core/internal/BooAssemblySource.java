@@ -119,7 +119,7 @@ public class BooAssemblySource implements IAssemblySource {
 	 * @see monolipse.core.IBooAssemblySource#getSourceFiles()
 	 */
 	public IFile[] getSourceFiles() throws CoreException {
-		final List files = new ArrayList();
+		final List<IResource> files = new ArrayList<IResource>();
 		IResourceVisitor visitor = new IResourceVisitor() {
 			public boolean visit(IResource resource) throws CoreException {
 				if (isBooFile(resource) && resource.exists()) {
@@ -129,9 +129,10 @@ public class BooAssemblySource implements IAssemblySource {
 			}
 		};
 		_folder.accept(visitor, IResource.DEPTH_INFINITE, IResource.FILE);
-		return (IFile[])files.toArray(new IFile[files.size()]);
+		return files.toArray(new IFile[files.size()]);
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object getAdapter(Class adapter) {
 		if (adapter.isAssignableFrom(IFolder.class)) {
 			return _folder;

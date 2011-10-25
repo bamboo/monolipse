@@ -14,19 +14,20 @@ public class ArrayUtilities {
 		return newArray;
 	}
 
+	@SuppressWarnings("unchecked")
 	private static <T> T[] copySourceArray(Class<?> componentType, T[] sourceArray, boolean append) {
 		T[] newArray = (T[])Array.newInstance(componentType, sourceArray.length + 1);
 		System.arraycopy(sourceArray, 0, newArray, append ? 0 : 1, sourceArray.length);
 		return newArray;
 	}
 
-	public static Object[] prepend(Class componentType, Object[] sourceArray, Object newElement) {
+	public static Object[] prepend(Class<?> componentType, Object[] sourceArray, Object newElement) {
 		Object[] newArray = copySourceArray(componentType, sourceArray, false);
 		newArray[0] = newElement;
 		return newArray;
 	}
 
-	public static Object[] replace(Class newComponentType, Object[] sourceArray, int index, Object element) {
+	public static Object[] replace(Class<?> newComponentType, Object[] sourceArray, int index, Object element) {
 		try {
 			sourceArray[index] = element; 
 		} catch (ArrayStoreException e) {

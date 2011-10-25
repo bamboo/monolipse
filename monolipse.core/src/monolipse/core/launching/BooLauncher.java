@@ -89,8 +89,7 @@ public class BooLauncher {
 	}
 
 	private static String generateUniqueLaunchConfigurationName(String path) {
-		return DebugPlugin.getDefault().getLaunchManager()
-				.generateUniqueLaunchConfigurationNameFrom(path);
+		return DebugPlugin.getDefault().getLaunchManager().generateLaunchConfigurationName(path);
 	}
 
 	private static ILaunchConfiguration findScriptLaunchConfiguration(IFile file)

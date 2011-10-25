@@ -11,7 +11,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 
-
 public class LocalAssemblyReference implements ILocalAssemblyReference {
 	
 	IFile _reference;
@@ -20,6 +19,7 @@ public class LocalAssemblyReference implements ILocalAssemblyReference {
 		_reference = reference;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object getAdapter(Class adapter) {
 		if (adapter.isAssignableFrom(IFile.class)) {
 			return _reference;

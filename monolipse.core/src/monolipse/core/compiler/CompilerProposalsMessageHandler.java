@@ -10,7 +10,7 @@ import monolipse.core.launching.*;
 
 public class CompilerProposalsMessageHandler implements IProcessMessageHandler {
 	private static final CompilerProposal[] EMPTY = new CompilerProposal[0];
-	private final Exchanger<ArrayList<CompilerProposal>> _proposalExchanger = new Exchanger();
+	private final Exchanger<ArrayList<CompilerProposal>> _proposalExchanger = new Exchanger<ArrayList<CompilerProposal>>();
 	
 	public CompilerProposal[] getProposals() {
 		final ArrayList<CompilerProposal> proposals = exchange(null);
@@ -20,12 +20,12 @@ public class CompilerProposalsMessageHandler implements IProcessMessageHandler {
 	}
 
 	public void handle(ProcessMessage response) {
-		final ArrayList proposals = new ArrayList();
+		final ArrayList<CompilerProposal> proposals = new ArrayList<CompilerProposal>();
 		collectProposals(proposals, response);
 		exchange(proposals);
 	}
 
-	private ArrayList<CompilerProposal> exchange(final ArrayList proposals) {
+	private ArrayList<CompilerProposal> exchange(final ArrayList<CompilerProposal> proposals) {
 		try {
 			 return _proposalExchanger.exchange(proposals, 3, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
@@ -36,7 +36,7 @@ public class CompilerProposalsMessageHandler implements IProcessMessageHandler {
 		return null;
 	}
 
-	private void collectProposals(final ArrayList resultingProposals,
+	private void collectProposals(final ArrayList<CompilerProposal> resultingProposals,
 			ProcessMessage response) {
 		String messagePayload = response.payload;
 		BufferedReader reader = new BufferedReader(new StringReader(messagePayload));	

@@ -95,10 +95,10 @@ public class BooExplorerLabelProvider implements ILabelProvider {
 			: cache(new OverlayedImage(image, null, errorOverlay));
 	}
 	
-	Map _imageCache = new HashMap();
+	Map<ImageDescriptor, Image> _imageCache = new HashMap<ImageDescriptor, Image>();
 
 	private Image cache(ImageDescriptor descriptor) {
-		Image cached = (Image)_imageCache.get(descriptor);
+		Image cached = _imageCache.get(descriptor);
 		if (null == cached) {
 			cached = descriptor.createImage();
 			_imageCache.put(descriptor, cached);

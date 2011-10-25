@@ -21,14 +21,24 @@ package monolipse.ui.editors;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.sound.sampled.Line;
-
 import monolipse.ui.BooUI;
-import monolipse.ui.editors.actions.*;
+import monolipse.ui.editors.actions.ExpandCodeAction;
+import monolipse.ui.editors.actions.ExpandMacrosAction;
+import monolipse.ui.editors.actions.GotoDefinitionAction;
+import monolipse.ui.editors.actions.ToggleCommentAction;
 
-import org.eclipse.jface.action.*;
-import org.eclipse.jface.text.*;
-import org.eclipse.jface.text.information.*;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IInformationControl;
+import org.eclipse.jface.text.IInformationControlCreator;
+import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.Position;
+import org.eclipse.jface.text.Region;
+import org.eclipse.jface.text.information.IInformationProvider;
+import org.eclipse.jface.text.information.IInformationProviderExtension;
+import org.eclipse.jface.text.information.InformationPresenter;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.IVerticalRuler;
@@ -43,7 +53,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.editors.text.TextEditor;
-import org.eclipse.ui.texteditor.*;
+import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 
@@ -98,13 +108,13 @@ public class BooEditor extends TextEditor {
 	private Annotation[] oldAnnotations;
 	private ProjectionAnnotationModel annotationModel;
 	
-	public void updateFoldingStructure(ArrayList positions)
+	public void updateFoldingStructure(ArrayList<Position> positions)
 	{
 		Annotation[] annotations = new Annotation[positions.size()];
 		
 		//this will hold the new annotations along
 		//with their corresponding positions
-		HashMap newAnnotations = new HashMap();
+		HashMap<ProjectionAnnotation, Position> newAnnotations = new HashMap<ProjectionAnnotation, Position>();
 		
 		for(int i = 0;i < positions.size(); i++)
 		{
@@ -191,6 +201,7 @@ public class BooEditor extends TextEditor {
 		menu.appendToGroup(ITextEditorActionConstants.MB_ADDITIONS, getAction(GotoDefinitionAction.ID));
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Object getAdapter(Class required) {
 		if (IContentOutlinePage.class.equals(required)) {
 			return outlinePage();

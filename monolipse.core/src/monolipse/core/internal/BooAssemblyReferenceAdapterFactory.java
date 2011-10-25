@@ -10,7 +10,7 @@ import org.eclipse.core.runtime.IAdapterFactory;
 
 public class BooAssemblyReferenceAdapterFactory implements IAdapterFactory {
 
-	public Object getAdapter(Object adaptableObject, Class adapterType) {
+	public Object getAdapter(Object adaptableObject, @SuppressWarnings("rawtypes") Class adapterType) {
 		IFile file = (IFile)adaptableObject;
 		if (!file.exists()) return null;
 		try {
@@ -21,6 +21,7 @@ public class BooAssemblyReferenceAdapterFactory implements IAdapterFactory {
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Class[] getAdapterList() {
 		return new Class[] { IAssemblyReference.class };
 	}

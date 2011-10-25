@@ -25,7 +25,7 @@ import org.eclipse.swt.graphics.Image;
 
 public class BooContentAssistProcessor implements IContentAssistProcessor {
 	
-	Map _imageMap = new HashMap();
+	Map<String, Image> _imageMap = new HashMap<String, Image>();
 	private CompilerProposal[] _cachedProposals;
 	private String _cachedLine;
 	private AbstractBooServiceClient _client;
@@ -109,7 +109,7 @@ public class BooContentAssistProcessor implements IContentAssistProcessor {
 	}
 
 	private ICompletionProposal[] filterCachedProposals(String prefix, int offset) {
-		ArrayList filtered = new ArrayList();
+		ArrayList<CompletionProposal> filtered = new ArrayList<CompletionProposal>();
 		for (int i=0; i<_cachedProposals.length; ++i) {
 			CompilerProposal item = _cachedProposals[i];
 			String name = item.getName();
@@ -117,11 +117,11 @@ public class BooContentAssistProcessor implements IContentAssistProcessor {
 				filtered.add(newCompletionProposal(prefix, offset, item));
 			}
 		}
-		return (ICompletionProposal[]) filtered.toArray(new ICompletionProposal[filtered.size()]);
+		return filtered.toArray(new ICompletionProposal[filtered.size()]);
 	}
 
 	private Image getImage(CompilerProposal proposal) {
-		return (Image)_imageMap.get(proposal.getEntityType());
+		return _imageMap.get(proposal.getEntityType());
 	}
 
 	private String massageDescription(String description) {

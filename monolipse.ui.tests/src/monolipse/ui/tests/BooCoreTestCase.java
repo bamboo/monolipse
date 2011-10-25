@@ -45,7 +45,7 @@ public class BooCoreTestCase extends AbstractBooTestCase {
 		assertSame(reference, getAdapter(folder, IAssemblyReference.class));
 	}
 
-	private Object getAdapter(Object adaptable, Class adapterClass) {
+	private Object getAdapter(Object adaptable, Class<?> adapterClass) {
 		return Platform.getAdapterManager().getAdapter(adaptable, adapterClass);
 	}
 }
