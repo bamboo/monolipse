@@ -225,10 +225,18 @@ public class BooAssemblySource implements IAssemblySource {
 		public IAssemblyReference[] activateReferences() throws CoreException {
 			IAssemblyReference[] asmReferences = new IAssemblyReference[references.length];
 			for (int i=0; i<asmReferences.length; ++i) {
-				asmReferences[i] = (IAssemblyReference) references[i].activate();
+				asmReferences[i] = activateReference(references[i]);
 			}
 			return asmReferences;
 			                                                                
+		}
+
+		private IAssemblyReference activateReference(IRemembrance ref) {
+			try {
+				return (IAssemblyReference) ref.activate();
+			} catch (CoreException e) {
+				return new AssemblyReferenceError(e, ref);
+			}
 		}
 	}
 	

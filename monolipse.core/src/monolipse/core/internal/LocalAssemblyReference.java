@@ -57,6 +57,11 @@ public class LocalAssemblyReference implements ILocalAssemblyReference {
 		 */
 		public Remembrance() {
 		}
+		
+		@Override
+		public String toString() {
+			return path;
+		}
 
 		public IMemorable activate() throws CoreException {
 			return BooAssemblyReference.get(ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(this.path)));

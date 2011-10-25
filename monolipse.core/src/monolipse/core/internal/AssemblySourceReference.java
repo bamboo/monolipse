@@ -12,7 +12,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 
-
 public class AssemblySourceReference implements IAssemblySourceReference {
 	
 	private IAssemblySource _source;
@@ -55,6 +54,11 @@ public class AssemblySourceReference implements IAssemblySourceReference {
 		 * on less capable virtual machines.
 		 */
 		public Remembrance() {
+		}
+		
+		@Override
+		public String toString() {
+			return path;
 		}
 
 		public IMemorable activate() throws CoreException {

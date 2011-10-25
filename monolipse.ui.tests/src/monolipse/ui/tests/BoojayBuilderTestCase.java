@@ -41,7 +41,7 @@ public class BoojayBuilderTestCase extends AbstractBooTestCase {
 	}
 
 	private IMarker[] booProblemsOn(final IFile file) throws CoreException {
-		return file.findMarkers(BooBuilder.BOO_PROBLEM_MARKER_TYPE, true, IResource.DEPTH_ZERO);
+		return file.findMarkers(BooMarkers.BOO_PROBLEM_MARKER_TYPE, true, IResource.DEPTH_ZERO);
 	}
 
 	private void assertOutputFile(final String expectedFileName) throws CoreException {

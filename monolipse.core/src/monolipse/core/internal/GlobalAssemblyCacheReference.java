@@ -1,5 +1,7 @@
 package monolipse.core.internal;
 
+import java.text.MessageFormat;
+
 import monolipse.core.BooCore;
 import monolipse.core.IAssemblyReference;
 import monolipse.core.IAssemblyReferenceVisitor;
@@ -63,6 +65,11 @@ public class GlobalAssemblyCacheReference implements IGlobalAssemblyCacheReferen
 		 * on less capable virtual machines.
 		 */
 		public Remembrance() {
+		}
+		
+		@Override
+		public String toString() {
+			return MessageFormat.format("{}, Version={}, Culture={}, PublicKey={}", name, version, culture, token);
 		}
 
 		public IMemorable activate() throws CoreException {

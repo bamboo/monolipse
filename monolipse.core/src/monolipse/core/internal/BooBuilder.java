@@ -32,35 +32,16 @@ public class BooBuilder extends IncrementalProjectBuilder {
 
 	public static final String BUILDER_ID = BooCore.ID_PLUGIN + ".booBuilder";
 
-	public static final String BOO_PROBLEM_MARKER_TYPE = BooCore.ID_PLUGIN + ".booProblem";
-	
 	protected void startupOnInitialize() {
 		super.startupOnInitialize();
 	}
 		
-	private void addMarker(IResource resource, String message, int lineNumber,
-			int severity) {
-		try {
-			IMarker marker = resource.createMarker(BOO_PROBLEM_MARKER_TYPE);
-			marker.setAttribute(IMarker.MESSAGE, message);
-			marker.setAttribute(IMarker.SEVERITY, severity);
-			if (lineNumber == -1) {
-				lineNumber = 1;
-			}
-			marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
-		} catch (CoreException e) {
-			BooCore.logException(e);
-		}
-	}
+	private void addMarker(String path, String message, int lineNumber, int severity) {
 
-	private void addMarker(String path, String message, int lineNumber,
-			int severity) {
-
-		String relativePath = path.substring(getProject().getLocation()
-				.toOSString().length() + 1);
+		String relativePath = path.substring(getProject().getLocation().toOSString().length() + 1);
 		relativePath = relativePath.replaceAll("\\\\", "/");
 		IFile file = getProject().getFile(relativePath);
-		addMarker(file, message, lineNumber, severity);
+		BooMarkers.addMarker(file, message, lineNumber, severity);
 
 	}
 	
@@ -70,7 +51,7 @@ public class BooBuilder extends IncrementalProjectBuilder {
 			try { 
 				clean(sources[i], monitor);
 			} catch (Exception x) {
-				addMarker(sources[i].getFolder(), x.getMessage(), -1, IMarker.SEVERITY_ERROR);
+				BooMarkers.addMarker(sources[i].getFolder(), x.getMessage(), -1, IMarker.SEVERITY_ERROR);
 			}
 		}
 	}
@@ -99,7 +80,7 @@ public class BooBuilder extends IncrementalProjectBuilder {
 	 * @see org.eclipse.core.internal.events.InternalBuilder#build(int,
 	 *      java.util.Map, org.eclipse.core.runtime.IProgressMonitor)
 	 */
-	protected IProject[] build(int kind, Map args, IProgressMonitor monitor)
+	protected IProject[] build(int kind, Map<String, String> args, IProgressMonitor monitor)
 			throws CoreException {
 		if (kind == FULL_BUILD) {
 			fullBuild(monitor);
@@ -112,14 +93,6 @@ public class BooBuilder extends IncrementalProjectBuilder {
 			}
 		}
 		return null;
-	}
-
-	private void deleteMarkers(IResource resource) {
-		try {
-			resource.deleteMarkers(BOO_PROBLEM_MARKER_TYPE, false, IResource.DEPTH_INFINITE);
-		} catch (CoreException e) {
-			BooCore.logException(e);
-		}
 	}
 
 	protected void fullBuild(final IProgressMonitor monitor)
@@ -149,9 +122,12 @@ public class BooBuilder extends IncrementalProjectBuilder {
 		return ensureReferences(source);
 	}
 
-	private boolean ensureReferences(IAssemblySource source)
-			throws CoreException {
-		for (IAssemblyReference r : source.getReferences()) {;
+	private boolean ensureReferences(IAssemblySource source) throws CoreException {
+		
+		for (IAssemblyReference r : source.getReferences()) {
+			if (r instanceof AssemblyReferenceError) {
+				return cantBeBuilt(source, "reference '" + r.getRemembrance() + "' couldn't be loaded: " + ((AssemblyReferenceError)r).error().getLocalizedMessage());
+			}
 			if (r instanceof IAssemblySourceReference) {
 				if (hasErrors(((IAssemblySourceReference)r).getAssemblySource())) {
 					return cantBeBuilt(source, "reference '" + r.getAssemblyName() + "' contains errors.");
@@ -166,7 +142,7 @@ public class BooBuilder extends IncrementalProjectBuilder {
 	}
 
 	private boolean hasErrors(IAssemblySource source) throws CoreException {
-		IMarker[] markers = source.getFolder().findMarkers(BOO_PROBLEM_MARKER_TYPE, false, IResource.DEPTH_INFINITE);
+		IMarker[] markers = source.getFolder().findMarkers(BooMarkers.BOO_PROBLEM_MARKER_TYPE, false, IResource.DEPTH_INFINITE);
 		for (int i=0; i<markers.length; ++i) {
 			if (IMarker.SEVERITY_ERROR == markers[i].getAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR)) {
 				return true;
@@ -176,7 +152,7 @@ public class BooBuilder extends IncrementalProjectBuilder {
 	}
 
 	private boolean cantBeBuilt(IAssemblySource source, String reason) {
-		addErrorMarker(source, "'" + source.getFolder().getName() + "' can't be built because " + reason);
+		BooMarkers.addErrorMarker(source, "'" + source.getFolder().getName() + "' can't be built because " + reason);
 		return false;
 	}
 	
@@ -193,7 +169,7 @@ public class BooBuilder extends IncrementalProjectBuilder {
 	
 	void compile(IAssemblySource source, IProgressMonitor monitor) throws CoreException {
 		
-		deleteMarkers(source.getFolder());
+		BooMarkers.deleteMarkers(source.getFolder());
 		
 		try {
 			if (!ensureCanBeBuilt(source))
@@ -203,19 +179,19 @@ public class BooBuilder extends IncrementalProjectBuilder {
 			if (0 == files.length) return;
 			
 			IFile file = source.getOutputFile();
-			WorkspaceUtilities.ensureDerivedParentExists(file);
+			WorkspaceUtilities.ensureDerivedParentExists(file, monitor);
 			CompilerError[] errors = launchCompiler(source, files);
 			if (0 == reportErrors(source, errors)) {
 				file.getParent().refreshLocal(IResource.DEPTH_ONE, monitor);
 				if (file.exists()) {
-					file.setDerived(true);
+					file.setDerived(true, monitor);
 				}
 				IFolder outputFolder = (IFolder)file.getParent();
 				copyLocalReferences(source, outputFolder, monitor);
 				copyResources(source, outputFolder, monitor);
 			}
 		} catch (Exception e) {
-			addMarker(source.getFolder(), e.getMessage(), -1, IMarker.SEVERITY_ERROR);
+			BooMarkers.addMarker(source.getFolder(), e.getMessage(), -1, IMarker.SEVERITY_ERROR);
 			BooCore.logException(e);
 		}
 	}
@@ -254,7 +230,6 @@ public class BooBuilder extends IncrementalProjectBuilder {
 		launcher.addSourceFiles(files);
 		return launcher.run();
 	}
-
 	
 	int reportErrors(IAssemblySource source, CompilerError[] errors) throws IOException {
 		
@@ -263,7 +238,7 @@ public class BooBuilder extends IncrementalProjectBuilder {
 			
 			boolean isError = error.severity == CompilerError.ERROR;
 			if (error.path == null)
-				addErrorMarker(source, error.message);
+				BooMarkers.addErrorMarker(source, error.message);
 			else
 				addMarker(error.path, error.message, error.line, isError
 							? IMarker.SEVERITY_ERROR
@@ -272,9 +247,5 @@ public class BooBuilder extends IncrementalProjectBuilder {
 			if (isError) ++errorCount;
 		}
 		return errorCount;
-	}
-
-	private void addErrorMarker(IAssemblySource source, String message) {
-		addMarker(source.getFolder(), message, -1, IMarker.SEVERITY_ERROR);
 	}
 }
