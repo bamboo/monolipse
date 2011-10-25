@@ -63,7 +63,7 @@ public class BooPartitionScanner extends RuleBasedPartitionScanner {
 			new MultiLineRule("/*", "*/", multiLineComment, (char)0, true),
 			new PatternRule("@/", "/", regex, '\\', false, false),
 			new EndOfLineRule("//", singleLineComment),
-			new PatternRule("/", "/", regex, '\\', false, false),
+			new SingleLineRule("/", "/", regex, '\\', false, false),
 			new MultiLineRule("\"\"\"", "\"\"\"", tqs, (char)0, true),
 			new SingleLineRule("\"", "\"", dqs, '\\'),
 			new SingleLineRule("'", "'", sqs, '\\'),
