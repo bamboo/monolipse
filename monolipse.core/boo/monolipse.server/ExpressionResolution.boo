@@ -44,7 +44,7 @@ class NodeInformationProvider(DepthFirstVisitor):
 		if node is null:
 			return ElementInfo.Unknown
 	
-		match TypeSystemServices.GetOptionalEntity(node):
+		match node.Entity:
 			case l=ILocalEntity(Name: name, Type: t):
 				return ElementInfo(NodeType: "local", Name: name, ResolvedType: ToString(t), Info: node.GetAncestor[of Method]().FullName, Documentation: DocStringFor(l))
 			case c=IConstructor():
@@ -78,7 +78,7 @@ class NodeInformationProvider(DepthFirstVisitor):
 		if node is null:
 			return "?"
 			
-		match TypeSystemServices.GetOptionalEntity(node):
+		match node.Entity:
 			case l=ILocalEntity(Name: name, Type: t):
 				return FormatHoverText("${name} as ${ToString(t)} - ${node.GetAncestor[of Method]().FullName}", DocStringFor(l))
 			case c=IConstructor():
@@ -127,7 +127,7 @@ class NodeInformationProvider(DepthFirstVisitor):
 		resolvedNode = Resolve(node)
 		if resolvedNode is null:
 			return null
-		return TypeSystemServices.GetOptionalEntity(resolvedNode)
+		return resolvedNode.Entity
 				
 	def ToString(type as IType):
 		match type:
