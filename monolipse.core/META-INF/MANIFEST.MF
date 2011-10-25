@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jdt.core,
  org.eclipse.jdt.launching;visibility:=reexport,
  org.eclipse.jdt.debug;visibility:=reexport
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Export-Package: com.thoughtworks.xstream,
  com.thoughtworks.xstream.alias,
  com.thoughtworks.xstream.converters,
