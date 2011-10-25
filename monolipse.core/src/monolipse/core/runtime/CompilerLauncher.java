@@ -37,8 +37,8 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 	private static String[] getProjectClasspaths(IAssemblySource source) {
 		ArrayList<String> result = new ArrayList<String>();
 		
-		IJavaProject javaProject = JavaCore.create(source.getFolder().getProject());
 		try {
+			IJavaProject javaProject = JavaCore.create(source.getFolder().getProject());			
 			IClasspathEntry[] classpaths = javaProject.getRawClasspath();
 			for (IClasspathEntry classpath: classpaths) {
 				if (classpath.getEntryKind() == IClasspathEntry.CPE_LIBRARY) {
