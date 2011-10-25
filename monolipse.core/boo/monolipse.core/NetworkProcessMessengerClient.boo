@@ -4,7 +4,8 @@ import System.IO
 import System.Threading
 import System.Net.Sockets
 
-transient class NetworkProcessMessengerClient(ProcessMessengerClient, System.MarshalByRefObject):
+[transient]
+class NetworkProcessMessengerClient(ProcessMessengerClient, System.MarshalByRefObject):
 	
 	_client as TcpClient
 	_reader as TextReader
