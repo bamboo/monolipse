@@ -20,7 +20,7 @@ public class IO {
 			targetFile.delete(true, monitor);
 		}
 		sourceFile.copy(targetFile.getFullPath(), true, monitor);
-		targetFile.setDerived(true);
+		targetFile.setDerived(true, monitor);
 	}
 
 	static boolean isNewer(IFile sourceFile, IFile targetFile) {

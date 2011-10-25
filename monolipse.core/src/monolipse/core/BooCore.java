@@ -104,8 +104,8 @@ public class BooCore extends Plugin {
 		return BooAssemblySource.isAssemblySource(selectedElement);
 	}
 
-	public static IMonoProject createProject(IProject project) throws CoreException {
-		return BooProject.create(project);
+	public static IMonoProject createProject(IProject project, IProgressMonitor monitor) throws CoreException {
+		return BooProject.create(project, monitor);
 	}
 
 	public static IAssemblyReference[] listGlobalAssemblyCache() throws IOException {

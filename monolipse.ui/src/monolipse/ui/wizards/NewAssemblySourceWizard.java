@@ -23,7 +23,7 @@ public class NewAssemblySourceWizard extends Wizard implements INewWizard {
 	public boolean performFinish() {
 		IWorkspaceRunnable action = new IWorkspaceRunnable() {
 			public void run(IProgressMonitor monitor) throws CoreException {
-				IMonoProject booProject = BooCore.createProject(_selection.getProject());
+				IMonoProject booProject = BooCore.createProject(_selection.getProject(), monitor);
 				
 				IPath containerPath = _selection.getProjectRelativePath();
 				booProject.addAssemblySource(containerPath.append(_mainPage.getName()));

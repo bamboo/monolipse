@@ -20,11 +20,11 @@ public class WorkspaceUtilities {
 		}
 	}
 
-	public static void ensureDerivedParentExists(IFile file) throws CoreException {
+	public static void ensureDerivedParentExists(IFile file, IProgressMonitor monitor) throws CoreException {
 		IContainer parent = file.getParent();
 		if (IResource.FOLDER == parent.getType()) {
 			createTree((IFolder)parent);
-			parent.setDerived(true);
+			parent.setDerived(true, monitor);
 		}
 	}
 	

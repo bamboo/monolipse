@@ -28,7 +28,7 @@ public abstract class AbstractBooTestCase extends TestCase{
 	protected void setUp() throws Exception {
 		disableAutoBuilding();
 		_project = new SimpleProject("Test");
-		_booProject = BooCore.createProject(getProject());
+		_booProject = BooCore.createProject(getProject(), null);
 		assertNotNull(_booProject);
 	}
 	

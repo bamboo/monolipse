@@ -29,7 +29,7 @@ public class NewBooProjectWizard extends Wizard implements INewWizard {
 				project.create(monitor);
 				project.open(monitor);
 				
-				IMonoProject booProject = BooCore.createProject(project);
+				IMonoProject booProject = BooCore.createProject(project, monitor);
 				booProject.addAssemblySource(new Path("src").append(project.getName()));
 			}
 		};

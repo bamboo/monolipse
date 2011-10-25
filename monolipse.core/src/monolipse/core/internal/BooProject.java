@@ -40,7 +40,9 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.jdt.core.JavaCore;
 
 
 public class BooProject implements IMonoProject {
@@ -48,20 +50,27 @@ public class BooProject implements IMonoProject {
 	private static final QualifiedName SESSION_KEY = new QualifiedName(
 			"monolipse.core.resources", "BooProject");
 
-	public static IMonoProject create(IProject project) throws CoreException {
+	public static IMonoProject create(IProject project, IProgressMonitor monitor) throws CoreException {		
 		if (project.hasNature(BooCore.ID_NATURE)) {
 			return BooProject.get(project);
 		}
-		IProjectDescription description = project.getDescription();
-		description.setNatureIds((String[]) ArrayUtilities.append(description
-				.getNatureIds(), BooCore.ID_NATURE));
-		project.setDescription(description, null);
+		ensureNaturesFor(project, monitor, BooCore.ID_NATURE, JavaCore.NATURE_ID);
 		return BooProject.get(project);
+	}
+
+	private static void ensureNaturesFor(IProject project, IProgressMonitor monitor, String... expectedNatureIds) throws CoreException {
+		IProjectDescription description = project.getDescription();		
+		String[] natureIds = description.getNatureIds();
+		for (String expected : expectedNatureIds)
+			if (!project.hasNature(expected))
+				natureIds = ArrayUtilities.append(natureIds, expected);
+		description.setNatureIds(natureIds);
+		project.setDescription(description, monitor);
 	}
 
 	public static IMonoProject get(IProject project) throws CoreException {
 		IMonoProject p = (IMonoProject) project.getSessionProperty(SESSION_KEY);
-		if (null == p && project.hasNature(BooCore.ID_NATURE)) {
+		if (p == null && project.hasNature(BooCore.ID_NATURE)) {
 			p = new BooProject(project);
 			project.setSessionProperty(SESSION_KEY, p);
 		}
