@@ -39,3 +39,4 @@ Export-Package: com.thoughtworks.xstream,
  monolipse.core.runtime
 Bundle-ClassPath: lib/xstream/xstream-1.1.2.jar,
  monolipse.core.jar
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

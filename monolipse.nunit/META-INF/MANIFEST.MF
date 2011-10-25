@@ -21,3 +21,4 @@ Bundle-ClassPath: monolipse.nunit.jar
 Export-Package: monolipse.nunit,
  monolipse.nunit.launching,
  monolipse.nunit.views
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
