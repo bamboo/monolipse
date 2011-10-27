@@ -28,7 +28,7 @@ public class MonoRuntimeImpl implements IMonoRuntime {
 	static final Pattern ASSEMBLY_NAME_PATTERN = Pattern
 			.compile("\\s*([^,]+),\\s*Version=([^,]+),\\s*Culture=([^,]+),\\s*PublicKeyToken=([^,]+)($|,\\s*Custom=null)$");
 
-	public static final String PATH_GACUTIL = "lib/mono/1.0/gacutil.exe";
+	public static final String PATH_GACUTIL = "lib/mono/4.0/gacutil.exe";
 
 	public static String getOSDependentRuntimeExecutable(String runtimeLocation)
 			throws IOException {
@@ -100,12 +100,7 @@ public class MonoRuntimeImpl implements IMonoRuntime {
 	}
 
 	private void initializeGlobalAssemblyCache() throws IOException {
-		IMonoLauncher launcher = createLauncher(IOUtilities.combinePath(
-				getLocation(), PATH_GACUTIL));
-		launcher.add("-l");
-		Process p = launcher.launch();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(p
-				.getInputStream()));
+		BufferedReader reader = gac();
 		String line = null;
 		while (null != (line = reader.readLine())) {
 			Matcher m = ASSEMBLY_NAME_PATTERN.matcher(line);
@@ -118,8 +113,15 @@ public class MonoRuntimeImpl implements IMonoRuntime {
 
 				getGlobalAssemblyCacheReference(name, version, culture, token);
 			}
-		}
+		}		
 		_gacInitialized = true;
+	}
+
+	private BufferedReader gac() throws IOException {
+		IMonoLauncher launcher = createLauncher(IOUtilities.combinePath(getLocation(), PATH_GACUTIL));
+		launcher.add("-l");
+		Process p = launcher.launch();
+		return new BufferedReader(new InputStreamReader(p.getInputStream()));
 	}
 
 	public IAssemblyReference[] listGlobalAssemblyCache() throws IOException {
