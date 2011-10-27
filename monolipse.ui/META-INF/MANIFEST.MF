@@ -36,3 +36,4 @@ Export-Package: monolipse.ui,
  monolipse.ui.views,
  monolipse.ui.wizards
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: monolipse.ui.internal
