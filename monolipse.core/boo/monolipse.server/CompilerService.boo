@@ -13,8 +13,8 @@ service CompilerService:
 		module.Accept(OutlineVisitor(response))
 			
 	onMessageWithResponse "GET-COMPILER-PROPOSALS":
-		proposals = ContentAssistProcessor.ProposalsFor(message.Payload)
-		writeTypeSystemEntitiesTo proposals, response
+		ContentAssistProcessor.WithProposalsFor(message.Payload) do (proposals):
+			writeTypeSystemEntitiesTo proposals, response
 			
 	onMessageWithResponse "EXPAND-BOO":
 		result = compileCodeWithPipeline(message.Payload, Pipelines.Compile())

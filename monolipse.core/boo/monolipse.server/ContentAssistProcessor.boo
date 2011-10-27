@@ -8,12 +8,13 @@ class ContentAssistProcessor(DepthFirstVisitor):
 	
 	static final MemberAnchor = '__codecomplete__'
 	
-	static def ProposalsFor(source as string):
+	static def WithProposalsFor(source as string, continuation as callable(IEntity*)):
 		
 		resolution = ExpressionResolution.ForCodeString(source)
 		processor = ContentAssistProcessor(resolution.NodeInformationProvider)
-		resolution.RunInResolvedCompilerContext: processor.VisitAllowingCancellation(resolution.OriginalCompileUnit)
-		return processor.Members
+		resolution.RunInResolvedCompilerContext:
+			processor.VisitAllowingCancellation(resolution.OriginalCompileUnit)
+			continuation(processor.Members)
 
 	Members as (IEntity):
 		get:
