@@ -10,9 +10,7 @@ public interface IAssemblySource extends IAdaptable {
 	
 	public interface OutputType {
 		public static final String CONSOLE_APPLICATION = "exe";
-	
 		public static final String WINDOWS_APPLICATION = "winexe";
-	
 		public static final String LIBRARY = "library";
 	}
 
@@ -47,5 +45,4 @@ public interface IAssemblySource extends IAdaptable {
 	String getAdditionalOptions();
 
 	void setAdditionalOptions(String additionalOptions);
-
 }

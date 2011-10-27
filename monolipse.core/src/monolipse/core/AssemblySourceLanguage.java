@@ -31,7 +31,7 @@ public enum AssemblySourceLanguage {
 		
 	}
 
-	private boolean isBoo() {
+	public boolean isBoo() {
 		return this == BOO || this == BOOJAY;
 	}
 	
