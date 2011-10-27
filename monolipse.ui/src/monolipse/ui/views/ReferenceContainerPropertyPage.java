@@ -40,7 +40,6 @@ import org.eclipse.ui.*;
 import org.eclipse.ui.model.*;
 import org.eclipse.ui.views.navigator.*;
 
-
 public class ReferenceContainerPropertyPage extends PreferencePage
 	implements IWorkbenchPropertyPage {
 	
@@ -295,7 +294,7 @@ public class ReferenceContainerPropertyPage extends PreferencePage
 				return false;
 			}
 		});
-		viewer.expandAll();
+		//viewer.expandAll();
 		return viewer.getControl();
 	}
 
@@ -317,7 +316,7 @@ public class ReferenceContainerPropertyPage extends PreferencePage
 				return false;
 			}
 		});
-		viewer.expandAll();
+		//viewer.expandAll();
 		return viewer.getControl();
 	}
 
