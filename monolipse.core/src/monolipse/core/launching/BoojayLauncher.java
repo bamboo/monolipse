@@ -1,16 +1,23 @@
 package monolipse.core.launching;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import monolipse.core.BooCore;
-import monolipse.core.foundation.Projects;
 
-import org.eclipse.core.resources.*;
-import org.eclipse.core.runtime.*;
-import org.eclipse.debug.core.*;
-import org.eclipse.jdt.core.*;
-import org.eclipse.jdt.launching.*;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationType;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
+import org.eclipse.jdt.launching.JavaRuntime;
 
 public class BoojayLauncher {
 	
@@ -77,7 +84,6 @@ public class BoojayLauncher {
 
 		private static IJavaProject javaProjectFor(IFile file) throws CoreException {
 			final IProject project = file.getProject();
-			Projects.ensureHasJavaNature(project);
 			return JavaCore.create(project);
 		}
 
