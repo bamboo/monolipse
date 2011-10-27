@@ -22,8 +22,6 @@ macro service.onMessageWithResponse:
 			onMessage $name:
 				try:
 					$(onMessageWithResponse.Body)
-				except x:
-					System.Console.Error.WriteLine(x)
 				ensure:
 					flush $name + "-RESPONSE"
 		|]

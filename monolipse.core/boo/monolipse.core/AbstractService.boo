@@ -16,7 +16,10 @@ class AbstractService:
 	def onMessage(name as string, handler as MessageHandler):
 		_client.OnMessage(name) do (message as Message):
 			resetBuffer()
-			handler(message)
+			try:
+				handler(message)
+			except x:
+				System.Console.Error.WriteLine(x)
 	
 	def writeLine(line):
 		_response.WriteLine(line)
