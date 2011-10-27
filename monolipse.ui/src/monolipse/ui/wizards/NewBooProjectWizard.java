@@ -17,13 +17,22 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
-
 public class NewBooProjectWizard extends Wizard implements INewWizard {
 
 	private WizardNewProjectCreationPage _projectPage;
 
 	public boolean performFinish() {
-		IWorkspaceRunnable action = new IWorkspaceRunnable() {
+		try {
+			ResourcesPlugin.getWorkspace().run(projectCreation(), null);
+		} catch (CoreException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	private IWorkspaceRunnable projectCreation() {
+		return new IWorkspaceRunnable() {
 			public void run(IProgressMonitor monitor) throws CoreException {
 				IProject project = _projectPage.getProjectHandle();
 				project.create(monitor);
@@ -33,14 +42,6 @@ public class NewBooProjectWizard extends Wizard implements INewWizard {
 				booProject.addAssemblySource(new Path("src").append(project.getName()));
 			}
 		};
-		try {
-			ResourcesPlugin.getWorkspace().run(action, null);
-		} catch (CoreException e) {
-			e.printStackTrace();
-			return false;
-		}
-		
-		return true;
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
