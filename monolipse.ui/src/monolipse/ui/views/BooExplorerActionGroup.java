@@ -40,7 +40,7 @@ public class BooExplorerActionGroup extends ActionGroup {
 		_openViewActionGroup = new OpenViewActionGroup(view);
 		
 		_view = view;
-		_refreshAction = new RefreshAction(_view.getSite().getShell());
+		_refreshAction = new RefreshAction(_view.getSite());
 		
 		_configureBuildPath = new ConfigureBuildPathAction(view);
 		_useAsAssemblySource = new UseAsAssemblySourceAction(view);
