@@ -11,7 +11,6 @@ import monolipse.core.IRemembrance;
 
 import org.eclipse.core.runtime.CoreException;
 
-
 public class GlobalAssemblyCacheReference implements IGlobalAssemblyCacheReference {
 
 	private String _name;
