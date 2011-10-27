@@ -12,20 +12,22 @@ import org.osgi.framework.Bundle;
 public class WorkspaceUtilities {
 	public static void createTree(IFolder folder) throws CoreException {
 		IContainer parent = folder.getParent();
-		if (!parent.exists()) {
+		if (isFolder(parent) && !parent.exists())
 			createTree((IFolder)parent);
-		}
-		if (!folder.exists()) {
+		if (!folder.exists())
 			folder.create(true, true, null);
-		}
 	}
 
 	public static void ensureDerivedParentExists(IFile file, IProgressMonitor monitor) throws CoreException {
 		IContainer parent = file.getParent();
-		if (IResource.FOLDER == parent.getType()) {
+		if (isFolder(parent)) {
 			createTree((IFolder)parent);
 			parent.setDerived(true, monitor);
 		}
+	}
+
+	private static boolean isFolder(IContainer parent) {
+		return IResource.FOLDER == parent.getType();
 	}
 	
 	public static String getLocation(IResource resource) {
