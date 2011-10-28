@@ -4,17 +4,15 @@ import System.IO
 
 class AbstractService:
 	
-	[getter(client)]
-	_client as ProcessMessengerClient
+	final client as ProcessMessengerClient
 	
-	[getter(response)] 
-	_response = StringWriter()
+	final response = StringWriter()
 
 	def constructor(client as ProcessMessengerClient):
-		_client = client
+		self.client = client
 		
 	def onMessage(name as string, handler as MessageHandler):
-		_client.OnMessage(name) do (message as Message):
+		client.OnMessage(name) do (message as Message):
 			resetBuffer()
 			try:
 				handler(message)
@@ -22,18 +20,18 @@ class AbstractService:
 				System.Console.Error.WriteLine(x)
 	
 	def writeLine(line):
-		_response.WriteLine(line)
+		response.WriteLine(line)
 		
-	def resetBuffer():
-		_response.GetStringBuilder().Length = 0
-		
-	def flush(name as string):
-		payload = _response.ToString()
+	def flushResponse(name as string):
+		payload = response.ToString()
 		resetBuffer()
 		send name, payload
 		
+	def resetBuffer():
+		response.GetStringBuilder().Length = 0
+		
 	def send(name as string, payload):
-		_client.Send(Message(Name: name, Payload: payload.ToString()))
+		client.Send(Message(Name: name, Payload: payload.ToString()))
 		
 	def send(name as string):
-		send(name, "")
+		send name, ""

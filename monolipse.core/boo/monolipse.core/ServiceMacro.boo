@@ -23,5 +23,5 @@ macro service.onMessageWithResponse:
 				try:
 					$(onMessageWithResponse.Body)
 				ensure:
-					flush $name + "-RESPONSE"
+					flushResponse $name + "-RESPONSE"
 		|]
