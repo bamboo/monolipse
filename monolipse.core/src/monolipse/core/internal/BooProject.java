@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import monolipse.core.AssemblySourceLanguage;
 import monolipse.core.BooCore;
 import monolipse.core.IAssemblySource;
 import monolipse.core.IMonoProject;
@@ -88,11 +89,11 @@ public class BooProject implements IMonoProject {
 	 * 
 	 * @see monolipse.core.IBooProject#addAssemblySource(org.eclipse.core.runtime.IPath)
 	 */
-	public IAssemblySource addAssemblySource(IPath path)
+	public IAssemblySource addAssemblySource(IPath path, AssemblySourceLanguage language)
 			throws CoreException {
 		IFolder folder = _project.getFolder(path);
 		WorkspaceUtilities.createTree(folder);
-		return BooAssemblySource.create(folder);
+		return BooAssemblySource.create(folder, language);
 	}
 
 	/*

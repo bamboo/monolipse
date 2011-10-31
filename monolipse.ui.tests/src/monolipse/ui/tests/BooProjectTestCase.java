@@ -17,17 +17,11 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 
-
 public class BooProjectTestCase extends AbstractBooTestCase {
 
 	public void testProjectAdapter() {
 		IMonoProject adapted = (IMonoProject) _project.getProject().getAdapter(IMonoProject.class);
 		assertSame(_booProject, adapted);
-	}
-	
-	public void testDefaultLanguageIsBoojay() throws CoreException {
-		final IAssemblySource srcFolder = _booProject.addAssemblySource(new Path("src/Test"));
-		assertEquals(AssemblySourceLanguage.BOOJAY, srcFolder.getLanguage());
 	}
 	
 	public void testAddAssemblySource() throws Exception {

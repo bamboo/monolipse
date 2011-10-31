@@ -1,5 +1,6 @@
 package monolipse.ui.wizards;
 
+import monolipse.core.AssemblySourceLanguage;
 import monolipse.core.BooCore;
 import monolipse.core.IMonoProject;
 import monolipse.ui.BooUI;
@@ -39,7 +40,8 @@ public class NewBooProjectWizard extends Wizard implements INewWizard {
 				project.open(monitor);
 				
 				IMonoProject booProject = BooCore.createProject(project, monitor);
-				booProject.addAssemblySource(new Path("src").append(project.getName()));
+				// TODO: allow user to select which language to use
+				booProject.addAssemblySource(new Path("src").append(project.getName()), AssemblySourceLanguage.BOO);
 			}
 		};
 	}

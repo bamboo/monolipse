@@ -256,10 +256,17 @@
                
          <wizard
                category="monolipse.ui.wizards"
-               class="monolipse.ui.wizards.NewAssemblySourceWizard"
+               class="monolipse.ui.wizards.NewBooAssemblySourceWizard"
                icon="icons/BooFile.png"
-               id="monolipse.ui.wizards.NewAssemblySourceWizard"
+               id="monolipse.ui.wizards.NewBooAssemblySourceWizard"
                name="Boo Source Folder"/>
+               
+          <wizard
+               category="monolipse.ui.wizards"
+               class="monolipse.ui.wizards.NewBoojayAssemblySourceWizard"
+               icon="icons/BooFile.png"
+               id="monolipse.ui.wizards.NewBoojayAssemblySourceWizard"
+               name="Boojay Source Folder"/>
    </extension>
    
    <extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">

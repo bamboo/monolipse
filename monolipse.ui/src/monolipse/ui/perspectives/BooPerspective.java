@@ -33,7 +33,8 @@ public class BooPerspective implements IPerspectiveFactory {
 		
 		layout.addPerspectiveShortcut("org.eclipse.ui.resourcePerspective");
 		layout.addNewWizardShortcut("monolipse.ui.wizards.NewClassWizard");
-		layout.addNewWizardShortcut("monolipse.ui.wizards.NewAssemblySourceWizard");
+		layout.addNewWizardShortcut("monolipse.ui.wizards.NewBooAssemblySourceWizard");
+		layout.addNewWizardShortcut("monolipse.ui.wizards.NewBoojayAssemblySourceWizard");
 		layout.addNewWizardShortcut("monolipse.ui.wizards.NewBooProjectWizard");
 		layout.addNewWizardShortcut("org.eclipse.ui.wizards.new.folder");
 		layout.addNewWizardShortcut("org.eclipse.ui.wizards.new.file");

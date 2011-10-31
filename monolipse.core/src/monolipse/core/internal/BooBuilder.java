@@ -129,7 +129,7 @@ public class BooBuilder extends IncrementalProjectBuilder {
 				return cantBeBuilt(source, "reference '" + r.getRemembrance() + "' couldn't be loaded: " + ((AssemblyReferenceError)r).error().getLocalizedMessage());
 			}
 			if (r instanceof IAssemblySourceReference) {
-				if (hasErrors(((IAssemblySourceReference)r).getAssemblySource())) {
+				if (BooMarkers.hasErrors(((IAssemblySourceReference)r).getAssemblySource())) {
 					return cantBeBuilt(source, "reference '" + r.getAssemblyName() + "' contains errors.");
 				}
 			} else if (r instanceof ILocalAssemblyReference) {
@@ -139,16 +139,6 @@ public class BooBuilder extends IncrementalProjectBuilder {
 			}
 		}
 		return true;
-	}
-
-	private boolean hasErrors(IAssemblySource source) throws CoreException {
-		IMarker[] markers = source.getFolder().findMarkers(BooMarkers.BOO_PROBLEM_MARKER_TYPE, false, IResource.DEPTH_INFINITE);
-		for (int i=0; i<markers.length; ++i) {
-			if (IMarker.SEVERITY_ERROR == markers[i].getAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	private boolean cantBeBuilt(IAssemblySource source, String reason) {

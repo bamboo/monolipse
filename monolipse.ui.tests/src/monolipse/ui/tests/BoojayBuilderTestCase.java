@@ -6,7 +6,6 @@ import monolipse.core.internal.*;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
 
-
 public class BoojayBuilderTestCase extends AbstractBooTestCase {
 
 	private static final String SRC_FOLDER = "src/BoojayTest";
@@ -15,12 +14,15 @@ public class BoojayBuilderTestCase extends AbstractBooTestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		_assemblySource = _booProject.addAssemblySource(new Path(SRC_FOLDER));
+		_assemblySource = _booProject.addAssemblySource(new Path(SRC_FOLDER), AssemblySourceLanguage.BOOJAY);
 		_assemblySource.setOutputFolder(_project.createFolder("bin"));
 	}
 
 	public void testBuildJarByDefault() throws Exception {
+		assertEquals(AssemblySourceLanguage.BOOJAY, _assemblySource.getLanguage());
 		addResourceAndBuild("Boojay.boo");
+		assertNoErrorsOn(_assemblySource);
+		
 		assertOutputFile("BoojayTest.jar");
 	}
 	
@@ -30,7 +32,7 @@ public class BoojayBuilderTestCase extends AbstractBooTestCase {
 		final IFile[] sourceFiles = _assemblySource.getSourceFiles();
 		assertEquals(1, sourceFiles.length);
 		
-		final IMarker[] problems = booProblemsOn(sourceFiles[0]);
+		final IMarker[] problems = BooMarkers.booProblemsOn(sourceFiles[0]);
 		assertEquals(1, problems.length);
 		assertProblemLineNumberAndMessage(problems[0], 1, "Unknown identifier: 'p'.");
 	}
@@ -38,10 +40,6 @@ public class BoojayBuilderTestCase extends AbstractBooTestCase {
 	private void assertProblemLineNumberAndMessage(IMarker marker, int lineNumber, String message) {
 		assertEquals(lineNumber, marker.getAttribute(IMarker.LINE_NUMBER, -1));
 		assertEquals(message, marker.getAttribute(IMarker.MESSAGE, ""));
-	}
-
-	private IMarker[] booProblemsOn(final IFile file) throws CoreException {
-		return file.findMarkers(BooMarkers.BOO_PROBLEM_MARKER_TYPE, true, IResource.DEPTH_ZERO);
 	}
 
 	private void assertOutputFile(final String expectedFileName) throws CoreException {

@@ -9,15 +9,18 @@ import monolipse.core.BooCore;
 import monolipse.core.IAssemblySource;
 import monolipse.core.IMonoProject;
 import monolipse.core.foundation.WorkspaceUtilities;
+import monolipse.core.internal.BooMarkers;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceDescription;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
 public abstract class AbstractBooTestCase extends TestCase{
@@ -63,9 +66,7 @@ public abstract class AbstractBooTestCase extends TestCase{
 
 	protected IAssemblySource addAssemblySource(final Path path)
 			throws CoreException {
-		final IAssemblySource srcFolder = _booProject.addAssemblySource(path);
-		srcFolder.setLanguage(AssemblySourceLanguage.BOO);
-		return srcFolder;
+		return _booProject.addAssemblySource(path, AssemblySourceLanguage.BOO);
 	}
 
 	protected IFile copyResourceTo(String resource, String path) throws Exception {
@@ -92,7 +93,12 @@ public abstract class AbstractBooTestCase extends TestCase{
 
 	protected void build() throws CoreException {
 		IProject project = _project.getProject();
-		project.build(IncrementalProjectBuilder.FULL_BUILD, null);
+		project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
+	}
+
+	protected void assertNoErrorsOn(IAssemblySource assemblySource) throws CoreException {
+		if (BooMarkers.hasErrors(assemblySource))
+			fail(BooMarkers.booProblemsOn(assemblySource)[0].getAttribute(IMarker.MESSAGE, "error"));
 	}
 
 }

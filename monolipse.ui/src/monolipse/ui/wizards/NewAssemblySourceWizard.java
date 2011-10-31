@@ -1,5 +1,6 @@
 package monolipse.ui.wizards;
 
+import monolipse.core.AssemblySourceLanguage;
 import monolipse.core.BooCore;
 import monolipse.core.IMonoProject;
 
@@ -14,11 +15,15 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
-
 public class NewAssemblySourceWizard extends Wizard implements INewWizard {
 
+	private final AssemblySourceLanguage _language;
 	private NewBooAssemblySourceWizardPage _mainPage;
 	private IContainer _selection;
+
+	public NewAssemblySourceWizard(AssemblySourceLanguage language) {
+		_language = language;
+	}
 
 	public boolean performFinish() {
 		IWorkspaceRunnable action = new IWorkspaceRunnable() {
@@ -26,7 +31,7 @@ public class NewAssemblySourceWizard extends Wizard implements INewWizard {
 				IMonoProject booProject = BooCore.createProject(_selection.getProject(), monitor);
 				
 				IPath containerPath = _selection.getProjectRelativePath();
-				booProject.addAssemblySource(containerPath.append(_mainPage.getName()));
+				booProject.addAssemblySource(containerPath.append(_mainPage.getName()), _language);
 			}
 		};
 		try {

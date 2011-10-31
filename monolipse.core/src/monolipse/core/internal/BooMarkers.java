@@ -3,6 +3,7 @@ package monolipse.core.internal;
 import monolipse.core.BooCore;
 import monolipse.core.IAssemblySource;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -35,6 +36,24 @@ public class BooMarkers {
 		}
 	}
 
-	public static final String BOO_PROBLEM_MARKER_TYPE = BooCore.ID_PLUGIN + ".booProblem";
+	private static final String BOO_PROBLEM_MARKER_TYPE = BooCore.ID_PLUGIN + ".booProblem";
+
+	public static IMarker[] booProblemsOn(final IFile file)
+			throws CoreException {
+		return file.findMarkers(BOO_PROBLEM_MARKER_TYPE, true, IResource.DEPTH_ZERO);
+	}
+
+	public static IMarker[] booProblemsOn(IAssemblySource source)
+			throws CoreException {
+		return source.getFolder().findMarkers(BOO_PROBLEM_MARKER_TYPE, false, IResource.DEPTH_INFINITE);
+	}
+
+	public static boolean hasErrors(IAssemblySource source) throws CoreException {
+		IMarker[] markers = booProblemsOn(source);
+		for (IMarker m : markers)
+			if (IMarker.SEVERITY_ERROR == m.getAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR))
+				return true;
+		return false;
+	}
 
 }

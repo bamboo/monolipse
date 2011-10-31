@@ -6,7 +6,6 @@ import monolipse.core.AssemblySourceLanguage;
 
 import org.eclipse.core.runtime.Path;
 
-
 public class BooAssemblySourceTestCase extends AbstractBooTestCase {
 	
 	IAssemblySource _assemblySource;
@@ -19,7 +18,7 @@ public class BooAssemblySourceTestCase extends AbstractBooTestCase {
 	public void testDefaultReferences() throws Exception {
 		IAssemblyReference[] references = _assemblySource.getReferences();
 		assertNotNull(references);
-		assertEquals(0, references.length);
+		assertEquals(2, references.length);
 	}
 	
 	public void testDefaultOutputType() throws Exception {

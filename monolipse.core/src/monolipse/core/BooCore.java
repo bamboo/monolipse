@@ -92,8 +92,8 @@ public class BooCore extends Plugin {
 		return null;
 	}
 
-	public static IAssemblySource createAssemblySource(IFolder folder) throws CoreException {
-		return BooAssemblySource.create(folder);
+	public static IAssemblySource createAssemblySource(IFolder folder, AssemblySourceLanguage language) throws CoreException {
+		return BooAssemblySource.create(folder, language);
 	}
 
 	public static IAssemblySource getAssemblySource(IFolder folder) throws CoreException {
@@ -113,11 +113,15 @@ public class BooCore extends Plugin {
 	}
 
 	public static IAssemblyReference createAssemblyReference(IFile file) throws CoreException {
-		return BooAssemblyReference.get(file);
+		return AssemblyReferences.assemblyReferenceFor(file);
 	}
 	
 	public static IAssemblyReference createAssemblyReference(IAssemblySource source) throws CoreException {
-		return BooAssemblyReference.get(source);
+		return AssemblyReferences.assemblyReferenceFor(source);
+	}
+
+	public static IAssemblyReference createBooAssemblyReference(String booAssemblyName) {
+		return AssemblyReferences.booAssemblyReference(booAssemblyName);
 	}
 
 	static IMonoRuntime _runtime;

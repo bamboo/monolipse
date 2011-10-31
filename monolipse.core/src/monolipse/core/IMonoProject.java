@@ -6,7 +6,7 @@ import org.eclipse.core.runtime.IPath;
 
 public interface IMonoProject {
 
-	IAssemblySource addAssemblySource(IPath path)
+	IAssemblySource addAssemblySource(IPath path, AssemblySourceLanguage language)
 			throws CoreException;
 
 	IAssemblySource[] getAssemblySources()

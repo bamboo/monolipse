@@ -21,12 +21,12 @@ public class BooAssemblySource implements IAssemblySource {
 	
 	private static final QualifiedName ASSEMBLY_SOURCE_SESSION_KEY = new QualifiedName("monolipse.core.resources", "BooAssemblySourceSession");
 	
-	public static IAssemblySource create(IFolder folder) throws CoreException {
+	public static IAssemblySource create(IFolder folder, AssemblySourceLanguage language) throws CoreException {
 		synchronized (folder) {
 			IAssemblySource source = BooAssemblySource.get(folder);
 			if (null != source)
 				return source;
-			source = internalCreate(folder);
+			source = internalCreate(folder, language);
 			source.save(null);
 			return source;
 		}
@@ -37,15 +37,15 @@ public class BooAssemblySource implements IAssemblySource {
 			BooAssemblySource source = (BooAssemblySource) folder.getSessionProperty(ASSEMBLY_SOURCE_SESSION_KEY);
 			if (null == source) {
 				if (isAssemblySource(folder)) {
-					source = internalCreate(folder);
+					source = internalCreate(folder, null);
 				}
 			}
 			return source;
 		}
 	}
 
-	private static BooAssemblySource internalCreate(IFolder folder) throws CoreException {
-		BooAssemblySource source = new BooAssemblySource(folder);
+	private static BooAssemblySource internalCreate(IFolder folder, AssemblySourceLanguage defaultLanguage) throws CoreException {
+		BooAssemblySource source = new BooAssemblySource(folder, defaultLanguage);
 		folder.setSessionProperty(ASSEMBLY_SOURCE_SESSION_KEY, source);
 		return source;
 	}
@@ -55,15 +55,13 @@ public class BooAssemblySource implements IAssemblySource {
 			return element instanceof IFolder
 				&& BooAssemblySource.isAssemblySource((IFolder)element);
 		} catch (CoreException x) {
+			x.printStackTrace();
 		}
 		return false;
 	}
 
 	public static boolean isAssemblySource(IFolder folder) throws CoreException {
 		return folder.getFile(SETTINGS_FILE).exists();
-//		synchronized (folder) {
-//			return folder.getPersistentProperty(ASSEMBLY_SOURCE_PERSIST_KEY) != null;
-//		}
 	}
 	
 	private IFolder _folder;
@@ -78,10 +76,10 @@ public class BooAssemblySource implements IAssemblySource {
 
 	private String _additionalOptions;
 
-	BooAssemblySource(IFolder folder) throws CoreException {
+	BooAssemblySource(IFolder folder, AssemblySourceLanguage defaultLanguage) throws CoreException {
 		if (null == folder || !folder.exists()) throw new IllegalArgumentException();
 		_folder = folder;
-		_language = AssemblySourceLanguage.BOOJAY;
+		_language = defaultLanguage;
 		_outputFolder = defaultOutputFolder();
 		refresh(null);
 	}
@@ -96,7 +94,7 @@ public class BooAssemblySource implements IAssemblySource {
 	
 	public AssemblySourceLanguage getLanguage() {
 		return _language == null
-			? AssemblySourceLanguage.BOOJAY
+			? AssemblySourceLanguage.BOO
 			: _language;
 	}
 	
@@ -304,9 +302,17 @@ public class BooAssemblySource implements IAssemblySource {
 	}
 
 	private void useDefaultSettings() {
-		_references = new IAssemblyReference[0];
+		_references = getLanguage() == AssemblySourceLanguage.BOO
+			? defaultBooAssemblyReferences()
+			: new IAssemblyReference[0];
 		_outputType = OutputType.CONSOLE_APPLICATION;
-		_language = null;
+	}
+
+	private IAssemblyReference[] defaultBooAssemblyReferences() {
+		return new IAssemblyReference[] {
+			BooCore.createBooAssemblyReference("Boo.Lang"),
+			BooCore.createBooAssemblyReference("Boo.Lang.PatternMatching")
+		};
 	}
 
 	private String getOutputAssemblyExtension() {
