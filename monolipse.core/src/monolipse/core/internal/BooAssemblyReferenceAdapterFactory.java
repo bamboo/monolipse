@@ -14,7 +14,7 @@ public class BooAssemblyReferenceAdapterFactory implements IAdapterFactory {
 		IFile file = (IFile)adaptableObject;
 		if (!file.exists()) return null;
 		try {
-			return BooAssemblyReference.get(file);
+			return AssemblyReferences.assemblyReferenceFor(file);
 		} catch (CoreException e) {
 			BooCore.logException(e);
 		}

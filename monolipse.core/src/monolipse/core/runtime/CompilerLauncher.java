@@ -134,9 +134,8 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 	}
 
 	public void addReferences(IAssemblyReference[] references) {		
-		for (int i=0; i<references.length; ++i) {
-			add("-r:" + references[i].getCompilerReference());
-		}
+		for (IAssemblyReference ref : references)
+			add("-r:" + ref.getCompilerReference());
 	}
 		
 	public void addReferences(String[] references) {		

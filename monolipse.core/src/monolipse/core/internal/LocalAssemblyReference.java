@@ -64,7 +64,7 @@ public class LocalAssemblyReference implements ILocalAssemblyReference {
 		}
 
 		public IMemorable activate() throws CoreException {
-			return BooAssemblyReference.get(ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(this.path)));
+			return AssemblyReferences.assemblyReferenceFor(ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(this.path)));
 		}
 	}
 	

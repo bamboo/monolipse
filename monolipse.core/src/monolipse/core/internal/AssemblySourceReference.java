@@ -64,7 +64,7 @@ public class AssemblySourceReference implements IAssemblySourceReference {
 		public IMemorable activate() throws CoreException {
 			IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder(new Path(this.path));
 			BooAssemblySource source = BooAssemblySource.get(folder);
-			return BooAssemblyReference.get(source);
+			return AssemblyReferences.assemblyReferenceFor(source);
 		}
 	}
 

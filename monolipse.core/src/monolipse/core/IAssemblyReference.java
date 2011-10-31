@@ -11,6 +11,8 @@ public interface IAssemblyReference extends IMemorable {
 	
 	public static final String ASSEMBLY_SOURCE = "assembly source";
 
+	public static final String BOO_LIB = "boo library";
+
 	/**
 	 * Assembly friendly name.
 	 * @return assembly friendly name

@@ -175,25 +175,45 @@ public class BooBuilder extends IncrementalProjectBuilder {
 			if (!ensureCanBeBuilt(source))
 				return;
 			
-			IFile[] files = source.getSourceFiles();
-			if (0 == files.length) return;
+			IFile[] srcFiles = source.getSourceFiles();
+			if (srcFiles.length == 0)
+				return;
 			
-			IFile file = source.getOutputFile();
-			WorkspaceUtilities.ensureDerivedParentExists(file, monitor);
-			CompilerError[] errors = launchCompiler(source, files);
-			if (0 == reportErrors(source, errors)) {
-				file.getParent().refreshLocal(IResource.DEPTH_ONE, monitor);
-				if (file.exists()) {
-					file.setDerived(true, monitor);
-				}
-				IFolder outputFolder = (IFolder)file.getParent();
+			ensureOutputFolderFor(source, monitor);
+			
+			CompilerError[] errors = launchCompiler(source, srcFiles);
+			if (reportErrors(source, errors) > 0)
+				return;
+			
+			refreshOutputFolder(source, monitor);
+			setDerivedOutputFile(source, monitor);
+			
+			if (source.getLanguage() == AssemblySourceLanguage.BOO) {
+				IFolder outputFolder = (IFolder)source.getOutputFile().getParent();
 				copyLocalReferences(source, outputFolder, monitor);
 				copyResources(source, outputFolder, monitor);
 			}
+			
 		} catch (Exception e) {
 			BooMarkers.addMarker(source.getFolder(), e.getMessage(), -1, IMarker.SEVERITY_ERROR);
 			BooCore.logException(e);
 		}
+	}
+
+	private void setDerivedOutputFile(IAssemblySource source, IProgressMonitor monitor) throws CoreException {
+		IFile outputFile = source.getOutputFile();
+		if (outputFile.exists())
+			outputFile.setDerived(true, monitor);
+	}
+
+	private void refreshOutputFolder(IAssemblySource source, IProgressMonitor monitor) throws CoreException {
+		IFile outputFile = source.getOutputFile();
+		outputFile.getParent().refreshLocal(IResource.DEPTH_ONE, monitor);
+	}
+
+	private void ensureOutputFolderFor(IAssemblySource source,
+			IProgressMonitor monitor) throws CoreException {
+		WorkspaceUtilities.ensureDerivedParentExists(source.getOutputFile(), monitor);
 	}
 	
 	private void copyResources(final IAssemblySource source, final IFolder outputFolder, final IProgressMonitor monitor) throws CoreException {
@@ -209,17 +229,33 @@ public class BooBuilder extends IncrementalProjectBuilder {
 		});
 	}
 
-	private void copyLocalReferences(final IAssemblySource source, final IFolder folder, final IProgressMonitor monitor) throws CoreException {
+	private void copyLocalReferences(final IAssemblySource source, final IFolder outputFolder, final IProgressMonitor monitor) throws CoreException {
 		source.visitReferences(new AssemblyReferenceVisitor() {
+			@Override
 			public boolean visit(ILocalAssemblyReference reference) throws CoreException {
-				IO.copyFileToFolder(reference.getFile(), folder, monitor);
+				IO.copyFileToFolder(reference.getFile(), outputFolder, monitor);
 				return true;
 			}
 			
+			@Override
 			public boolean visit(IAssemblySourceReference reference) throws CoreException {
-				if (reference.getAssemblySource().getOutputFolder().equals(folder))
+				if (reference.getAssemblySource().getOutputFolder().equals(outputFolder))
 					return true;
-				IO.copyFileToFolder(reference.getAssemblySource().getOutputFile(), folder, monitor);
+				IO.copyFileToFolder(reference.getAssemblySource().getOutputFile(), outputFolder, monitor);
+				return true;
+			}
+			
+			@Override
+			public boolean visit(IBooAssemblyReference reference) throws CoreException {
+				String assemblyPath = reference.getCompilerReference();
+				IFile outputFile = outputFolder.getFile(new Path(assemblyPath).lastSegment());
+				if (outputFile.exists())
+					return true;
+				try {	
+					IO.copyFile(assemblyPath, outputFile, monitor);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				return true;
 			}
 		});

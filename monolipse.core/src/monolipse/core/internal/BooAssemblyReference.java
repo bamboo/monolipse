@@ -1,49 +1,67 @@
 package monolipse.core.internal;
 
-import monolipse.core.IAssemblyReference;
-import monolipse.core.IAssemblySource;
+import java.io.IOException;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.QualifiedName;
 
+import monolipse.core.BooCore;
+import monolipse.core.IAssemblyReference;
+import monolipse.core.IAssemblyReferenceVisitor;
+import monolipse.core.IBooAssemblyReference;
+import monolipse.core.IMemorable;
+import monolipse.core.IRemembrance;
 
-public class BooAssemblyReference {
+public class BooAssemblyReference implements IBooAssemblyReference, IRemembrance {
 	
-	private static final QualifiedName SESSION_KEY = new QualifiedName("monolipse.core.resources", "BooAssemblyReference");
-	
-	private BooAssemblyReference() {
+	private final String assemblyName;
+
+	public BooAssemblyReference(String booAssemblyName) {
+		this.assemblyName = booAssemblyName;
 	}
 	
-	public static IAssemblyReference get(IFile file) throws CoreException {
-		if (!file.exists())
-			return new LocalAssemblyReference(file);
-		
-		IAssemblyReference reference = getCachedReference(file);
-		if (null == reference) {
-			reference = new LocalAssemblyReference(file);
-			cacheReference(file, reference);
+	@Override
+	public int hashCode() {
+		return assemblyName.hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof BooAssemblyReference
+			? ((BooAssemblyReference)obj).assemblyName.equals(assemblyName)
+			: false;
+	}
+
+	@Override
+	public IRemembrance getRemembrance() {
+		return this;
+	}
+
+	@Override
+	public String getAssemblyName() {
+		return assemblyName;
+	}
+
+	@Override
+	public String getCompilerReference() {
+		try {
+			return BooCore.resolveBundlePath("lib/boojay/" + assemblyName + ".dll");
+		} catch (IOException e) {
+			throw new IllegalStateException(e);
 		}
-		return reference;
 	}
 
-	public static IAssemblyReference get(IAssemblySource source) throws CoreException {
-		IFolder folder = source.getFolder();
-		IAssemblyReference reference = getCachedReference(folder);
-		if (null == reference) {
-			reference = new AssemblySourceReference(source);
-			cacheReference(folder, reference);
-		}
-		return reference;
+	@Override
+	public String getType() {
+		return IAssemblyReference.BOO_LIB;
+	}
+
+	@Override
+	public boolean accept(IAssemblyReferenceVisitor visitor)
+			throws CoreException {
+		return visitor.visit(this);
 	}
 	
-	private static IAssemblyReference getCachedReference(IResource resource) throws CoreException {
-		return (IAssemblyReference)resource.getSessionProperty(SESSION_KEY);
-	}
-	
-	private static void cacheReference(IResource resource, IAssemblyReference reference) throws CoreException {
-		resource.setSessionProperty(SESSION_KEY, reference);
+	public IMemorable activate() throws CoreException {
+		return this;
 	}
 }
