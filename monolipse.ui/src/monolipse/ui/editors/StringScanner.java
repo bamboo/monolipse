@@ -18,7 +18,8 @@
  */
 package monolipse.ui.editors;
 
-import org.eclipse.jface.text.TextAttribute;
+import org.eclipse.jdt.internal.ui.text.*;
+import org.eclipse.jface.text.*;
 import org.eclipse.jface.text.rules.*;
 import org.eclipse.swt.*;
 import org.eclipse.swt.graphics.*;
@@ -26,16 +27,13 @@ import org.eclipse.swt.graphics.*;
 public class StringScanner extends RuleBasedScanner {
 	
 	public StringScanner(Color baseColor) {
-		IToken tqs = new Token(
-			new TextAttribute(
-				baseColor));
+		IToken tqs = new Token(new TextAttribute(baseColor));
 		IToken expression = new Token(
-			new TextAttribute(
-				baseColor,
-				null,
-				SWT.BOLD));
+			new TextAttribute(baseColor, null, SWT.BOLD));
 		IRule[] rules = new IRule[] {
 			new SingleLineRule("${", "}", expression),
+			new SingleLineRule("$(", ")", expression),
+			new WordPatternRule(new JavaWordDetector(), "$", "", expression),
 		};
 		setRules(rules);
 		setDefaultReturnToken(tqs);
