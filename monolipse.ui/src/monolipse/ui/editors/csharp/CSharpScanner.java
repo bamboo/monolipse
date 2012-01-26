@@ -118,6 +118,8 @@ public class CSharpScanner extends RuleBasedScanner {
 	static final String[] BUILTINS = new String[] {
 		"using",
 		"lock",
+		"var",
+		"default",
 	};
 	
 	static final String[] LITERALS = new String[] {
