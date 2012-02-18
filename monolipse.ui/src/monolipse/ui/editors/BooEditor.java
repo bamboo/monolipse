@@ -69,10 +69,6 @@ public class BooEditor extends TextEditor {
 			return new Region(offset, 1);
 		}
 
-		public IInformationControlCreator getInformationPresenterControlCreator() {
-			return quickOutlineCreator();
-		}
-
 		public Object getInformation2(ITextViewer textViewer, IRegion subject) {
 			return outlinePage().outline();
 		}
