@@ -85,8 +85,7 @@ public class BooEditor extends TextEditor {
 		setKeyBindingScopes(new String[] { "monolipse.ui.booEditorScope", "org.eclipse.ui.textEditorScope" });
 	}
 
-    public void createPartControl(Composite parent)
-    {
+    public void createPartControl(Composite parent) {
         super.createPartControl(parent);
         ProjectionViewer viewer = (ProjectionViewer) getSourceViewer();
         
