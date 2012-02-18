@@ -21,6 +21,7 @@ package monolipse.ui.editors;
 import monolipse.ui.BooUI;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.DefaultInformationControl;
 import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
@@ -41,9 +42,11 @@ import org.eclipse.jface.text.source.ISharedTextColors;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
 
-public class BooSourceViewerConfiguration extends SourceViewerConfiguration {
+public class BooSourceViewerConfiguration extends TextSourceViewerConfiguration {
+	
 	private BooDoubleClickStrategy _doubleClickStrategy;
 	private BooScanner _scanner;
 	private BooScanner _codeLiteralScanner;
@@ -56,10 +59,12 @@ public class BooSourceViewerConfiguration extends SourceViewerConfiguration {
 	private ContentAssistant _assistant;
 	private BooEditor _editor;
 
-	public BooSourceViewerConfiguration(ISharedTextColors colors, BooEditor booEditor) {
+	public BooSourceViewerConfiguration(ISharedTextColors colors, BooEditor booEditor, IPreferenceStore preferenceStore) {
+		super(preferenceStore);
 		this._colorManager = colors;
 		this._editor = booEditor;
 	}
+	
 	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
 		return BooPartitionScanner.PARTITION_TYPES;
 	}

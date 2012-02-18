@@ -77,10 +77,11 @@ public class BooEditor extends TextEditor {
 	public static final String ID_EDITOR = "monolipse.ui.editors.BooEditor";
 
 	private BooContentOutlinePage _outlinePage;
-
-	public BooEditor() {
-		super();
-		setSourceViewerConfiguration(new BooSourceViewerConfiguration(getSharedColors(), this));
+	
+	@Override
+	protected void initializeEditor() {
+		super.initializeEditor();
+		setSourceViewerConfiguration(new BooSourceViewerConfiguration(getSharedColors(), this, getPreferenceStore()));
 		setDocumentProvider(new BooDocumentProvider());
 		setKeyBindingScopes(new String[] { "monolipse.ui.booEditorScope", "org.eclipse.ui.textEditorScope" });
 	}
