@@ -86,7 +86,7 @@ public class BooEditorToggleBreakpointsTarget implements
 		}
 			
 		JDIDebugModel.createLineBreakpoint(
-				resource(), typeName, lineNumber, -1, -1, 0, true, new HashMap<Object, Object>());
+				resource(), typeName, lineNumber, -1, -1, 0, true, new HashMap<String, Object>());
 	}
 
 	private String typeNameFor(final int line) {

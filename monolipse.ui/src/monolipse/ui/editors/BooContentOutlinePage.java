@@ -6,6 +6,7 @@ import monolipse.core.compiler.OutlineNode;
 import monolipse.ui.*;
 
 import org.eclipse.jdt.internal.ui.text.AbstractInformationControl;
+import org.eclipse.jdt.internal.ui.text.JavaElementPrefixPatternMatcher;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.text.*;
 import org.eclipse.jface.viewers.*;
@@ -73,10 +74,11 @@ public class BooContentOutlinePage extends ContentOutlinePage {
 			ILabelProvider labelProvider= (ILabelProvider)getTreeViewer().getLabelProvider();
 			for (int i= 0; i < items.length; i++) {
 				Object element= items[i].getData();
-				if (fStringMatcher == null) return element;
+				JavaElementPrefixPatternMatcher matcher = getMatcher();
+				if (matcher == null) return element;
 				if (element != null) {
 					String label= labelProvider.getText(element);
-					if (fStringMatcher.match(label)) {
+					if (matcher.matches(label)) {
 						return element;
 					}
 				}
