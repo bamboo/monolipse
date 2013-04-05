@@ -13,7 +13,13 @@ import monolipse.core.IRemembrance;
 
 public class BooAssemblyReference implements IBooAssemblyReference, IRemembrance {
 	
-	private final String assemblyName;
+	private String assemblyName;
+	
+	/**
+	 * For serialization only.
+	 */
+	public BooAssemblyReference() {
+	}
 
 	public BooAssemblyReference(String booAssemblyName) {
 		this.assemblyName = booAssemblyName;
