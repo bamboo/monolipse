@@ -30,8 +30,6 @@ class RelativeAssemblyResolver:
 			if asm is null:
 				asm = ProbeFile(basePath + ".exe")
 			_cache[simpleName] = asm
-			
-		print "AssemblyResolve(${args.Name}) ->", asm
 		return asm
 		
 	private def GetSimpleName(name as string):
