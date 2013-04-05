@@ -16,11 +16,11 @@ public abstract class AbstractBooLaunchShortcut implements ILaunchShortcut  {
 		IStructuredSelection ss = (IStructuredSelection) selection;
 		if (ss.isEmpty()) return;
 		
-		IFile file = Adapters.getAdapter(ss.getFirstElement(), IFile.class);
+		IFile file = Adapters.adapterFor(ss.getFirstElement(), IFile.class);
 		if (null != file)
 			launch(file, mode);
 		
-		IAssemblySource source = Adapters.getAdapter(ss.getFirstElement(), IAssemblySource.class);
+		IAssemblySource source = Adapters.adapterFor(ss.getFirstElement(), IAssemblySource.class);
 		if (null != source)
 			launch(source, mode);
 		
