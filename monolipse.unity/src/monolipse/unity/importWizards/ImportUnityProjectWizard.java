@@ -27,8 +27,7 @@ public class ImportUnityProjectWizard extends Wizard implements IImportWizard {
 	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
 	public boolean performFinish() {
-		// Project p = mainPage.importProject();
-        return true;
+		return mainPage.importProject();
 	}
 	 
 	/* (non-Javadoc)
