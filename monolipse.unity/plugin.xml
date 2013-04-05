@@ -13,6 +13,7 @@
          </run>
       </builder>
    </extension>
+   
    <extension
          id="unityNature"
          name="Unity Project Nature"
@@ -26,15 +27,25 @@
             id="monolipse.unity.unityBuilder">
       </builder>
    </extension>
+   
+   <extension
+   		point="org.eclipse.ui.ide.projectNatureImages">
+   		<image 
+   			icon="icons/UnityNature.png"
+   			natureId="monolipse.unity.unityNature"
+   			id="monolipse.unity.unityNatureImage">
+   		</image>
+   	</extension>
+   
    <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
             adaptable="true"
             objectClass="org.eclipse.core.resources.IProject"
             nameFilter="*"
-            id="monolipse.unity.contribution1">
+            id="monolipse.unity.toggleNatureContribution">
          <action
-               label="Add/Remove Sample Nature"
+               label="Toggle Unity Nature"
                class="monolipse.unity.builder.ToggleNatureAction"
                menubarPath="additions"
                enablesFor="+"
@@ -84,5 +95,126 @@
             class="monolipse.unity.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+   
+   <extension point="org.eclipse.core.expressions.propertyTesters">
+    <propertyTester
+      id="monolipse.unity.propertytesters.RootResourceTester"
+      type="org.eclipse.core.resources.IResource"
+      namespace="org.eclipse.core.resources"
+      properties="isRootResource"
+      class="monolipse.unity.propertytesters.RootResourceTester">
+    </propertyTester>
+  </extension>
+  
+  <extension point="org.eclipse.core.expressions.propertyTesters">
+    <propertyTester
+      id="monolipse.unity.propertytesters.InUnityProjectTester"
+      type="org.eclipse.core.resources.IResource"
+      namespace="org.eclipse.core.resources"
+      properties="inUnityProject"
+      class="monolipse.unity.propertytesters.InUnityProjectTester">
+    </propertyTester>
+  </extension>
+   
+	<extension point="org.eclipse.ui.navigator.navigatorContent">
+		<commonFilter
+				description="Hides Unity temporary folders (Temp and Library)"
+        id="monolipse.unity.contentFilters.hideTempFolders"
+        name="Unity temporary folders"
+        activeByDefault="true">
+        <filterExpression>
+        	<adapt type="org.eclipse.core.resources.IFolder">
+        		<and>
+        			<test property="org.eclipse.core.resources.inUnityProject" value="true" forcePluginActivation="true" />
+	        		<test property="org.eclipse.core.resources.isRootResource" value="true" forcePluginActivation="true" />
+	        		<or>
+	        			<test property="org.eclipse.core.resources.name" value="Temp" />
+	        			<test property="org.eclipse.core.resources.name" value="Library" />
+	        			<test property="org.eclipse.core.resources.name" value="ProjectSettings" />
+	        		</or>
+        		</and>
+        	</adapt>
+        </filterExpression>
+    </commonFilter>
+	</extension>
+	
+	<extension point="org.eclipse.ui.navigator.navigatorContent">
+		<commonFilter
+				description="Hides Unity meta files (*.meta)"
+        id="monolipse.unity.contentFilters.hideMetaFiles"
+        name="Unity meta files"
+        activeByDefault="true">
+        <filterExpression>
+        	<adapt type="org.eclipse.core.resources.IFile">
+        		<and>
+        			<test property="org.eclipse.core.resources.inUnityProject" value="true" forcePluginActivation="true" />
+	        		<test property="org.eclipse.core.resources.name" value="*.meta" />
+        		</and>
+        	</adapt>
+        </filterExpression>
+    </commonFilter>
+	</extension>
+	
+	<extension point="org.eclipse.ui.navigator.navigatorContent">
+		<commonFilter
+				description="Hides Visual Studio and MonoDevelop files (*.csproj, *.unityproj, *.booproj, *.pidb, *.userpref, *.suo)"
+        id="monolipse.unity.contentFilters.hideVisualStudioFiles"
+        name="Visual Studio temporary files"
+        activeByDefault="true">
+        <filterExpression>
+        	<adapt type="org.eclipse.core.resources.IResource">
+        		<and>
+	        		<test property="org.eclipse.core.resources.isRootResource" value="true" forcePluginActivation="true" />
+	        		<or>
+	        			<adapt type="org.eclipse.core.resources.IFile">
+	        				<or>
+			        			<test property="org.eclipse.core.resources.name" value="*.csproj" />
+			        			<test property="org.eclipse.core.resources.name" value="*.unityproj" />
+			        			<test property="org.eclipse.core.resources.name" value="*.booproj" />
+			        			<test property="org.eclipse.core.resources.name" value="*.suo" />
+			        			<test property="org.eclipse.core.resources.name" value="*.pidb" />
+			        			<test property="org.eclipse.core.resources.name" value="*.userprefs" />
+			        		</or>
+			        	</adapt>
+			        	<adapt type="org.eclipse.core.resources.IFolder">
+	        				<or>
+			        			<test property="org.eclipse.core.resources.name" value="obj" />
+			        			<test property="org.eclipse.core.resources.name" value="bin" />
+			        		</or>
+			        	</adapt>
+	        		</or>
+        		</and>
+        	</adapt>
+        </filterExpression>
+    </commonFilter>
+	</extension>
+	
+	<extension point="org.eclipse.ui.navigator.navigatorContent">
+		<commonFilter
+				description="Hides ReSharper folders (_ReSharper.*)"
+        id="monolipse.unity.contentFilters.hideReSharperFolders"
+        name="ReSharper folders"
+        activeByDefault="true">
+        <filterExpression>
+        	<adapt type="org.eclipse.core.resources.IFolder">
+        		<and>
+	        		<test property="org.eclipse.core.resources.name" value="_ReSharper.*" />
+        		</and>
+        	</adapt>
+        </filterExpression>
+    </commonFilter>
+	</extension>
+		
+		<extension point="org.eclipse.ui.navigator.viewer">
+		    <viewerContentBinding
+		          viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+		          <includes>
+		            <contentExtension pattern="monolipse.unity.contentFilters.hideTempFolders"/>
+		            <contentExtension pattern="monolipse.unity.contentFilters.hideVisualStudioFiles"/>
+		            <contentExtension pattern="monolipse.unity.contentFilters.hideMetaFiles" />
+		            <contentExtension pattern="monolipse.unity.contentFilters.hideReSharperFolders" />
+		          </includes>
+		    </viewerContentBinding>
+		</extension>
 
 </plugin>
