@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="unityBuilder"
+         name="Unity Project Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="true">
+         <run
+               class="monolipse.unity.builder.UnityBuilder">
+         </run>
+      </builder>
+   </extension>
+   <extension
+         id="unityNature"
+         name="Unity Project Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="monolipse.unity.builder.UnityNature">
+         </run>
+      </runtime>
+      <builder
+            id="monolipse.unity.unityBuilder">
+      </builder>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            objectClass="org.eclipse.core.resources.IProject"
+            nameFilter="*"
+            id="monolipse.unity.contribution1">
+         <action
+               label="Add/Remove Sample Nature"
+               class="monolipse.unity.builder.ToggleNatureAction"
+               menubarPath="additions"
+               enablesFor="+"
+               id="monolipse.unity.addRemoveNatureAction">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         id="xmlProblem"
+         name="XML Problem"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            name="Unity"
+            id="monolipse.unity.importWizards.unityCategory">
+      </category>
+      <wizard
+            name="Import Existing Unity Project"
+            icon="icons/unity16x16.png"
+            category="monolipse.unity.importWizards.unityCategory"
+            class="monolipse.unity.importWizards.ImportUnityProjectWizard"
+            id="monolipse.unity.importWizards.ImportUnityProjectWizard">
+         <description>
+            Import a Unity project into the workspace.
+         </description>
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="Unity Preferences"
+            class="monolipse.unity.preferences.UnityPreferencePage"
+            id="monolipse.unity.preferences.UnityPreferencePage">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="monolipse.unity.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>
