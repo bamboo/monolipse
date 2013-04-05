@@ -6,6 +6,7 @@ import monolipse.core.IAssemblyReference;
 import monolipse.core.IMonoLauncher;
 import monolipse.core.IMonoRuntime;
 import monolipse.core.IRemembrance;
+import monolipse.core.internal.GlobalAssemblyCacheReference;
 
 public class DotNetRuntimeImpl implements IMonoRuntime {
 
@@ -22,7 +23,7 @@ public class DotNetRuntimeImpl implements IMonoRuntime {
 	}
 
 	public IAssemblyReference getGlobalAssemblyCacheReference(String name, String version, String culture, String token) {
-		throw new NotImplementedException();
+		return new GlobalAssemblyCacheReference(name, version, culture, token);
 	}
 
 	public IRemembrance getRemembrance() {
