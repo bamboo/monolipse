@@ -4,6 +4,7 @@ import System
 import Boo.Lang.Interpreter
 import Boo.Lang.Interpreter.Builtins
 import monolipse.core
+import Boo.Lang.Environments
 
 service InterpreterService:
 	
@@ -21,5 +22,6 @@ service InterpreterService:
 				writeLine console.ToString().Trim()
 
 	onMessageWithResponse "GET-INTERPRETER-PROPOSALS":
-		proposals = interpreter.SuggestCodeCompletion(message.Payload)
-		writeTypeSystemEntitiesTo proposals, response
+		proposals = interpreter.SuggestCompletionsFor(message.Payload)
+		proposals.Environment.Run:
+			writeTypeSystemEntitiesTo proposals.Value, response
