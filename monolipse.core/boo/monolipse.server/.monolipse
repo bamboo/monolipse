@@ -8,6 +8,9 @@
     <monolipse.core.internal.LocalAssemblyReference-Remembrance>
       <path>/monolipse.core/lib/boojay/Boojay.Compilation.dll</path>
     </monolipse.core.internal.LocalAssemblyReference-Remembrance>
+    <monolipse.core.internal.BooAssemblyReference>
+      <assemblyName>Boo.Lang.Parser</assemblyName>
+    </monolipse.core.internal.BooAssemblyReference>
   </references>
   <outputFolder>/monolipse.core/bin</outputFolder>
   <additionalOptions></additionalOptions>
