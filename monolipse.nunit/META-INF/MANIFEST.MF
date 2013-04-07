@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Nunit for Boo Plug-in
 Bundle-SymbolicName: monolipse.nunit;singleton:=true
-Bundle-Version: 1.1.0
+Bundle-Version: 1.2.0
 Bundle-Activator: monolipse.nunit.NUnitPlugin
 Bundle-Vendor: Rodrigo B. de Oliveira
 Bundle-Localization: plugin

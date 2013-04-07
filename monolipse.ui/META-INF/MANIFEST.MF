@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Boo Development Tools
 Bundle-SymbolicName: monolipse.ui;singleton:=true
-Bundle-Version: 1.1.0
+Bundle-Version: 1.2.0
 Bundle-Activator: monolipse.ui.BooUI
 Bundle-Vendor: Rodrigo B. de Oliveira
 Bundle-Localization: plugin
