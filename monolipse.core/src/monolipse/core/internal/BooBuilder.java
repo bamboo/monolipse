@@ -48,7 +48,7 @@ public class BooBuilder extends IncrementalProjectBuilder {
 	protected void clean(IProgressMonitor monitor) throws CoreException {
 		IAssemblySource[] sources = getAssemblySources();
 		for (int i = 0; i < sources.length; ++i) {
-			try { 
+			try {
 				clean(sources[i], monitor);
 			} catch (Exception x) {
 				BooMarkers.addMarker(sources[i].getFolder(), x.getMessage(), -1, IMarker.SEVERITY_ERROR);
