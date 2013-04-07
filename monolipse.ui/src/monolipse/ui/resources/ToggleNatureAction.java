@@ -21,6 +21,7 @@ package monolipse.ui.resources;
 import java.util.Iterator;
 
 import monolipse.core.BooCore;
+import monolipse.core.foundation.Adapters;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -44,21 +45,22 @@ public class ToggleNatureAction implements IObjectActionDelegate {
 	 */
 	public void run(IAction action) {
 		if (_selection instanceof IStructuredSelection) {
-			for (Iterator<?> it = ((IStructuredSelection) _selection).iterator(); it
-					.hasNext();) {
-				Object element = it.next();
-				IProject project = null;
-				if (element instanceof IProject) {
-					project = (IProject) element;
-				} else if (element instanceof IAdaptable) {
-					project = (IProject) ((IAdaptable) element)
-							.getAdapter(IProject.class);
-				}
+			for (Iterator<?> it = ((IStructuredSelection) _selection).iterator(); it.hasNext();) {
+				IProject project = projectFrom(it.next());
 				if (project != null) {
 					toggleNature(project);
 				}
 			}
 		}
+	}
+
+	private IProject projectFrom(Object element) {
+		if (element instanceof IProject) {
+			return (IProject) element;
+		} else if (element instanceof IAdaptable) {
+			return Adapters.adapterFor(element, IProject.class);
+		}
+		return null;
 	}
 
 	/*
@@ -92,7 +94,7 @@ public class ToggleNatureAction implements IObjectActionDelegate {
 			String[] natures = description.getNatureIds();
 
 			for (int i = 0; i < natures.length; ++i) {
-				if (BooCore.ID_NATURE.equals(natures[i])) {
+				if (BooCore.NATURE_ID.equals(natures[i])) {
 					// Remove the nature
 					String[] newNatures = new String[natures.length - 1];
 					System.arraycopy(natures, 0, newNatures, 0, i);
@@ -107,11 +109,10 @@ public class ToggleNatureAction implements IObjectActionDelegate {
 			// Add the nature
 			String[] newNatures = new String[natures.length + 1];
 			System.arraycopy(natures, 0, newNatures, 0, natures.length);
-			newNatures[natures.length] = BooCore.ID_NATURE;
+			newNatures[natures.length] = BooCore.NATURE_ID;
 			description.setNatureIds(newNatures);
 			project.setDescription(description, null);
 		} catch (CoreException e) {
 		}
 	}
-
 }

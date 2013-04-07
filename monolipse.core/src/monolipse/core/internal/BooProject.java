@@ -45,17 +45,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jdt.core.JavaCore;
 
-
 public class BooProject implements IMonoProject {
 
-	private static final QualifiedName SESSION_KEY = new QualifiedName(
-			"monolipse.core.resources", "BooProject");
+	private static final QualifiedName SESSION_KEY = new QualifiedName("monolipse.core.resources", "BooProject");
 
 	public static IMonoProject create(IProject project, IProgressMonitor monitor) throws CoreException {		
-		if (project.hasNature(BooCore.ID_NATURE)) {
+		if (project.hasNature(BooCore.NATURE_ID)) {
 			return BooProject.get(project);
 		}
-		ensureNaturesFor(project, monitor, BooCore.ID_NATURE, JavaCore.NATURE_ID);
+		ensureNaturesFor(project, monitor, BooCore.NATURE_ID, JavaCore.NATURE_ID);
 		return BooProject.get(project);
 	}
 
@@ -71,7 +69,7 @@ public class BooProject implements IMonoProject {
 
 	public static IMonoProject get(IProject project) throws CoreException {
 		IMonoProject p = (IMonoProject) project.getSessionProperty(SESSION_KEY);
-		if (p == null && project.hasNature(BooCore.ID_NATURE)) {
+		if (p == null && project.hasNature(BooCore.NATURE_ID)) {
 			p = new BooProject(project);
 			project.setSessionProperty(SESSION_KEY, p);
 		}
@@ -106,8 +104,7 @@ public class BooProject implements IMonoProject {
 		IResourceVisitor visitor = new IResourceVisitor() {
 			public boolean visit(IResource resource) throws CoreException {
 				if (resource instanceof IFolder) {
-					IAssemblySource source = BooAssemblySource
-							.get((IFolder) resource);
+					IAssemblySource source = BooAssemblySource.get((IFolder) resource);
 					if (source != null) {
 						sources.add(source);
 						return false;

@@ -3,7 +3,6 @@
 import java.io.InputStream;
 
 import junit.framework.TestCase;
-
 import monolipse.core.AssemblySourceLanguage;
 import monolipse.core.BooCore;
 import monolipse.core.IAssemblySource;

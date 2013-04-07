@@ -20,7 +20,7 @@ public class BooCore extends Plugin {
 	/**
 	 * Boo Project Nature ID
 	 */
-	public static final String ID_NATURE = BooCore.ID_PLUGIN + ".booNature";
+	public static final String NATURE_ID = BooCore.ID_PLUGIN + ".booNature";
 	
 	private static BooCore _plugin;
 	

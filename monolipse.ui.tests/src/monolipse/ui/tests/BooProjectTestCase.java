@@ -1,6 +1,5 @@
 ﻿package monolipse.ui.tests;
 
-import monolipse.core.AssemblySourceLanguage;
 import monolipse.core.BooCore;
 import monolipse.core.IAssemblySource;
 import monolipse.core.IMonoProject;
@@ -14,7 +13,6 @@ import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 
 public class BooProjectTestCase extends AbstractBooTestCase {
