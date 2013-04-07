@@ -216,6 +216,7 @@
 				<include name="icons/**" />
 				<include name="META-INF/**" />
 				<include name="plugin.xml" />
+				<include name="plugin.properties" />
 			</fileset>
 		</copy>
 		
