@@ -1,7 +1,7 @@
 package monolipse.ui;
 
 public interface IBooUIConstants {
-
+	
 	String ASSEMBLY_REFERENCE = "assembly";
 	String WARNING = "warning";
 	String ERROR = "error";
@@ -47,5 +47,4 @@ public interface IBooUIConstants {
 	String EVENT 				= "event";
 	String CALLABLE 			= "callable";
 	String STRUCT 				= "struct";
-
 }

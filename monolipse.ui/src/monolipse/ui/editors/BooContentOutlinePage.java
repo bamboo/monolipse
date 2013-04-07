@@ -24,11 +24,9 @@ public class BooContentOutlinePage extends ContentOutlinePage {
 
 		public BooOutlineInformationControl(Shell parent, int shellStyle, int treeStyle) {
 			super(parent, shellStyle, treeStyle);
-			
 		}
 
 		protected TreeViewer createTreeViewer(Composite parent, int style) {
-			
 			final TreeViewer viewer = new TreeViewer(newTree(parent, style));
 			viewer.setAutoExpandLevel(4);
 			viewer.setContentProvider(new OutlineContentProvider());
@@ -151,6 +149,8 @@ public class BooContentOutlinePage extends ContentOutlinePage {
 			mapImage(OutlineNode.NAMESPACE, IBooUIConstants.NAMESPACE);
 			mapImage(OutlineNode.IMPORT, IBooUIConstants.IMPORT);
 			mapImage(OutlineNode.IMPORT_COLLECTION, IBooUIConstants.IMPORT_COLLECTION);
+			
+			mapImage(OutlineNode.MACRO, IBooUIConstants.IMPORT);
 		}
 		
 		void mapImage(String entityType, String key) {

@@ -51,6 +51,8 @@ public class OutlineNode {
 
 	public static final String IMPORT_COLLECTION = "ImportCollection";
 	public static final String IMPORT = "Import";
+	
+	public static final String MACRO = "MacroStatement";
 
 	private String _name;
 
