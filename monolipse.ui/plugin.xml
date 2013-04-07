@@ -396,7 +396,7 @@
 			id="monolipse.ui.debug.StackTracePatternMatchListener"
 			regex="in\s.+\.(boo|js|cs):\d+"
 			class="monolipse.ui.debug.StackTracePatternMatchListener"
-			qualifier="(boo|js|cs):">
+			qualifier="\.(boo|js|cs):">
 			<enablement>
 			</enablement>
 		</consolePatternMatchListener>
@@ -405,7 +405,16 @@
 			id="monolipse.ui.debug.CompilerOutputPatternMatchListener"
 			regex="\b.+\.(boo|cs|js)\(\d+,\d+\)"
 			class="monolipse.ui.debug.CompilerOutputPatternMatchListener"
-			qualifier="(js|cs|boo)\(">
+			qualifier="\.(js|cs|boo)\(">
+			<enablement>
+			</enablement>
+		</consolePatternMatchListener>
+		
+		<consolePatternMatchListener
+			id="monolipse.ui.debug.BoojayStackTracePatternMatchListener"
+			regex="\(.+\.boo:\d+\)"
+			class="monolipse.ui.debug.BoojayStackTracePatternMatchListener"
+			qualifier="\.boo:">
 			<enablement>
 			</enablement>
 		</consolePatternMatchListener>
