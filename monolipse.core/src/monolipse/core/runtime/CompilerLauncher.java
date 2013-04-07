@@ -15,7 +15,7 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 	public static CompilerLauncher createLauncher(AssemblySourceLanguage language) throws IOException {
 		if (language.equals(AssemblySourceLanguage.BOO))
 			return new BooCompilerLauncher();
-		if (language.equals(AssemblySourceLanguage.BOOJAY)) 
+		if (language.equals(AssemblySourceLanguage.BOOJAY))
 			return new BoojayCompilerLauncher();
 		return new CSharpCompilerLauncher(language);
 	}
@@ -30,7 +30,7 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 		launcher.addReferences(source.getReferences());
 		if (source.getLanguage().equals(AssemblySourceLanguage.BOOJAY)) {
 			launcher.addReferences(getProjectClasspaths(source));
-		} 
+		}
 		return launcher;
 	}
 
@@ -43,11 +43,6 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 			for (IClasspathEntry classpath: classpaths) {
 				if (classpath.getEntryKind() == IClasspathEntry.CPE_LIBRARY) {
 					result.add(classpath.getPath().toOSString());
-				}
-				if (classpath.getEntryKind() == IClasspathEntry.CPE_CONTAINER) {
-					IClasspathContainer container = JavaCore.getClasspathContainer(classpath.getPath(), javaProject);
-					for (IClasspathEntry e: container.getClasspathEntries())
-						result.add(e.getPath().toOSString());
 				}
 			}
 		} catch (JavaModelException e) {
