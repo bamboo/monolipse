@@ -18,13 +18,23 @@
  */
 package monolipse.core.internal;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import monolipse.core.foundation.ArrayUtilities;
+import monolipse.core.foundation.JavaModelUtilities;
 
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 
 
 public class BooNature implements IProjectNature {
@@ -37,15 +47,77 @@ public class BooNature implements IProjectNature {
 	 * @see org.eclipse.core.resources.IProjectNature#configure()
 	 */
 	public void configure() throws CoreException {
-		IProject project = _project;
-		addBuilderToProject(project);
+		addBuilderTo(_project);
+		addExclusionPatternsToSourceFoldersOf(_project);
 	}
 
-	public static void addBuilderToProject(IProject project) throws CoreException {
+	private void addExclusionPatternsToSourceFoldersOf(IProject project) throws CoreException {
+		IJavaProject javaProject = JavaCore.create(project);
+		if (javaProject == null)
+			return;
+		addExclusionPatternsToSourceFoldersOf(javaProject);
+	}
+
+	private void addExclusionPatternsToSourceFoldersOf(IJavaProject javaProject) throws JavaModelException {
+		IClasspathEntry[] classpath = javaProject.getRawClasspath();
+		Map<IClasspathEntry, IClasspathEntry> modified = addExclusionPatternsTo(classpath);
+		if (modified.isEmpty())
+			return;
+		javaProject.setRawClasspath(replaceModifiedClasspathEntries(classpath, modified), null);
+	}
+
+	private IClasspathEntry[] replaceModifiedClasspathEntries(
+			IClasspathEntry[] classpath,
+			Map<IClasspathEntry, IClasspathEntry> modifiedEntries) {
+		
+		for (int i = 0; i < classpath.length; i++) {
+			IClasspathEntry originalEntry = classpath[i];
+			IClasspathEntry modified = modifiedEntries.get(originalEntry);
+			if (modified != null)
+				classpath[i] = modified;
+		}
+		return classpath;
+	}
+
+	private Map<IClasspathEntry, IClasspathEntry> addExclusionPatternsTo(IClasspathEntry[] classpath) {
+		Map<IClasspathEntry, IClasspathEntry> modified = new HashMap<IClasspathEntry, IClasspathEntry>();
+		for (int i = 0; i < classpath.length; i++) {
+			IClasspathEntry entry = classpath[i];
+			if (entry.getEntryKind() != IClasspathEntry.CPE_SOURCE)
+				continue;
+			
+			IPath[] exclusionPatterns = entry.getExclusionPatterns();
+			IPath[] newExclusionPatterns = addExclusionPatternsTo(exclusionPatterns);
+			if (exclusionPatterns == newExclusionPatterns)
+				continue;
+			
+			IClasspathEntry newSourceEntry = JavaCore.newSourceEntry(
+					entry.getPath(),
+					entry.getInclusionPatterns(),
+					newExclusionPatterns,
+					entry.getOutputLocation(),
+					entry.getExtraAttributes());
+			
+			modified.put(entry, newSourceEntry);
+		}
+		return modified;
+	}
+
+	private IPath[] addExclusionPatternsTo(IPath[] exclusionPatterns) {
+		IPath[] newExclusionPatterns = exclusionPatterns;
+		for (String pattern : new String[] { "**/.monolipse", "**/*.boo" }) {
+			if (!JavaModelUtilities.exclusionPatternsContains(pattern, exclusionPatterns))
+				newExclusionPatterns = ArrayUtilities.append(newExclusionPatterns, new Path(pattern));
+		}
+		return newExclusionPatterns;
+	}
+
+	public static void addBuilderTo(IProject project) throws CoreException {
 		IProjectDescription desc = project.getDescription();
 		ICommand[] commands = desc.getBuildSpec();
 		
-		if (hasBuilder(commands)) return;
+		if (hasBuilder(commands))
+			return;
 
 		ICommand command = desc.newCommand();
 		command.setBuilderName(BooBuilder.BUILDER_ID);
