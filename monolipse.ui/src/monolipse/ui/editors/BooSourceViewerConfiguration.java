@@ -40,7 +40,6 @@ import org.eclipse.jface.text.rules.ITokenScanner;
 import org.eclipse.jface.text.source.IAnnotationHover;
 import org.eclipse.jface.text.source.ISharedTextColors;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
@@ -72,7 +71,10 @@ public class BooSourceViewerConfiguration extends TextSourceViewerConfiguration 
 	public IReconciler getReconciler(ISourceViewer sourceViewer) {
 		BooReconcilingStrategy strategy = new BooReconcilingStrategy();
 		strategy.setEditor(_editor);
-		return new MonoReconciler(strategy, false);
+		MonoReconciler reconciler = new MonoReconciler(strategy, false);
+		int twoSeconds = 2 * 1000;
+		reconciler.setDelay(twoSeconds);
+		return reconciler;
 	}
 	
 	public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
