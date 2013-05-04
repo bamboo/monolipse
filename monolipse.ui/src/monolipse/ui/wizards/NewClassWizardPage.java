@@ -1,5 +1,7 @@
 package monolipse.ui.wizards;
 
+import monolipse.core.foundation.Adapters;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -82,13 +84,13 @@ public class NewClassWizardPage extends WizardPage {
 			IStructuredSelection ssel = (IStructuredSelection) _selection;
 			if (ssel.size() > 1)
 				return;
-			Object obj = ssel.getFirstElement();
-			if (obj instanceof IResource) {
+			IResource resource = Adapters.adapterFor(ssel.getFirstElement(), IResource.class);
+			if (resource != null) {
 				IContainer container;
-				if (obj instanceof IContainer)
-					container = (IContainer) obj;
+				if (resource instanceof IContainer)
+					container = (IContainer) resource;
 				else
-					container = ((IResource) obj).getParent();
+					container = ((IResource) resource).getParent();
 				_containerText.setText(container.getFullPath().toString());
 			}
 		}
