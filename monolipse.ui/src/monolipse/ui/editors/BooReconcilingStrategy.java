@@ -7,18 +7,18 @@ import monolipse.core.compiler.*;
 import monolipse.ui.*;
 
 import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.text.*;
 import org.eclipse.jface.text.reconciler.*;
 import org.eclipse.swt.widgets.*;
 
-
 public class BooReconcilingStrategy implements IReconcilingStrategy, IReconcilingStrategyExtension {
-	
+
 	private CompilerServices _builder;
 
 	private BooDocument _document;
 	private BooEditor _editor;
-	
+
 	public BooReconcilingStrategy() {
 		try {
 			_builder = CompilerServices.getInstance();
@@ -39,34 +39,44 @@ public class BooReconcilingStrategy implements IReconcilingStrategy, IReconcilin
 	}
 
 	public void reconcile(IRegion partition) {
+		new Job("outline update") {
+			@Override
+			protected IStatus run(IProgressMonitor arg0) {
+				reconcileAll();
+				return Status.OK_STATUS;
+			}
+		}.schedule();
+	}
+
+	private void reconcileAll() {
 		updateDocumentFolding(updateDocumentOutline());
 	}
-	
+
 	ArrayList<Position> positions = new ArrayList<Position>();
 
 	private void updateDocumentFolding(OutlineNode outline) {
-        positions = calculatePositions(outline, positions);
- 
-        Display.getDefault().asyncExec(new Runnable() {
-                public void run() {
-                	if (_editor != null) 
-                		_editor.updateFoldingStructure(positions);
-                }
-        });
+		positions = calculatePositions(outline, positions);
+
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				if (_editor != null)
+					_editor.updateFoldingStructure(positions);
+			}
+		});
 	}
 
 	private ArrayList<Position> calculatePositions(OutlineNode outline, ArrayList<Position> positions) {
-        getOutlinePositions(outline, positions);
+		getOutlinePositions(outline, positions);
 		return positions;
 	}
 
 	private void getOutlinePositions(OutlineNode root, ArrayList<Position> collection) {
 		if (shouldFoldBlock(root)) {
 			int start = getPositionForLine(root.startLine());
-			int length = getPositionForLine(root.endLine() + 1) - start;			
+			int length = getPositionForLine(root.endLine() + 1) - start;
 			collection.add(new Position(start, Math.max(1, length)));
 		}
-		for (OutlineNode child: root.children()) {
+		for (OutlineNode child : root.children()) {
 			getOutlinePositions(child, collection);
 		}
 	}
@@ -75,14 +85,16 @@ public class BooReconcilingStrategy implements IReconcilingStrategy, IReconcilin
 		if (root == null || root.type() == null) {
 			return false;
 		}
-		
+
 		String type = root.type();
-		return type.equals("ImportCollection") || type.equals("Method") || type.equals("Constructor") || type.equals("ClassDefinition") || type.equals("InterfaceDefinition");
+		return type.equals("ImportCollection") || type.equals("Method") || type.equals("Constructor")
+				|| type.equals("ClassDefinition") || type.equals("InterfaceDefinition");
 	}
 
 	private int getPositionForLine(int line) {
-		if (null == _document) return 1;
-		
+		if (null == _document)
+			return 1;
+
 		try {
 			return _document.getLineOffset(line - 1);
 		} catch (org.eclipse.jface.text.BadLocationException e) {
@@ -91,7 +103,8 @@ public class BooReconcilingStrategy implements IReconcilingStrategy, IReconcilin
 	}
 
 	private OutlineNode updateDocumentOutline() {
-		if (null == _document) return null;
+		if (null == _document)
+			return null;
 		OutlineNode outline = getOutline();
 		if (null != outline) {
 			_document.updateOutline(outline);
@@ -100,7 +113,8 @@ public class BooReconcilingStrategy implements IReconcilingStrategy, IReconcilin
 	}
 
 	private OutlineNode getOutline() {
-		if (null == _builder) return null;
+		if (null == _builder)
+			return null;
 		try {
 			return _builder.getOutline(_document.get());
 		} catch (IOException e) {
@@ -113,6 +127,6 @@ public class BooReconcilingStrategy implements IReconcilingStrategy, IReconcilin
 	}
 
 	public void initialReconcile() {
-		updateDocumentFolding(updateDocumentOutline());
+		reconcileAll();
 	}
 }
