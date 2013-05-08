@@ -18,30 +18,18 @@
  */
 package monolipse.ui.editors.csharp;
 
-import monolipse.ui.editors.BooColorConstants;
-import monolipse.ui.editors.BooDoubleClickStrategy;
-import monolipse.ui.editors.MarkerAnnotationHover;
-import monolipse.ui.editors.MultiLineCommentScanner;
-import monolipse.ui.editors.SingleQuotedStringScanner;
-import monolipse.ui.editors.StringScanner;
+import monolipse.ui.editors.*;
 
-import org.eclipse.jface.text.DefaultInformationControl;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IInformationControl;
-import org.eclipse.jface.text.IInformationControlCreator;
-import org.eclipse.jface.text.ITextDoubleClickStrategy;
-import org.eclipse.jface.text.presentation.IPresentationReconciler;
-import org.eclipse.jface.text.presentation.PresentationReconciler;
-import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
-import org.eclipse.jface.text.rules.ITokenScanner;
-import org.eclipse.jface.text.source.IAnnotationHover;
-import org.eclipse.jface.text.source.ISharedTextColors;
-import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.jface.text.source.SourceViewerConfiguration;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.jface.preference.*;
+import org.eclipse.jface.text.*;
+import org.eclipse.jface.text.presentation.*;
+import org.eclipse.jface.text.rules.*;
+import org.eclipse.jface.text.source.*;
+import org.eclipse.swt.widgets.*;
+import org.eclipse.ui.editors.text.*;
 
 
-public class CSharpSourceViewerConfiguration extends SourceViewerConfiguration {
+public class CSharpSourceViewerConfiguration extends TextSourceViewerConfiguration {
 	private BooDoubleClickStrategy _doubleClickStrategy;
 	private CSharpScanner _scanner;
 	private ISharedTextColors _colorManager;
@@ -49,9 +37,11 @@ public class CSharpSourceViewerConfiguration extends SourceViewerConfiguration {
 	private StringScanner _dqsScanner;
 	private SingleQuotedStringScanner _sqsScanner;
 
-	public CSharpSourceViewerConfiguration(ISharedTextColors colors) {
+	public CSharpSourceViewerConfiguration(ISharedTextColors colors, IPreferenceStore preferenceStore) {
+		super(preferenceStore);
 		this._colorManager = colors;
 	}
+	
 	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
 		return CSharpPartitionScanner.PARTITION_TYPES;
 	}

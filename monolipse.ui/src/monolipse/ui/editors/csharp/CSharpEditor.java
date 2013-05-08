@@ -5,8 +5,7 @@ import org.eclipse.ui.editors.text.TextEditor;
 public class CSharpEditor extends TextEditor {
 	public CSharpEditor() {
 		super();
-		setSourceViewerConfiguration(new CSharpSourceViewerConfiguration(
-				getSharedColors()));
+		setSourceViewerConfiguration(new CSharpSourceViewerConfiguration(getSharedColors(), getPreferenceStore()));
 		setDocumentProvider(new CSharpDocumentProvider());
 	}
 }
