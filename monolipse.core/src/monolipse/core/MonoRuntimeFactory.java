@@ -13,7 +13,7 @@ public class MonoRuntimeFactory {
 	}
 
 	private static boolean isMonoHomeSet() {
-		return null != System.getProperty(MONO_HOME, null);
+		return System.getProperty(MONO_HOME, null) != null;
 	}
 
 	private static String getMonoHome() {
@@ -29,12 +29,16 @@ public class MonoRuntimeFactory {
 	}
 
 	private static final String MONO_HOME = "MONO_HOME";
-
+	
 	private static IMonoRuntime newMonoRuntime(String location) {
 		return new MonoRuntimeImpl(location);
 	}
 
 	private static IMonoRuntime newDotnetRuntime() {
-		return new DotNetRuntimeImpl();
+		return new DotNetRuntimeImpl(getDotNetHome());
+	}
+
+	private static String getDotNetHome() {
+		return System.getProperty("DOTNET_HOME", "c:/WINDOWS/Microsoft.NET/Framework/v3.5");
 	}
 }

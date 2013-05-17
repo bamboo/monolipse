@@ -10,12 +10,18 @@ import monolipse.core.internal.GlobalAssemblyCacheReference;
 
 public class DotNetRuntimeImpl implements IMonoRuntime {
 
+	private final String location;
+	
+	public DotNetRuntimeImpl(String location) {
+		this.location = location;
+	}
+
 	public IMonoLauncher createLauncher(String executablePath) throws IOException {
 		return new MonoLauncherImpl(executablePath);
 	}
 
 	public String getLocation() {
-		return "c:/WINDOWS/Microsoft.NET/Framework/v3.5";
+		return location;
 	}
 
 	public IAssemblyReference[] listGlobalAssemblyCache() throws IOException {
