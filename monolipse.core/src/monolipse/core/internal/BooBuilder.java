@@ -229,10 +229,29 @@ public class BooBuilder extends IncrementalProjectBuilder {
 			
 			@Override
 			public boolean visit(IAssemblySourceReference reference) throws CoreException {
-				if (reference.getAssemblySource().getOutputFolder().equals(outputFolder))
+				
+				IAssemblySource assemblySource = reference.getAssemblySource();
+				if (assemblySource.getOutputFolder().equals(outputFolder))
 					return true;
-				IO.copyFileToFolder(reference.getAssemblySource().getOutputFile(), outputFolder, monitor);
+				
+				IFile outputFile = assemblySource.getOutputFile();
+				IO.copyFileToFolder(outputFile, outputFolder, monitor);
+				copyDebugInfoOf(outputFile, outputFolder, monitor);
+				
 				return true;
+			}
+
+			private void copyDebugInfoOf(IFile assemblyFile, final IFolder outputFolder, final IProgressMonitor monitor)
+					throws CoreException {
+				IFile debugInfoFile = debugInfoFileFor(assemblyFile);
+				//debugInfoFile.refreshLocal(0, monitor);
+				if (debugInfoFile.exists())
+					IO.copyFileToFolder(debugInfoFile, outputFolder, monitor);
+			}
+
+			private IFile debugInfoFileFor(IFile assemblyFile) {
+				IPath debugInfo = assemblyFile.getProjectRelativePath().addFileExtension(".mdb");
+				return assemblyFile.getProject().getFile(debugInfo);
 			}
 			
 			@Override
