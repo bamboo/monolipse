@@ -174,7 +174,6 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream, Charset.forName("utf-8")));		
 		String line = null;
 		while (null != (line = reader.readLine())) {
-			
 			CompilerError error = parseCompilerError(line);
 			if (null != error) errors.add(error);
 		}
