@@ -20,12 +20,17 @@ public class CSharpCompilerLauncher extends CompilerLauncher {
 
 	CSharpCompilerLauncher(AssemblySourceLanguage language) throws IOException {
 		super(compilerLauncherFor(language));
+		if (isDotnet()) add("/utf8output");
 	}
 
 	private static IMonoLauncher compilerLauncherFor(AssemblySourceLanguage language) throws IOException {
-		if (BooCore.getRuntime().isDotnet())
+		if (isDotnet())
 			return BooCore.createLauncherWithRuntimeLocation("csc.exe");
 		return BooCore.createLauncherWithRuntimeLocation(monoExecutableFor(language));
+	}
+
+	private static boolean isDotnet() {
+		return BooCore.getRuntime().isDotnet();
 	}
 
 	private static String monoExecutableFor(AssemblySourceLanguage language) {
