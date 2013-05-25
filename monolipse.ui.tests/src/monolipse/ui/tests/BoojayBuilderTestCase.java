@@ -5,6 +5,8 @@ import monolipse.core.internal.*;
 
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
+import org.eclipse.jdt.core.*;
+import org.junit.*;
 
 public class BoojayBuilderTestCase extends AbstractBooTestCase {
 
@@ -15,17 +17,22 @@ public class BoojayBuilderTestCase extends AbstractBooTestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		_assemblySource = _booProject.addAssemblySource(new Path(SRC_FOLDER), AssemblySourceLanguage.BOOJAY);
-		_assemblySource.setOutputFolder(_project.createFolder("bin"));
-	}
-
-	public void testBuildJarByDefault() throws Exception {
-		assertEquals(AssemblySourceLanguage.BOOJAY, _assemblySource.getLanguage());
-		addResourceAndBuild("Boojay.boo");
-		assertNoErrorsOn(_assemblySource);
-		
-		assertOutputFile("BoojayTest.jar");
 	}
 	
+	public void testBuildClassesToTheProjectOutputFolder() throws Exception {
+		addResourceAndBuild("Boojay.boo");
+		assertNoErrorsOn(_assemblySource);
+		assertEquals(javaOutputFolderPath(), _assemblySource.getOutputFolder().getFullPath());
+	}
+	
+	private IPath javaOutputFolderPath() throws CoreException {
+		return javaProject().getOutputLocation();
+	}
+
+	private IJavaProject javaProject() {
+		return JavaCore.create(getProject());
+	}
+
 	public void testBuildErrorsCauseMarkers() throws Exception {
 		addResourceAndBuild("BoojayWithErrors.boo");
 		
@@ -57,7 +64,7 @@ public class BoojayBuilderTestCase extends AbstractBooTestCase {
 		build();
 	}
 
-	private IContainer outputFolder() {
+	private IContainer outputFolder() throws CoreException {
 		return _assemblySource.getOutputFolder();
 	}
 }

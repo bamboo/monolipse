@@ -149,7 +149,11 @@ public class BooAssemblySourcePropertyPage extends PreferencePage implements IWo
 		};
 		_languageButtons = createButtonGroup(composite, "Language", languageLabels, sourceLanguages, source.getLanguage());
 		
-		createOutputFolderGroup(composite, source);
+		try {
+			createOutputFolderGroup(composite, source);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 		
 		createAdditionalOptionsGroup(composite, source);
 		
@@ -175,13 +179,15 @@ public class BooAssemblySourcePropertyPage extends PreferencePage implements IWo
 	    text.setSize(text.computeSize(width, height));
 	}
 
-	private void createOutputFolderGroup(Composite composite, final IAssemblySource source) {
+	private void createOutputFolderGroup(Composite composite, final IAssemblySource source) throws CoreException {
 		
 		Group group = createGroup(composite, "Output Folder: ");
 	    
 		_outputPath = new Text(group, SWT.NONE);
 		_outputPath.setEditable(false);
-		setOutputFolder(source.getOutputFile().getParent());
+		
+		if (source.hasOutputFolder())
+			setOutputFolder(source.getOutputFolder());
 		
 		Button button = new Button(group, SWT.PUSH);
 		button.setText("Browse...");

@@ -17,14 +17,14 @@ public class TestRunner {
 	private final IAssemblySource _source;
 	private final String _runArguments;
 	
-	public TestRunner(IAssemblySource source, List<String> testNames) {
+	public TestRunner(IAssemblySource source, List<String> testNames) throws CoreException {
 		_source = source;
 		_runArguments = testNames.isEmpty()
 			? assemblyLocation()
 			: assemblyLocation() + "," + Strings.commaSeparatedList(testNames);
 	}
 
-	private String assemblyLocation() {
+	private String assemblyLocation() throws CoreException {
 		return _source.getOutputFile().getLocation().toOSString();
 	}
 	

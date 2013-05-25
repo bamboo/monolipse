@@ -28,7 +28,7 @@ public class AssemblySourceReference implements IAssemblySourceReference {
 		return _source.getFolder().getName();
 	}
 
-	public String getCompilerReference() {
+	public String getCompilerReference() throws CoreException {
 		return _source.getOutputFile().getLocation().toOSString();
 	}
 

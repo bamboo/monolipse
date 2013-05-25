@@ -24,8 +24,9 @@ public interface IAssemblyReference extends IMemorable {
 	 * passed as a command line argument to the compiler.
 	 * 
 	 * @return string representation of this reference
+	 * @throws CoreException 
 	 */
-	String getCompilerReference();
+	String getCompilerReference() throws CoreException;
 
 	String getType();
 	

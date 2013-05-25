@@ -3,8 +3,6 @@ package monolipse.core;
 /**
  * Interface for objects which are worth being remembered by the
  * system such as compiler settings, assembly references, etc.
- * 
- * @author rodrigob
  */
 public interface IMemorable {
 	

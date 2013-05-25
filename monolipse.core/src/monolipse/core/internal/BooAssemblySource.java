@@ -8,6 +8,7 @@ import monolipse.core.foundation.*;
 
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
+import org.eclipse.jdt.core.*;
 
 import com.thoughtworks.xstream.*;
 import com.thoughtworks.xstream.io.xml.*;
@@ -80,14 +81,10 @@ public class BooAssemblySource implements IAssemblySource {
 		if (null == folder || !folder.exists()) throw new IllegalArgumentException();
 		_folder = folder;
 		_language = defaultLanguage;
-		_outputFolder = defaultOutputFolder();
+		_outputFolder = null;
 		refresh(null);
 	}
 
-	private IFolder defaultOutputFolder() {
-		return _folder.getProject().getFolder("bin");
-	}
-	
 	public void setLanguage(AssemblySourceLanguage language) {
 		_language = language;
 	}
@@ -102,8 +99,8 @@ public class BooAssemblySource implements IAssemblySource {
 		_outputFolder = folder;
 	}
 	
-	public IFolder getOutputFolder() {
-		return _outputFolder;
+	public IFolder getOutputFolder() throws CoreException {
+		return _outputFolder != null ? _outputFolder : defaultOutputFolder();
 	}
 	
 	/* (non-Javadoc)
@@ -173,8 +170,16 @@ public class BooAssemblySource implements IAssemblySource {
 	/* (non-Javadoc)
 	 * @see monolipse.core.IBooAssemblySource#getOutputFile()
 	 */
-	public IFile getOutputFile() {
-		return _outputFolder.getFile(_folder.getName() + getOutputAssemblyExtension());
+	public IFile getOutputFile() throws CoreException {
+		return getOutputFolder().getFile(assemblyFileName());
+	}
+
+	private String assemblyFileName() {
+		return assemblyName() + getOutputAssemblyExtension();
+	}
+
+	private String assemblyName() {
+		return _folder.getName();
 	}
 	
 	/* (non-Javadoc)
@@ -202,11 +207,11 @@ public class BooAssemblySource implements IAssemblySource {
 		public IRemembrance[] references;
 		public String outputFolder;
 		public String additionalOptions;
-		public AssemblySourceRemembrance(BooAssemblySource source) {
+		public AssemblySourceRemembrance(BooAssemblySource source) throws CoreException {
 			language = source.getLanguage().id();
 			outputType = source.getOutputType();
 			references = new IRemembrance[source._references.length];
-			outputFolder = source.getOutputFolder().getFullPath().toPortableString();
+			outputFolder = source.hasOutputFolder() ? source.getOutputFolder().getFullPath().toPortableString() : null;
 			additionalOptions = source.getAdditionalOptions();
 			for (int i=0; i<references.length; ++i) {
 				references[i] = source._references[i].getRemembrance();
@@ -253,18 +258,25 @@ public class BooAssemblySource implements IAssemblySource {
 		}
 	}
 
+	public boolean hasOutputFolder() {
+		return _outputFolder != null;
+	}
+
 	private void loadSettingsFrom(IFile file) throws CoreException {
 		AssemblySourceRemembrance remembrance = (AssemblySourceRemembrance) createXStream().fromXML(decode(file));
-		final String language = remembrance.language;
+		String language = remembrance.language;
 		_language = isEmptyOrNull(language)
-				? AssemblySourceLanguage.BOO
-				: AssemblySourceLanguage.forId(language);
+			? AssemblySourceLanguage.BOO
+			: AssemblySourceLanguage.forId(language);
+		
 		_outputType = remembrance.outputType;
 		_references = remembrance.activateReferences();
 		_additionalOptions = remembrance.additionalOptions;
 		
 		String path = remembrance.outputFolder;
-		_outputFolder = path == null ? defaultOutputFolder() : WorkspaceUtilities.getFolder(path);
+		_outputFolder = isEmptyOrNull(path)
+			? null
+			: WorkspaceUtilities.getFolder(path);
 	}
 	
 	private boolean isEmptyOrNull(String language) {
@@ -376,4 +388,39 @@ public class BooAssemblySource implements IAssemblySource {
 	public void setAdditionalOptions(String additionalOptions) {
 		_additionalOptions = additionalOptions;
 	}
+	
+	private IFolder defaultOutputFolder() throws CoreException {
+		return _language == AssemblySourceLanguage.BOOJAY
+			? javaOutputFolder()
+			: projectFolder("bin");
+	}
+
+	private IFolder projectFolder(String path) {
+		return project().getFolder(path);
+	}
+
+	private IFolder javaOutputFolder() throws JavaModelException {
+		return workspaceFolder(javaProject().getOutputLocation());
+	}
+
+	private IFolder workspaceFolder(IPath location) {
+		return workspaceRoot().getFolder(location);
+	}
+
+	private IWorkspaceRoot workspaceRoot() {
+		return workspace().getRoot();
+	}
+
+	private IWorkspace workspace() {
+		return project().getWorkspace();
+	}
+
+	private IJavaProject javaProject() {
+		return JavaCore.create(project());
+	}
+
+	private IProject project() {
+		return _folder.getProject();
+	}
+
 }

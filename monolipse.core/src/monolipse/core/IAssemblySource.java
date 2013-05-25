@@ -32,11 +32,11 @@ public interface IAssemblySource extends IAdaptable {
 	
 	void setLanguage(AssemblySourceLanguage language);
 
-	IFile getOutputFile();
+	IFile getOutputFile() throws CoreException;
 	
 	void setOutputFolder(IFolder folder);
 
-	IFolder getOutputFolder();
+	IFolder getOutputFolder() throws CoreException;
 	
 	void refresh(IProgressMonitor monitor) throws CoreException;
 
@@ -45,4 +45,6 @@ public interface IAssemblySource extends IAdaptable {
 	String getAdditionalOptions();
 
 	void setAdditionalOptions(String additionalOptions);
+
+	boolean hasOutputFolder();
 }
