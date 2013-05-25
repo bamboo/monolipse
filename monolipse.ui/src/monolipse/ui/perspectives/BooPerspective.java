@@ -32,6 +32,7 @@ public class BooPerspective implements IPerspectiveFactory {
 		layout.addActionSet("org.eclipse.debug.ui.launchActionSet");
 		
 		layout.addPerspectiveShortcut("org.eclipse.ui.resourcePerspective");
+		
 		layout.addNewWizardShortcut("monolipse.ui.wizards.NewClassWizard");
 		layout.addNewWizardShortcut("monolipse.ui.wizards.NewBooAssemblySourceWizard");
 		layout.addNewWizardShortcut("monolipse.ui.wizards.NewBoojayAssemblySourceWizard");
@@ -46,7 +47,7 @@ public class BooPerspective implements IPerspectiveFactory {
 		IFolderLayout upperLeft = layout.createFolder("upperLeft",
 				IPageLayout.LEFT, (float) 0.26, editorArea);
 		upperLeft.addView(BooExplorerView.ID_VIEW);
-		upperLeft.addView(IPageLayout.ID_RES_NAV);
+		upperLeft.addView(IPageLayout.ID_PROJECT_EXPLORER);
 
 		IFolderLayout bottomLeft = layout.createFolder("bottomLeft",
 				IPageLayout.BOTTOM, (float) 0.5, "upperLeft");
