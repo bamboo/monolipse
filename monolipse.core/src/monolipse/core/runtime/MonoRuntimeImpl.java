@@ -70,6 +70,7 @@ public class MonoRuntimeImpl implements IMonoRuntime {
 	public IMonoLauncher createLauncher(String executablePath)
 			throws IOException {
 		MonoLauncherImpl launcher = new MonoLauncherImpl(MonoRuntimeImpl.getOSDependentRuntimeExecutable(_location));
+		launcher.add("--runtime=v4.0");
 		launcher.add("--debug");
 		launcher.add(executablePath);
 		return launcher;
