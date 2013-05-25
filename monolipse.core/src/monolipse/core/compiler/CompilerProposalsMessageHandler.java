@@ -27,7 +27,7 @@ public class CompilerProposalsMessageHandler implements IProcessMessageHandler {
 
 	private ArrayList<CompilerProposal> exchange(final ArrayList<CompilerProposal> proposals) {
 		try {
-			 return _proposalExchanger.exchange(proposals, 3, TimeUnit.SECONDS);
+			 return _proposalExchanger.exchange(proposals, 1, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			BooCore.logException(e);
 		} catch (TimeoutException e) {
