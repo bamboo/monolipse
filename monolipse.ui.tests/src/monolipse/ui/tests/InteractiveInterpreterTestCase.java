@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.*;
 
-import junit.framework.TestCase;
+import junit.framework.*;
 import monolipse.core.compiler.CompilerProposal;
 import monolipse.core.interpreter.*;
+
+import static org.junit.Assert.*;
 
 public class InteractiveInterpreterTestCase extends TestCase {
 	
@@ -37,8 +39,8 @@ public class InteractiveInterpreterTestCase extends TestCase {
 	
 	public void testCompletionProposalsForVariable() throws Exception {
 		assertCompletionProposals("class Foo:\n\tdef foo():\n\t\tpass\nf = Foo()", "f.", new String[] {
-			"constructor",
 			"foo",
+			"constructor",
 			"Equals",
 			"Equals", // static version
 			"GetHashCode",
@@ -71,10 +73,15 @@ public class InteractiveInterpreterTestCase extends TestCase {
 		exchanger.exchange(true, 3, TimeUnit.SECONDS);
 		
 		CompilerProposal[] proposals = _interpreter.getCompletionProposals(insertPoint + "__codecomplete__");
-		assertEquals(expected.length, proposals.length);
-		for (int i=0; i<expected.length; ++i) {
-			assertEquals(expected[i], proposals[i].getName());
-		}
+		assertArrayEquals(expected, namesOf(proposals));
+		
+	}
+
+	private String[] namesOf(CompilerProposal[] proposals) {
+		String[] actual = new String[proposals.length];
+		for (int i=0; i<proposals.length; ++i)
+			actual[i] = proposals[i].getName();
+		return actual;
 	}
 	
 	public void tearDown() throws Exception {
