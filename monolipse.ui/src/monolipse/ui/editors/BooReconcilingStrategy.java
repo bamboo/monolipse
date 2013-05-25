@@ -49,7 +49,16 @@ public class BooReconcilingStrategy implements IReconcilingStrategy, IReconcilin
 	}
 
 	private void reconcileAll() {
-		updateDocumentFolding(updateDocumentOutline());
+		if (_document == null)
+			return;
+		OutlineNode outline = getOutline();
+		_document.updateOutline(outline);
+		updateDocumentFolding(outline);
+	}
+
+	private OutlineNode getOutline() {
+		OutlineNode outline = buildOutline();
+		return outline == null ? new OutlineNode() : outline;
 	}
 
 	ArrayList<Position> positions = new ArrayList<Position>();
@@ -101,18 +110,7 @@ public class BooReconcilingStrategy implements IReconcilingStrategy, IReconcilin
 			return 1;
 		}
 	}
-
-	private OutlineNode updateDocumentOutline() {
-		if (null == _document)
-			return null;
-		OutlineNode outline = getOutline();
-		if (null != outline) {
-			_document.updateOutline(outline);
-		}
-		return outline;
-	}
-
-	private OutlineNode getOutline() {
+	private OutlineNode buildOutline() {
 		if (null == _builder)
 			return null;
 		try {
