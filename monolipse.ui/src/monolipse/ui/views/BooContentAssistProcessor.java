@@ -57,6 +57,8 @@ public class BooContentAssistProcessor implements IContentAssistProcessor {
 		
 		try {
 			CompilerProposal[] found = _client.getCompletionProposals(getCompletionText(viewer, offset));
+			if (found == null)
+				return none();
 			proposals = newCompletionProposalArray("", offset, found);
 			_cachedLine = line;
 			_cachedProposals = found;
@@ -64,6 +66,10 @@ public class BooContentAssistProcessor implements IContentAssistProcessor {
 		} catch (IOException e) {
 			BooUI.logException(e);
 		}
+		return none();
+	}
+
+	private ICompletionProposal[] none() {
 		return new ICompletionProposal[0];
 	}
 	
