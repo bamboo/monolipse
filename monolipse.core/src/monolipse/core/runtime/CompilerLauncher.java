@@ -8,6 +8,7 @@ import monolipse.core.*;
 import monolipse.core.foundation.*;
 
 import org.eclipse.core.resources.*;
+import org.eclipse.core.runtime.*;
 import org.eclipse.jdt.core.*;
 
 public abstract class CompilerLauncher implements IMonoCompilerLauncher {
@@ -20,7 +21,7 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 		return new CSharpCompilerLauncher(language);
 	}
 	
-	public static CompilerLauncher createLauncher(IAssemblySource source) throws IOException {
+	public static CompilerLauncher createLauncher(IAssemblySource source) throws IOException, CoreException {
 		CompilerLauncher launcher = createLauncher(source.getLanguage());
 		
 		launcher.setOutput(source.getOutputFile());
@@ -29,27 +30,43 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 		
 		launcher.addReferences(source.getReferences());
 		if (source.getLanguage().equals(AssemblySourceLanguage.BOOJAY)) {
-			launcher.addReferences(getProjectClasspaths(source));
+			launcher.addReferences(classpathEntryReferencesFor(source));
 		}
 		return launcher;
 	}
 
-	private static String[] getProjectClasspaths(IAssemblySource source) {
+	private static String[] classpathEntryReferencesFor(IAssemblySource source) {
 		ArrayList<String> result = new ArrayList<String>();
-		
 		try {
-			IJavaProject javaProject = JavaCore.create(source.getFolder().getProject());			
-			IClasspathEntry[] classpaths = javaProject.getRawClasspath();
-			for (IClasspathEntry classpath: classpaths) {
-				if (classpath.getEntryKind() == IClasspathEntry.CPE_LIBRARY) {
-					result.add(classpath.getPath().toOSString());
-				}
-			}
+			addClasspathEntriesTo(result, javaProjectFor(source).getResolvedClasspath(true));
 		} catch (JavaModelException e) {
 			BooCore.logException(e);
 		}
-
 		return result.toArray(new String[result.size()]);
+	}
+
+	private static IJavaProject javaProjectFor(IAssemblySource source) {
+		return JavaCore.create(source.getFolder().getProject());
+	}
+
+	private static void addClasspathEntriesTo(ArrayList<String> result, IClasspathEntry[] classpaths) {
+		for (IClasspathEntry classpath: classpaths)
+			addClasspathEntryTo(result, classpath);
+	}
+
+	private static void addClasspathEntryTo(ArrayList<String> result, IClasspathEntry classpath) {
+		int entryKind = classpath.getEntryKind();
+		if (entryKind == IClasspathEntry.CPE_LIBRARY) {
+			String ref = classpath.getPath().toOSString();
+			logInfo("Classpath " + classpath + " referenced as '" + ref + "'");
+			result.add(ref);
+			return;
+		}
+		logInfo("Skipping " + classpath);
+	}
+
+	private static void logInfo(String message) {
+		BooCore.logInfo(message);
 	}
 
 	private final IMonoLauncher _launcher;
@@ -128,7 +145,7 @@ public abstract class CompilerLauncher implements IMonoCompilerLauncher {
 		add("-out:" + output);
 	}
 
-	public void addReferences(IAssemblyReference[] references) {		
+	public void addReferences(IAssemblyReference[] references) throws CoreException {		
 		for (IAssemblyReference ref : references)
 			add("-r:" + ref.getCompilerReference());
 	}
