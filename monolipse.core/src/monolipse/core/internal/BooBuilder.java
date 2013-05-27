@@ -31,19 +31,28 @@ import org.eclipse.core.runtime.*;
 public class BooBuilder extends IncrementalProjectBuilder {
 
 	public static final String BUILDER_ID = BooCore.ID_PLUGIN + ".booBuilder";
+	private String projectLocation;
 
 	protected void startupOnInitialize() {
 		super.startupOnInitialize();
+		projectLocation = canonicalPathFor(getProject().getLocation().toOSString());
 	}
 		
 	private void addMarker(String path, String message, int lineNumber, int severity) {
-
-		String projectLocation = getProject().getLocation().toOSString();
-		String relativePath = path.startsWith(projectLocation) ? path.substring(projectLocation.length() + 1) : path;
+		String canonicalPath = canonicalPathFor(path);
+		String relativePath = canonicalPath.startsWith(projectLocation) ? canonicalPath.substring(projectLocation.length() + 1) : canonicalPath;
 		relativePath = relativePath.replace('\\', '/');
 		IFile file = getProject().getFile(relativePath);
 		BooMarkers.addMarker(file, message, lineNumber, severity);
+	}
 
+	private String canonicalPathFor(String path) {
+		try {
+			return new File(path).getCanonicalPath();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return path;
+		}
 	}
 	
 	protected void clean(IProgressMonitor monitor) throws CoreException {
