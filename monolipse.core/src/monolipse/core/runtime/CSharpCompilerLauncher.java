@@ -11,9 +11,7 @@ import monolipse.core.IMonoLauncher;
 
 public class CSharpCompilerLauncher extends CompilerLauncher {
 	
-	private static final String MCS_EXECUTABLE = "lib/mono/1.0/mcs.exe";
-
-	private static final String GMCS_EXECUTABLE = "lib/mono/2.0/gmcs.exe";
+	private static final String MCS_EXECUTABLE = "lib/mono/2.0/mcs.exe";
 	
 	Pattern LINE_ERROR_PATTERN = Pattern
 		.compile("(.+)\\((\\d+),\\d+\\):\\s(error|warning) (\\w+\\d+):\\s(.+)");
@@ -26,17 +24,11 @@ public class CSharpCompilerLauncher extends CompilerLauncher {
 	private static IMonoLauncher compilerLauncherFor(AssemblySourceLanguage language) throws IOException {
 		if (isDotnet())
 			return BooCore.createLauncherWithRuntimeLocation("csc.exe");
-		return BooCore.createLauncherWithRuntimeLocation(monoExecutableFor(language));
+		return BooCore.createLauncherWithRuntimeLocation(MCS_EXECUTABLE);
 	}
 
 	private static boolean isDotnet() {
 		return BooCore.getRuntime().isDotnet();
-	}
-
-	private static String monoExecutableFor(AssemblySourceLanguage language) {
-		return language.equals(AssemblySourceLanguage.CSHARP_1_1)
-			? MCS_EXECUTABLE
-			: GMCS_EXECUTABLE;
 	}
 
 	protected CompilerError parseCompilerError(String line) {		

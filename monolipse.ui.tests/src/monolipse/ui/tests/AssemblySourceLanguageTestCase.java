@@ -12,8 +12,7 @@ public class AssemblySourceLanguageTestCase extends TestCase {
 				values,
 				AssemblySourceLanguage.BOOJAY,
 				AssemblySourceLanguage.BOO,
-				AssemblySourceLanguage.CSHARP,
-				AssemblySourceLanguage.CSHARP_1_1);
+				AssemblySourceLanguage.CSHARP);
 	}
 
 	private void assertOrder(AssemblySourceLanguage[] actual, AssemblySourceLanguage... expected) {

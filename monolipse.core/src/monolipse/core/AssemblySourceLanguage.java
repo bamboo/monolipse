@@ -3,8 +3,7 @@ package monolipse.core;
 public enum AssemblySourceLanguage {
 	BOOJAY("boojay"),
 	BOO("boo"),
-	CSHARP("cs"),
-	CSHARP_1_1("cs11");
+	CSHARP("cs");
 	
 	private final String _id;
 
