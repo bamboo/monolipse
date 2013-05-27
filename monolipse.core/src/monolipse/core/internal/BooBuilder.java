@@ -185,7 +185,7 @@ public class BooBuilder extends IncrementalProjectBuilder {
 			}
 			
 		} catch (Exception e) {
-			BooMarkers.addMarker(source.getFolder(), e.getMessage(), -1, IMarker.SEVERITY_ERROR);
+			BooMarkers.addErrorMarker(source, e.getMessage());
 			BooCore.logException(e);
 		}
 	}
@@ -282,10 +282,11 @@ public class BooBuilder extends IncrementalProjectBuilder {
 		for (CompilerError error : errors) {
 			
 			boolean isError = error.severity == CompilerError.ERROR;
-			if (error.path == null)
+			String path = error.getPath();
+			if (path == null)
 				BooMarkers.addErrorMarker(source, error.message);
 			else
-				addMarker(error.path, error.message, error.line, isError
+				addMarker(path, error.message, error.line, isError
 							? IMarker.SEVERITY_ERROR
 							: IMarker.SEVERITY_WARNING);
 			
