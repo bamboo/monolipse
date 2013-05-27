@@ -39,6 +39,19 @@ public class MonoRuntimeFactory {
 	}
 
 	private static String getDotNetHome() {
-		return System.getProperty("DOTNET_HOME", "c:/WINDOWS/Microsoft.NET/Framework/v3.5");
+		String[] candidates = {
+				System.getProperty("DOTNET_HOME", null),
+				"c:/Windows/Microsoft.NET/Framework/v4.0.30319",
+				"c:/Windows/Microsoft.NET/Framework/v3.5",
+		};
+		for (String candidate : candidates) {
+			if (candidate == null) continue;
+			if (IO.existsFile(candidate)) {
+				BooCore.logInfo(".NET runtime found at '{0}'.", candidate);
+				return candidate;
+			}
+			BooCore.logInfo(".NET runtime '{0}' not found, trying next...", candidate);
+		}
+		throw new IllegalStateException("DOTNET_HOME is not set to a valid .NET runtime and no runtime could be found!");
 	}
 }
