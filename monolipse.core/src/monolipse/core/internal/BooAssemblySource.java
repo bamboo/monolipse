@@ -36,7 +36,7 @@ public class BooAssemblySource implements IAssemblySource {
 	public static BooAssemblySource get(IFolder folder) throws CoreException {
 		synchronized (folder) {
 			BooAssemblySource source = (BooAssemblySource) folder.getSessionProperty(ASSEMBLY_SOURCE_SESSION_KEY);
-			if (null == source) {
+			if (source == null) {
 				if (isAssemblySource(folder)) {
 					source = internalCreate(folder, null);
 				}
@@ -366,14 +366,12 @@ public class BooAssemblySource implements IAssemblySource {
 		return _folder.getFullPath().toString();
 	}
 
-	public static boolean references(IAssemblySource l,
-			final IAssemblySource r) throws CoreException {
+	public static boolean references(IAssemblySource l, final IAssemblySource r) {
 		IAssemblyReference[] references = l.getReferences();
 		for (int i = 0; i < references.length; ++i) {
 			IAssemblyReference reference = references[i];
 			if (reference instanceof IAssemblySourceReference) {
-				if (r == ((IAssemblySourceReference) reference)
-						.getAssemblySource()) {
+				if (r == ((IAssemblySourceReference) reference).getAssemblySource()) {
 					return true;
 				}
 			}

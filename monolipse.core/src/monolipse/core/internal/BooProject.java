@@ -128,17 +128,22 @@ public class BooProject implements IMonoProject {
 	 * 
 	 * @see monolipse.core.IBooProject#getAffectedAssemblySources(org.eclipse.core.resources.IResourceDelta)
 	 */
-	public IAssemblySource[] getAffectedAssemblySources(IResourceDelta delta)
-			throws CoreException {
+	public IAssemblySource[] getAffectedAssemblySources(IResourceDelta delta) throws CoreException {
 		final IAssemblySource[] sources = getAssemblySources();
 		final Set<IAssemblySource> affected = new HashSet<IAssemblySource>();
+		collectAffectedAssemblySources(delta, sources, affected);
+		return toBooAssemblySourceArray(affected);
+	}
+
+	private void collectAffectedAssemblySources(IResourceDelta delta,
+			final IAssemblySource[] sources, final Set<IAssemblySource> affected)
+			throws CoreException {
 		delta.accept(new IResourceDeltaVisitor() {
-			public boolean visit(IResourceDelta delta) throws CoreException {
+			public boolean visit(IResourceDelta delta) {
 				IResource resource = delta.getResource();
 				if (IResource.FILE == resource.getType()) {
-					IAssemblySource parent = BooCore
-							.assemblySourceContaining(resource);
-					if (null != parent && !affected.contains(parent)) {
+					IAssemblySource parent = BooCore.assemblySourceContaining(resource);
+					if (parent != null && !affected.contains(parent)) {
 						affected.add(parent);
 						addDependents(affected, sources, parent);
 						return false;
@@ -147,7 +152,7 @@ public class BooProject implements IMonoProject {
 				return true;
 			}
 
-			private void addDependents(final Set<IAssemblySource> affected, final IAssemblySource[] sources, IAssemblySource changed) throws CoreException {
+			private void addDependents(final Set<IAssemblySource> affected, final IAssemblySource[] sources, IAssemblySource changed) {
 				for (int i=0; i<sources.length; ++i) {
 					IAssemblySource source = sources[i];
 					if (BooAssemblySource.references(source, changed)) {
@@ -159,7 +164,6 @@ public class BooProject implements IMonoProject {
 				}
 			}
 		});
-		return toBooAssemblySourceArray(affected);
 	}
 
 	public IAssemblySource[] getAssemblySourceOrder(

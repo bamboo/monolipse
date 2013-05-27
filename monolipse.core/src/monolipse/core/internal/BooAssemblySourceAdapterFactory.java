@@ -43,8 +43,7 @@ public class BooAssemblySourceAdapterFactory implements IAdapterFactory {
 			final BooAssemblySource source = BooAssemblySource.get(folder);
 			if (adapterType.isAssignableFrom(IAssemblySource.class)) return source;
 			return AssemblyReferences.assemblyReferenceFor(source);
-		}
-		catch (CoreException x) {
+		} catch (CoreException x) {
 			BooCore.logException(x);
 		}
 		return null;
