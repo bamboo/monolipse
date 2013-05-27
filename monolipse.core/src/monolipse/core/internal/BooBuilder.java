@@ -167,8 +167,10 @@ public class BooBuilder extends IncrementalProjectBuilder {
 				return;
 			
 			IFile[] srcFiles = source.getSourceFiles();
-			if (srcFiles.length == 0)
+			if (srcFiles.length == 0) {
+				cantBeBuilt(source, "no source files");
 				return;
+			}
 			
 			ensureOutputFolderFor(source, monitor);
 			
