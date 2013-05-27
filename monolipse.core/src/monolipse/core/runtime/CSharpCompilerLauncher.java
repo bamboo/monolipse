@@ -49,7 +49,7 @@ public class CSharpCompilerLauncher extends CompilerLauncher {
 			Matcher matcher = LINE_ERROR_PATTERN.matcher(line);
 			if (matcher.matches()) {
 				final CompilerError error = new CompilerError();
-				error.path = matcher.group(1);
+				error.setPath(matcher.group(1));
 				error.line = Integer.parseInt(matcher.group(2));
 				error.code = matcher.group(4);
 				error.message = matcher.group(5);

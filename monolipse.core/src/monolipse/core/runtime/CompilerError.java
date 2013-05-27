@@ -9,6 +9,15 @@ public class CompilerError {
 	public int line = -1;
 	public String code;
 	public String message;
-	public String path;
 	public int severity = CompilerError.ERROR;
+	
+	public void setPath(String path) {
+		this.path = path.replace('\\', '/');
+	}
+
+	public String getPath() {
+		return path;
+	}
+	
+	private String path;
 }

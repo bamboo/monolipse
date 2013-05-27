@@ -14,7 +14,7 @@ public class BooErrorParser {
 		Matcher matcher = LINE_ERROR_PATTERN.matcher(line);
 		if (matcher.matches()) {
 			CompilerError error = new CompilerError();
-			error.path = matcher.group(1);
+			error.setPath(matcher.group(1));
 			error.line = Integer.parseInt(matcher.group(2));
 			error.code = matcher.group(3);
 			error.severity = error.code.startsWith("BCE") ? CompilerError.ERROR : CompilerError.WARNING;
@@ -30,6 +30,4 @@ public class BooErrorParser {
 		}
 		return null;
 	}
-
-
 }

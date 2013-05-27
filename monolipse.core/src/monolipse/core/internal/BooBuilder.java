@@ -38,8 +38,9 @@ public class BooBuilder extends IncrementalProjectBuilder {
 		
 	private void addMarker(String path, String message, int lineNumber, int severity) {
 
-		String relativePath = path.substring(getProject().getLocation().toOSString().length() + 1);
-		relativePath = relativePath.replaceAll("\\\\", "/");
+		String projectLocation = getProject().getLocation().toOSString();
+		String relativePath = path.startsWith(projectLocation) ? path.substring(projectLocation.length() + 1) : path;
+		relativePath = relativePath.replace('\\', '/');
 		IFile file = getProject().getFile(relativePath);
 		BooMarkers.addMarker(file, message, lineNumber, severity);
 
